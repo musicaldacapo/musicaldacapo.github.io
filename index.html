@@ -8,7 +8,34 @@
   <!-- SEO local -->
   <meta name="description" content="Musical da Capo, tienda de música en Córdoba. Avenida de los Molinos 8, junto al Conservatorio Profesional. Horario L-V 16:30–20:30.">
   <meta name="robots" content="index,follow">
+<style>
+  .review{ background:#d72638; } /* botón reseña (navideño/llamativo) */
 
+  .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
+
+  .mapShell{
+    width:100%;
+    border:1px solid rgba(0,0,0,.10);
+    border-radius:12px;
+    overflow:hidden;
+    background:#fff;
+  }
+  .mapPlaceholder{
+    padding:18px;
+    text-align:center;
+  }
+  .mapTitle{ font-weight:bold; margin-bottom:6px; }
+  .mapText{ color:#555; font-size:14px; line-height:1.4; margin-bottom:12px; }
+  .mapBtn{
+    border:0;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    color:#fff;
+    background:linear-gradient(135deg,#f28c28,#1f6feb);
+  }
+</style>
   <style>
     body{
       margin:0;
@@ -148,19 +175,45 @@
     </p>
   </div>
 
-  <div class="buttons">
-    <a class="whatsapp" href="https://wa.me/34695908361" target="_blank">WhatsApp</a>
-    <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
-    <a class="maps" href="https://share.google/mB2gaoxPHkrZa2iCe" target="_blank">Cómo llegar</a>
-  </div>
+  <!-- BOTONES -->
+<div class="buttons">
+  <a class="whatsapp" href="https://wa.me/34695908361" target="_blank" rel="noopener">WhatsApp</a>
+  <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
 
-  <!-- MAPA DE GOOGLE CORRECTO (TU IFRAME) -->
-  <iframe
-    class="map"
-    loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade"
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6297.279991449915!2d-4.781773223665278!3d37.892101005392185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6cdf7aaf6b856d%3A0xa2a0162c1597d138!2sMusical%20da%20Capo!5e0!3m2!1ses!2ses!4v1766014231271!5m2!1ses!2ses">
-  </iframe>
+  <!-- Abrir Maps (tu enlace compartir) -->
+  <a class="maps" href="https://share.google/mB2gaoxPHkrZa2iCe" target="_blank" rel="noopener">Cómo llegar</a>
+
+  <!-- Dejar reseña (abre la ficha del negocio) -->
+  <a class="review" href="https://www.google.com/maps?cid=0xa2a0162c1597d138" target="_blank" rel="noopener">
+    Dejar reseña en Google
+  </a>
+</div>
+
+<!-- MAPA CON CARGA MANUAL (evita que “salga mal” por bloqueos) -->
+<div class="mapShell" id="mapShell">
+  <div class="mapPlaceholder" id="mapPlaceholder">
+    <div class="mapTitle">Mapa</div>
+    <div class="mapText">
+      Para mostrar el mapa incrustado, pulsa “Cargar mapa”. (Algunos navegadores bloquean iframes de Google si no hay consentimiento o si hay anti-tracking.)
+    </div>
+    <button class="mapBtn" type="button" onclick="loadMap()">Cargar mapa</button>
+  </div>
+</div>
+
+<script>
+  function loadMap(){
+    const shell = document.getElementById("mapShell");
+    shell.innerHTML = `
+      <iframe
+        class="map"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6297.279991449915!2d-4.781773223665278!3d37.892101005392185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6cdf7aaf6b856d%3A0xa2a0162c1597d138!2sMusical%20da%20Capo!5e0!3m2!1ses!2ses!4v1766014231271!5m2!1ses!2ses">
+      </iframe>
+    `;
+  }
+</script>
 
   <div class="seo">
     <p>
