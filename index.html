@@ -1,75 +1,156 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
   <title>Musical da Capo - Tu tienda de Música</title>
-  <meta name="description" content="Musical da Capo - Tu tienda de Música. Lunes a viernes 16:30–20:30. Contacto: tiendagabou@gmail.com · WhatsApp 695 908 361." />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- SEO básico -->
+  <meta name="description" content="Musical da Capo - Tu tienda de Música. Instrumentos y librería musical. Horario: lunes a viernes de 16:30 a 20:30.">
+  <meta name="robots" content="index,follow">
 
   <style>
-    :root{
-      /* Ajusta si quieres: naranja corporativo + azul complementario */
-      --orange:#F28C28;
-      --blue:#1F6FEB;
-
-      --ink:#0f172a;
-      --bg:#ffffff;
-      --soft:#f6f7fb;
-      --border:rgba(15,23,42,.12);
-      --shadow: 0 12px 40px rgba(15,23,42,.10);
-
-      /* toque navideño */
-      --xmas-red:#d72638;
-      --xmas-green:#178a3a;
-    }
-
-    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 500px at 20% 0%, rgba(242,140,40,.16), transparent 55%),
-        radial-gradient(900px 500px at 85% 10%, rgba(31,111,235,.14), transparent 55%),
-        linear-gradient(180deg, var(--soft), var(--bg) 55%);
-      overflow-x:hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:#f7f7f7;
+      color:#222;
     }
 
-    .wrap{max-width:980px;margin:0 auto;padding:24px 18px 36px}
-    .card{
-      background:rgba(255,255,255,.92);
-      border:1px solid var(--border);
-      border-radius:22px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
+    .container{
+      max-width:900px;
+      margin:auto;
+      background:#fff;
+      padding:24px;
+      border-radius:12px;
+      box-shadow:0 6px 20px rgba(0,0,0,.1);
     }
 
-    /* Guirnalda navideña (simple) */
-    .lights{
-      display:flex; gap:10px; padding:12px 16px;
-      border-bottom:1px solid var(--border);
-      background:
-        linear-gradient(90deg, rgba(215,38,56,.10), rgba(23,138,58,.10));
+    .logo{
+      display:block;
+      margin:0 auto 10px;
+      max-width:280px;
     }
-    .bulb{
-      width:10px;height:10px;border-radius:999px;
-      box-shadow:0 0 16px rgba(255,255,255,.7);
-      border:1px solid rgba(0,0,0,.08);
-      animation: twinkle 1.6s infinite ease-in-out;
-    }
-    .bulb:nth-child(1){background:var(--xmas-red)}
-    .bulb:nth-child(2){background:var(--xmas-green);animation-delay:.2s}
-    .bulb:nth-child(3){background:var(--orange);animation-delay:.4s}
-    .bulb:nth-child(4){background:var(--blue);animation-delay:.6s}
-    .bulb:nth-child(5){background:var(--xmas-red);animation-delay:.8s}
-    .bulb:nth-child(6){background:var(--xmas-green);animation-delay:1s}
-    @keyframes twinkle{ 0%,100%{opacity:.55} 50%{opacity:1} }
 
-    /* Nieve (sutil) */
-    .snow{
-      position:absolute; inset:0; pointer-events:none; opacity:.35;
-      background-image:
-        radial-gradient(2px 2px at 20px 30px, #fff 60%, transparent 61%),
-        radial-gradient(1.5px 1.5px at 60px 80px, #fff 60%, transparent 61%),
-        radial-gradient(2px 2px at 110px 50px, #fff 60%, transparent 61%),
+    h1{
+      text-align:center;
+      margin:10px 0 5px;
+      color:#f28c28;
+    }
+
+    .subtitle{
+      text-align:center;
+      margin-bottom:20px;
+      font-size:18px;
+    }
+
+    .xmas{
+      text-align:center;
+      background:#178a3a;
+      color:white;
+      padding:10px;
+      border-radius:8px;
+      margin-bottom:20px;
+      font-weight:bold;
+    }
+
+    .info{
+      text-align:center;
+      font-size:16px;
+      margin-bottom:20px;
+    }
+
+    .info strong{
+      color:#1f6feb;
+    }
+
+    .buttons{
+      text-align:center;
+      margin-bottom:25px;
+    }
+
+    .buttons a{
+      display:inline-block;
+      margin:6px;
+      padding:10px 16px;
+      border-radius:8px;
+      text-decoration:none;
+      color:white;
+      font-weight:bold;
+    }
+
+    .whatsapp{ background:#25d366; }
+    .email{ background:#1f6feb; }
+
+    .map{
+      width:100%;
+      height:350px;
+      border:0;
+      border-radius:10px;
+    }
+
+    footer{
+      text-align:center;
+      margin-top:20px;
+      font-size:14px;
+      color:#666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <img src="logo-musical.jpg" alt="Musical da Capo" class="logo">
+
+    <h1>Musical da Capo</h1>
+    <div class="subtitle">Tu tienda de Música</div>
+
+    <div class="xmas">
+      🎄 Felices Fiestas 🎶
+    </div>
+
+    <div class="info">
+      <p>
+        <strong>Horario:</strong><br>
+        Lunes a viernes<br>
+        16:30 – 20:30
+      </p>
+
+      <p>
+        📧 <strong>tiendagabou@gmail.com</strong><br>
+        📱 <strong>695 908 361</strong>
+      </p>
+    </div>
+
+    <div class="buttons">
+      <a class="whatsapp" href="https://wa.me/34695908361" target="_blank">
+        WhatsApp
+      </a>
+      <a class="email" href="mailto:tiendagabou@gmail.com">
+        Enviar email
+      </a>
+    </div>
+
+    <!-- MAPA DE GOOGLE INCRUSTADO (sin sugerencias laterales) -->
+    <iframe
+      class="map"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3169.642937764874!2d-4.775343!3d37.884726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6cdf9f9e4f8f8b%3A0x8b0b8b7e3b0c0d3a!2sMusical%20da%20Capo!5e0!3m2!1ses!2ses!4v1734360000000">
+    </iframe>
+
+    <footer>
+      © <span id="year"></span> Musical da Capo
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
+
