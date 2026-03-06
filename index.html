@@ -20,15 +20,15 @@
   /* ESTILOS DEL BUSCADOR */
   .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
   .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
-  #buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; }
-  .tabla-wrapper { max-height: 300px; overflow-y: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th { background: #f28c28; color: white; padding: 10px; position: sticky; top: 0; }
+  #buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
+  .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+  th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
   td { padding: 10px; border-bottom: 1px solid #eee; }
+  .col-code { color: #888; font-family: monospace; font-size: 12px; width: 80px; }
   .verde { color: #27ae60; font-weight: bold; }
   .amarillo { color: #f39c12; font-weight: bold; }
   .rojo { color: #e74c3c; font-weight: bold; }
-  .oculto { display: none; }
 </style>
   <style>
     body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
@@ -99,11 +99,10 @@
   <!-- SECCIÓN BUSCADOR DE STOCK -->
   <div class="stock-container">
     <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
-    <input type="text" id="buscador" placeholder="Busca instrumento o accesorio..." onkeyup="filtrarStock()">
+    <input type="text" id="buscador" placeholder="Busca por nombre o código..." onkeyup="filtrarStock()">
     
-    <!-- NUEVA CASILLA DE VERIFICACIÓN -->
     <div style="margin-bottom: 15px; font-size: 14px; color: #555;">
-      <label style="cursor:pointer;">
+      <label style="cursor:pointer; display: flex; align-items: center; gap: 8px;">
         <input type="checkbox" id="soloStock" onclick="filtrarStock()"> Mostrar solo productos con stock
       </label>
     </div>
@@ -111,19 +110,39 @@
     <div class="tabla-wrapper">
       <table id="tablaStock">
         <thead>
-          <tr><th>Producto</th><th>Estado</th></tr>
+          <tr>
+            <th>Código</th>
+            <th>Producto</th>
+            <th>Estado</th>
+          </tr>
         </thead>
-        <tbody id="cuerpoTabla"></tbody>
+        <tbody id="cuerpoTabla">
+           <!-- Vacío al inicio -->
+        </tbody>
       </table>
     </div>
   </div>
 
-<!-- ... -->
+  <div class="mapShell" id="mapShell">
+    <div class="mapPlaceholder">
+      <div class="mapTitle">Mapa</div>
+      <button class="mapBtn" type="button" onclick="loadMap()">Cargar mapa</button>
+    </div>
+  </div>
+
+  <div class="seo">
+    <p><strong>Musical da Capo</strong> es tu tienda de música en Córdoba...</p>
+  </div>
+
+  <footer>
+    © <span id="year"></span> Musical da Capo - B14956825 - Avda. de los Molinos 8 - 14001 Córdoba
+  </footer>
+</div>
 
 <script>
   let productos = [];
 
-  // Carga del CSV con soporte de acentos
+  // 1. Carga con parche de ACENTOS (ISO-8859-1)
   fetch('stock.csv')
     .then(response => {
       if (!response.ok) throw new Error('Archivo no encontrado');
@@ -138,6 +157,7 @@
         const c = f.split(',');
         if (c.length >= 3) {
           return { 
+            codigo: c[0].replace(/"/g, '').trim(), 
             nombre: c[1].replace(/"/g, '').trim(), 
             stock: parseInt(c[2]) 
           };
@@ -145,20 +165,20 @@
         return null;
       }).filter(p => p && p.nombre);
     })
-    .catch(err => console.log("Error:", err));
+    .catch(err => console.log("Error cargando CSV:", err));
 
+  // 2. Renderizado que evita mostrar nada si no hay búsqueda
   function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     const busqueda = document.getElementById('buscador').value.trim();
 
-    // No mostrar nada si el buscador está vacío
     if (busqueda === "") {
       cuerpo.innerHTML = '';
       return;
     }
 
     if (lista.length === 0) {
-      cuerpo.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:20px;">No se han encontrado productos</td></tr>';
+      cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No se han encontrado productos</td></tr>';
       return;
     }
 
@@ -166,10 +186,16 @@
       let clase = 'rojo', texto = 'Agotado';
       if (p.stock > 5) { clase = 'verde'; texto = 'Stock disponible'; }
       else if (p.stock > 0) { clase = 'amarillo'; texto = 'Últimas unidades'; }
-      return `<tr><td>${p.nombre}</td><td class="${clase}">${texto}</td></tr>`;
+      
+      return `<tr>
+        <td class="col-code">${p.codigo}</td>
+        <td>${p.nombre}</td>
+        <td class="${clase}">${texto}</td>
+      </tr>`;
     }).join('');
   }
 
+  // 3. Filtrado por nombre, código y checkbox de stock
   function filtrarStock() {
     const busqueda = document.getElementById('buscador').value.toLowerCase().trim();
     const soloDisponibles = document.getElementById('soloStock').checked;
@@ -180,9 +206,10 @@
     }
 
     const filtrados = productos.filter(p => {
-        const coincideNombre = p.nombre.toLowerCase().includes(busqueda);
-        const tieneStock = soloDisponibles ? p.stock > 0 : true; // Si el check está marcado, filtramos por stock > 0
-        return coincideNombre && tieneStock;
+        const coincide = p.nombre.toLowerCase().includes(busqueda) || 
+                         p.codigo.toLowerCase().includes(busqueda);
+        const tieneStock = soloDisponibles ? p.stock > 0 : true;
+        return coincide && tieneStock;
     });
 
     renderTabla(filtrados);
@@ -193,7 +220,6 @@
   }
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
-
 
 </body>
 </html>
