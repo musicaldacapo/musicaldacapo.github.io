@@ -4,29 +4,25 @@
   <meta charset="UTF-8">
   <title>Musical da Capo | Tienda de música en Córdoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- SEO local -->
-  <meta name="description" content="Musical da Capo, tienda de música en Córdoba. Avenida de los Molinos 8, junto al Conservatorio Profesional. Horario de lunes a jueves de 16:30h a 20:30h.">
-  <meta name="robots" content="index,follow">
-<style>
-  .review{ background:#d72638; } 
-  .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
-  .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
-
-  /* ESTILOS DEL BUSCADOR */
-  .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
-  .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
-  #buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
-  .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
-  th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
-  td { padding: 10px; border-bottom: 1px solid #eee; }
-  .col-code { color: #888; font-family: monospace; font-size: 12px; width: 80px; }
-  .verde { color: #27ae60; font-weight: bold; }
-  .amarillo { color: #f39c12; font-weight: bold; }
-  .rojo { color: #e74c3c; font-weight: bold; }
-</style>
   <style>
+    .review{ background:#d72638; } 
+    .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
+    .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
+    .mapPlaceholder{ padding:30px; text-align:center; color: #666; font-size: 14px; }
+
+    /* ESTILOS DEL BUSCADOR */
+    .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
+    .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
+    #buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
+    .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+    th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
+    td { padding: 10px; border-bottom: 1px solid #eee; }
+    .col-code { color: #888; font-family: monospace; font-size: 12px; width: 80px; }
+    .verde { color: #27ae60; font-weight: bold; }
+    .amarillo { color: #f39c12; font-weight: bold; }
+    .rojo { color: #e74c3c; font-weight: bold; }
+    
     body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
     .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
     .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; }
@@ -36,34 +32,11 @@
     .info{ text-align:center; font-size:16px; line-height:1.5; margin-bottom:18px; }
     .info strong{color:#1f6feb}
     .buttons{ text-align:center; margin-bottom:20px; }
-    .buttons a{ display:inline-block; margin:6px; padding:11px 16px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold; }
+    .buttons a{ display:inline-block; margin:6px; padding:11px 16px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold; cursor: pointer; }
     .whatsapp{background:#25d366} .email{background:#1f6feb} .maps{background:#f28c28}
     .seo{ margin-top:18px; font-size:15px; line-height:1.6; }
     footer{ margin-top:18px; text-align:center; font-size:13px; color:#666; }
   </style>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"MusicStore",
-    "name":"Musical da Capo",
-    "address":{
-      "@type":"PostalAddress",
-      "streetAddress":"Avenida de los Molinos 8",
-      "addressLocality":"Córdoba",
-      "postalCode":"14001",
-      "addressCountry":"ES"
-    },
-    "telephone":"+34 695908361",
-    "email":"info@musicaldacapo.es",
-    "openingHoursSpecification":[{
-      "@type":"OpeningHoursSpecification",
-      "dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],
-      "opens":"16:30",
-      "closes":"20:30"
-    }]
-  }
-  </script>
 </head>
 <body>
 
@@ -88,7 +61,8 @@
   <div class="buttons">
     <a class="whatsapp" href="https://wa.me" target="_blank" rel="noopener">WhatsApp</a>
     <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
-    <a class="maps" href="https://share.google" target="_blank" rel="noopener">Cómo llegar</a>
+    <!-- BOTÓN MODIFICADO PARA CARGAR MAPA -->
+    <a class="maps" onclick="loadMap()">Cómo llegar</a>
     <a class="review" href="https://www.google.com" target="_blank" rel="noopener">Dejar reseña</a>
   </div>
 
@@ -117,19 +91,9 @@
     </div>
   </div>
 
-  <!-- MAPA AUTOMÁTICO -->
-  <div class="mapShell">
-    <iframe 
-      class="map" 
-      src="https://www.google.com" 
-      allowfullscreen="" 
-      loading="lazy" 
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-  </div>
-
-  <div class="seo">
-    <p><strong>Musical da Capo</strong> es tu tienda de música en Córdoba...</p>
+  <!-- CONTENEDOR DEL MAPA (VACÍO AL INICIO) -->
+  <div id="mapShell" class="mapShell">
+    <div class="mapPlaceholder">Pulsa en "Cómo llegar" para ver nuestra ubicación en el mapa.</div>
   </div>
 
   <footer>
@@ -140,7 +104,7 @@
 <script>
   let productos = [];
 
-  // Carga con soporte de acentos
+  // CARGA DE STOCK CON ACENTOS
   fetch('stock.csv')
     .then(response => response.arrayBuffer())
     .then(buffer => {
@@ -163,13 +127,11 @@
   function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     const busqueda = document.getElementById('buscador').value.trim();
-
     if (busqueda === "") { cuerpo.innerHTML = ''; return; }
     if (lista.length === 0) {
       cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No hay resultados</td></tr>';
       return;
     }
-
     cuerpo.innerHTML = lista.map(p => {
       let clase = 'rojo', texto = 'Agotado';
       if (p.stock > 5) { clase = 'verde'; texto = 'Disponible'; }
@@ -190,9 +152,16 @@
     renderTabla(filtrados);
   }
 
+  // FUNCIÓN PARA CARGAR EL MAPA
+  function loadMap() {
+    document.getElementById("mapShell").innerHTML = `<iframe class="map" src="https://www.google.com" allowfullscreen="" loading="lazy"></iframe>`;
+    // Abrir también en pestaña nueva para facilitar la navegación GPS
+    window.open("https://share.google", "_blank");
+  }
+
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
-
 </body>
 </html>
+
 
