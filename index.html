@@ -128,41 +128,50 @@
   </footer>
 </div>
 
+<!-- ... (resto del código igual hasta el script) ... -->
+
 <script>
   let productos = [];
 
-  // Lógica del buscador de Stock con validación
+  // Lógica del buscador de Stock con soporte para ACENTOS (ISO-8859-1 a UTF-8)
   fetch('stock.csv')
     .then(response => {
-      // Si el archivo no existe o hay error, lanzamos error para no procesar basura
       if (!response.ok) throw new Error('Archivo no encontrado');
-      return response.text();
+      // Usamos arrayBuffer para poder decodificar acentos correctamente
+      return response.arrayBuffer();
     })
-    .then(data => {
+    .then(buffer => {
+      // Decodificamos el archivo como Windows-1252/ISO-8859-1 para evitar errores en acentos y eñes
+      const decoder = new TextDecoder('iso-8859-1');
+      const data = decoder.decode(buffer);
+      
       const filas = data.trim().split('\n').slice(1);
       productos = filas.map(f => {
         const c = f.split(',');
-        // Aseguramos que existan las columnas antes de mapear
         if (c.length >= 3) {
-          return { nombre: c[1].trim(), stock: parseInt(c[2]) };
+          // Limpiamos comillas que a veces añade Excel y espacios
+          return { 
+            nombre: c[1].replace(/"/g, '').trim(), 
+            stock: parseInt(c[2]) 
+          };
         }
         return null;
-      }).filter(p => p && p.nombre); // Filtramos nulos y filas sin nombre
+      }).filter(p => p && p.nombre);
       
-      renderTabla(productos);
+      // No llamamos a renderTabla aquí para que empiece vacío
     })
-    .catch(err => {
-      console.log("Esperando archivo stock.csv...");
-      // Opcional: mostrar un mensaje en la tabla si quieres
-      // document.getElementById('cuerpoTabla').innerHTML = '<tr><td colspan="2">Cargando inventario...</td></tr>';
-    });
+    .catch(err => console.log("Error cargando stock:", err));
 
   function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
-    if (lista.length === 0) {
+    const busqueda = document.getElementById('buscador').value.trim();
+
+    // PARCHE 1: Si el buscador está vacío, limpiar tabla y salir
+    if (busqueda === "" || lista.length === 0) {
       cuerpo.innerHTML = '';
       return;
     }
+
     cuerpo.innerHTML = lista.map(p => {
       let clase = 'rojo', texto = 'Agotado';
       if (p.stock > 5) { clase = 'verde'; texto = 'Stock disponible'; }
@@ -172,8 +181,17 @@
   }
 
   function filtrarStock() {
-    const busqueda = document.getElementById('buscador').value.toLowerCase();
-    const filtrados = productos.filter(p => p.nombre.toLowerCase().includes(busqueda));
+    const busqueda = document.getElementById('buscador').value.toLowerCase().trim();
+    
+    // Si no hay texto, mandamos lista vacía para que no pinte nada
+    if(busqueda === "") {
+        renderTabla([]);
+        return;
+    }
+
+    const filtrados = productos.filter(p => 
+        p.nombre.toLowerCase().includes(busqueda)
+    );
     renderTabla(filtrados);
   }
 
@@ -183,6 +201,7 @@
   }
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
 
 </body>
 </html>
