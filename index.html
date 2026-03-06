@@ -1,3 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Musical da Capo | Tienda de música en Córdoba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- SEO local -->
+  <meta name="description" content="Musical da Capo, tienda de música en Córdoba. Avenida de los Molinos 8, junto al Conservatorio Profesional. Horario de lunes a jueves de 16:30h a 20:30h.">
+  <meta name="robots" content="index,follow">
+<style>
+  .review{ background:#d72638; } 
+  .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
+  .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
+  .mapPlaceholder{ padding:18px; text-align:center; }
+  .mapTitle{ font-weight:bold; margin-bottom:6px; }
+  .mapText{ color:#555; font-size:14px; line-height:1.4; margin-bottom:12px; }
+  .mapBtn{ border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:bold; color:#fff; background:linear-gradient(135deg,#f28c28,#1f6feb); }
+
+  /* ESTILOS DEL BUSCADOR */
+  .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
+  .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
+  #buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; }
+  .tabla-wrapper { max-height: 300px; overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: #f28c28; color: white; padding: 10px; position: sticky; top: 0; }
+  td { padding: 10px; border-bottom: 1px solid #eee; }
+  .verde { color: #27ae60; font-weight: bold; }
+  .amarillo { color: #f39c12; font-weight: bold; }
+  .rojo { color: #e74c3c; font-weight: bold; }
+  .oculto { display: none; }
+</style>
+  <style>
+    body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
+    .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
+    .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; }
+    h1{ text-align:center; color:#f28c28; margin:10px 0 5px; font-size:30px; }
+    .subtitle{ text-align:center; font-size:18px; margin-bottom:16px; }
+    .xmas{ background:#178a3a; color:#fff; text-align:center; padding:10px; border-radius:10px; font-weight:bold; margin-bottom:18px; }
+    .info{ text-align:center; font-size:16px; line-height:1.5; margin-bottom:18px; }
+    .info strong{color:#1f6feb}
+    .buttons{ text-align:center; margin-bottom:20px; }
+    .buttons a{ display:inline-block; margin:6px; padding:11px 16px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold; }
+    .whatsapp{background:#25d366} .email{background:#1f6feb} .maps{background:#f28c28}
+    .seo{ margin-top:18px; font-size:15px; line-height:1.6; }
+    footer{ margin-top:18px; text-align:center; font-size:13px; color:#666; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"MusicStore",
+    "name":"Musical da Capo",
+    "address":{
+      "@type":"PostalAddress",
+      "streetAddress":"Avenida de los Molinos 8",
+      "addressLocality":"Córdoba",
+      "postalCode":"14001",
+      "addressCountry":"ES"
+    },
+    "telephone":"+34 695908361",
+    "email":"info@musicaldacapo.es",
+    "openingHoursSpecification":[{
+      "@type":"OpeningHoursSpecification",
+      "dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens":"16:30",
+      "closes":"20:30"
+    }]
+  }
+  </script>
+</head>
+<body>
+
+<div class="container">
+  <img src="logo-musical.png" alt="Musical da Capo" class="logo">
+  <h1>Musical da Capo</h1>
+  <div class="subtitle">Tu tienda de Música en Córdoba</div>
+  <div class="xmas">¡Hola amantes de la música!</div>
+
+  <div class="info">
+    <p>Instrumentos, accesorios y librería musical.<br>
+      <strong>Avenida de los Molinos 8</strong><br>
+      (junto al Conservatorio Profesional)<br>
+      <strong>14001 · Córdoba</strong>
+    </p>
+    <p><strong>HORARIO DE TIENDA:</strong><br>
+      De lunes a jueves: 16:30h a 20:30h<br>
+      Para consultas por WHATSAPP: 695 90 83 61
+    </p>
+  </div>
+
+  <div class="buttons">
+    <a class="whatsapp" href="https://wa.me/34695908361" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
+    <a class="maps" href="https://share.google/mB2gaoxPHkrZa2iCe" target="_blank" rel="noopener">Cómo llegar</a>
+    <a class="review" href="https://www.google.com/maps?cid=0xa2a0162c1597d138" target="_blank" rel="noopener">Dejar reseña</a>
+  </div>
+
+  <!-- SECCIÓN BUSCADOR DE STOCK -->
+  <div class="stock-container">
+    <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
+    <input type="text" id="buscador" placeholder="Busca instrumento o accesorio..." onkeyup="filtrarStock()">
+    <div class="tabla-wrapper">
+      <table id="tablaStock">
+        <thead>
+          <tr><th>Producto</th><th>Estado</th></tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+          <!-- Se rellena con JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="mapShell" id="mapShell">
+    <div class="mapPlaceholder">
+      <div class="mapTitle">Mapa</div>
+      <button class="mapBtn" type="button" onclick="loadMap()">Cargar mapa</button>
+    </div>
+  </div>
+
+  <div class="seo">
+    <p><strong>Musical da Capo</strong> es tu tienda de música en Córdoba...</p>
+  </div>
+
+  <footer>
+    © <span id="year"></span> Musical da Capo - B14956825 - Avda. de los Molinos 8 - 14001 Córdoba
+  </footer>
+</div>
+
 <script>
   let productos = [];
 
@@ -53,3 +183,6 @@
   }
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
+</body>
+</html>
