@@ -12,10 +12,6 @@
   .review{ background:#d72638; } 
   .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
   .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
-  .mapPlaceholder{ padding:18px; text-align:center; }
-  .mapTitle{ font-weight:bold; margin-bottom:6px; }
-  .mapText{ color:#555; font-size:14px; line-height:1.4; margin-bottom:12px; }
-  .mapBtn{ border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:bold; color:#fff; background:linear-gradient(135deg,#f28c28,#1f6feb); }
 
   /* ESTILOS DEL BUSCADOR */
   .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
@@ -90,10 +86,10 @@
   </div>
 
   <div class="buttons">
-    <a class="whatsapp" href="https://wa.me/34695908361" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="whatsapp" href="https://wa.me" target="_blank" rel="noopener">WhatsApp</a>
     <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
-    <a class="maps" href="https://share.google/mB2gaoxPHkrZa2iCe" target="_blank" rel="noopener">Cómo llegar</a>
-    <a class="review" href="https://www.google.com/maps?cid=0xa2a0162c1597d138" target="_blank" rel="noopener">Dejar reseña</a>
+    <a class="maps" href="https://share.google" target="_blank" rel="noopener">Cómo llegar</a>
+    <a class="review" href="https://www.google.com" target="_blank" rel="noopener">Dejar reseña</a>
   </div>
 
   <!-- SECCIÓN BUSCADOR DE STOCK -->
@@ -116,18 +112,14 @@
             <th>Estado</th>
           </tr>
         </thead>
-        <tbody id="cuerpoTabla">
-           <!-- Vacío al inicio -->
-        </tbody>
+        <tbody id="cuerpoTabla"></tbody>
       </table>
     </div>
   </div>
 
-  <div class="mapShell" id="mapShell">
-    <div class="mapPlaceholder">
-      <div class="mapTitle">Mapa</div>
-      <button class="mapBtn" type="button" onclick="loadMap()">Cargar mapa</button>
-    </div>
+  <!-- MAPA AUTOMÁTICO -->
+  <div class="mapShell">
+    <iframe class="map" src="https://www.google.com" allowfullscreen="" loading="lazy"></iframe>
   </div>
 
   <div class="seo">
@@ -142,16 +134,12 @@
 <script>
   let productos = [];
 
-  // 1. Carga con parche de ACENTOS (ISO-8859-1)
+  // Carga con soporte de acentos
   fetch('stock.csv')
-    .then(response => {
-      if (!response.ok) throw new Error('Archivo no encontrado');
-      return response.arrayBuffer();
-    })
+    .then(response => response.arrayBuffer())
     .then(buffer => {
       const decoder = new TextDecoder('iso-8859-1');
       const data = decoder.decode(buffer);
-      
       const filas = data.trim().split('\n').slice(1);
       productos = filas.map(f => {
         const c = f.split(',');
@@ -164,62 +152,41 @@
         }
         return null;
       }).filter(p => p && p.nombre);
-    })
-    .catch(err => console.log("Error cargando CSV:", err));
+    });
 
-  // 2. Renderizado que evita mostrar nada si no hay búsqueda
   function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     const busqueda = document.getElementById('buscador').value.trim();
 
-    if (busqueda === "") {
-      cuerpo.innerHTML = '';
-      return;
-    }
-
+    if (busqueda === "") { cuerpo.innerHTML = ''; return; }
     if (lista.length === 0) {
-      cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No se han encontrado productos</td></tr>';
+      cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No hay resultados</td></tr>';
       return;
     }
 
     cuerpo.innerHTML = lista.map(p => {
       let clase = 'rojo', texto = 'Agotado';
-      if (p.stock > 5) { clase = 'verde'; texto = 'Stock disponible'; }
+      if (p.stock > 5) { clase = 'verde'; texto = 'Disponible'; }
       else if (p.stock > 0) { clase = 'amarillo'; texto = 'Últimas unidades'; }
-      
-      return `<tr>
-        <td class="col-code">${p.codigo}</td>
-        <td>${p.nombre}</td>
-        <td class="${clase}">${texto}</td>
-      </tr>`;
+      return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td class="${clase}">${texto}</td></tr>`;
     }).join('');
   }
 
-  // 3. Filtrado por nombre, código y checkbox de stock
   function filtrarStock() {
     const busqueda = document.getElementById('buscador').value.toLowerCase().trim();
     const soloDisponibles = document.getElementById('soloStock').checked;
-    
-    if(busqueda === "") {
-        renderTabla([]);
-        return;
-    }
-
+    if(busqueda === "") { renderTabla([]); return; }
     const filtrados = productos.filter(p => {
-        const coincide = p.nombre.toLowerCase().includes(busqueda) || 
-                         p.codigo.toLowerCase().includes(busqueda);
+        const coincide = p.nombre.toLowerCase().includes(busqueda) || p.codigo.toLowerCase().includes(busqueda);
         const tieneStock = soloDisponibles ? p.stock > 0 : true;
         return coincide && tieneStock;
     });
-
     renderTabla(filtrados);
   }
 
-  function loadMap(){
-    document.getElementById("mapShell").innerHTML = `<iframe class="map" loading="lazy" src="https://www.google.com"></iframe>`;
-  }
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 
 </body>
 </html>
+
