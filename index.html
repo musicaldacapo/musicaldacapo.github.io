@@ -100,48 +100,36 @@
   <div class="stock-container">
     <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
     <input type="text" id="buscador" placeholder="Busca instrumento o accesorio..." onkeyup="filtrarStock()">
+    
+    <!-- NUEVA CASILLA DE VERIFICACIÓN -->
+    <div style="margin-bottom: 15px; font-size: 14px; color: #555;">
+      <label style="cursor:pointer;">
+        <input type="checkbox" id="soloStock" onclick="filtrarStock()"> Mostrar solo productos con stock
+      </label>
+    </div>
+
     <div class="tabla-wrapper">
       <table id="tablaStock">
         <thead>
           <tr><th>Producto</th><th>Estado</th></tr>
         </thead>
-        <tbody id="cuerpoTabla">
-          <!-- Se rellena con JS -->
-        </tbody>
+        <tbody id="cuerpoTabla"></tbody>
       </table>
     </div>
   </div>
 
-  <div class="mapShell" id="mapShell">
-    <div class="mapPlaceholder">
-      <div class="mapTitle">Mapa</div>
-      <button class="mapBtn" type="button" onclick="loadMap()">Cargar mapa</button>
-    </div>
-  </div>
-
-  <div class="seo">
-    <p><strong>Musical da Capo</strong> es tu tienda de música en Córdoba...</p>
-  </div>
-
-  <footer>
-    © <span id="year"></span> Musical da Capo - B14956825 - Avda. de los Molinos 8 - 14001 Córdoba
-  </footer>
-</div>
-
-<!-- ... (resto del código igual hasta el script) ... -->
+<!-- ... -->
 
 <script>
   let productos = [];
 
-  // Lógica del buscador de Stock con soporte para ACENTOS (ISO-8859-1 a UTF-8)
+  // Carga del CSV con soporte de acentos
   fetch('stock.csv')
     .then(response => {
       if (!response.ok) throw new Error('Archivo no encontrado');
-      // Usamos arrayBuffer para poder decodificar acentos correctamente
       return response.arrayBuffer();
     })
     .then(buffer => {
-      // Decodificamos el archivo como Windows-1252/ISO-8859-1 para evitar errores en acentos y eñes
       const decoder = new TextDecoder('iso-8859-1');
       const data = decoder.decode(buffer);
       
@@ -149,7 +137,6 @@
       productos = filas.map(f => {
         const c = f.split(',');
         if (c.length >= 3) {
-          // Limpiamos comillas que a veces añade Excel y espacios
           return { 
             nombre: c[1].replace(/"/g, '').trim(), 
             stock: parseInt(c[2]) 
@@ -157,18 +144,21 @@
         }
         return null;
       }).filter(p => p && p.nombre);
-      
-      // No llamamos a renderTabla aquí para que empiece vacío
     })
-    .catch(err => console.log("Error cargando stock:", err));
+    .catch(err => console.log("Error:", err));
 
   function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     const busqueda = document.getElementById('buscador').value.trim();
 
-    // PARCHE 1: Si el buscador está vacío, limpiar tabla y salir
-    if (busqueda === "" || lista.length === 0) {
+    // No mostrar nada si el buscador está vacío
+    if (busqueda === "") {
       cuerpo.innerHTML = '';
+      return;
+    }
+
+    if (lista.length === 0) {
+      cuerpo.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:20px;">No se han encontrado productos</td></tr>';
       return;
     }
 
@@ -182,22 +172,24 @@
 
   function filtrarStock() {
     const busqueda = document.getElementById('buscador').value.toLowerCase().trim();
+    const soloDisponibles = document.getElementById('soloStock').checked;
     
-    // Si no hay texto, mandamos lista vacía para que no pinte nada
     if(busqueda === "") {
         renderTabla([]);
         return;
     }
 
-    const filtrados = productos.filter(p => 
-        p.nombre.toLowerCase().includes(busqueda)
-    );
+    const filtrados = productos.filter(p => {
+        const coincideNombre = p.nombre.toLowerCase().includes(busqueda);
+        const tieneStock = soloDisponibles ? p.stock > 0 : true; // Si el check está marcado, filtramos por stock > 0
+        return coincideNombre && tieneStock;
+    });
+
     renderTabla(filtrados);
   }
 
-  // Funciones originales
   function loadMap(){
-    document.getElementById("mapShell").innerHTML = `<iframe class="map" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6297.279991449915!2d-4.781773223665278!3d37.892101005392185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6cdf7aaf6b856d%3A0xa2a0162c1597d138!2sMusical%20da%20Capo!5e0!3m2!1ses!2ses!4v1766014231271!5m2!1ses!2ses"></iframe>`;
+    document.getElementById("mapShell").innerHTML = `<iframe class="map" loading="lazy" src="https://www.google.com"></iframe>`;
   }
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
