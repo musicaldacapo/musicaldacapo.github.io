@@ -5,12 +5,11 @@
   <title>Musical da Capo | Tienda de música en Córdoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* TUS ESTILOS ORIGINALES */
+    /* TUS ESTILOS ORIGINALES SE MANTIENEN IGUAL */
     .review{ background:#d72638; } 
     .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
     .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
     .mapPlaceholder{ padding:30px; text-align:center; color: #666; font-size: 14px; }
-
     .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
     .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
     #buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
@@ -22,7 +21,6 @@
     .verde { color: #27ae60; font-weight: bold; }
     .amarillo { color: #f39c12; font-weight: bold; }
     .rojo { color: #e74c3c; font-weight: bold; }
-    
     body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
     .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
     .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; }
@@ -35,8 +33,6 @@
     .buttons a{ display:inline-block; margin:6px; padding:11px 16px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold; cursor: pointer; }
     .whatsapp{background:#25d366} .email{background:#1f6feb} .maps{background:#f28c28}
     footer{ margin-top:18px; text-align:center; font-size:13px; color:#666; }
-
-    /* ESTILOS DEL NUEVO MENÚ (Integrados discretamente) */
     .nav-articulos { text-align: center; margin-bottom: 25px; }
     .dropdown { position: relative; display: inline-block; }
     .dropbtn { background: #333; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
@@ -44,8 +40,6 @@
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; }
     .dropdown-content a:hover { background-color: #f28c28; color: white; }
     .dropdown:hover .dropdown-content { display: block; }
-
-    /* ESTILO LANDING SENCILLA */
     #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
     .btn-volver { background: #eee; color: #333; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; margin-bottom: 15px; }
   </style>
@@ -139,7 +133,6 @@
 <script>
   let productos = [];
 
-  // Listado específico para la landing de Guitarras
   const guitarrasEspecificas = [
     { nombre: "Admira Alba 3/4", desc: "Guitarra clásica ideal para niños y jóvenes estudiantes.", img: "https://via.placeholder.com/100?text=Alba+3/4" },
     { nombre: "Admira Alba 4/4", desc: "La guitarra clásica de iniciación por excelencia para adultos.", img: "https://via.placeholder.com/100?text=Alba+4/4" },
@@ -149,50 +142,20 @@
     { nombre: "Daytona A411 Azul Brillo", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "https://via.placeholder.com/100?text=Daytona+Azul" }
   ];
 
-  // FUNCIONES PARA EL MENÚ Y LANDINGS
   function mostrarLanding(titulo, desc) {
     document.getElementById('main-content').style.display = 'none';
     const landing = document.getElementById('landing-producto');
     landing.style.display = 'block';
-    
-    let htmlContent = `
-      <button class="btn-volver" onclick="cerrarLanding()">← Volver</button>
-      <h2 style="color:#f28c28">${titulo}</h2>
-      <p>${desc}</p>
-    `;
-
-    // Si es Guitarras, inyectamos la lista específica
+    let htmlContent = `<button class="btn-volver" onclick="cerrarLanding()">← Volver</button><h2 style="color:#f28c28">${titulo}</h2><p>${desc}</p>`;
     if (titulo === 'Guitarras') {
       htmlContent += '<div style="display: grid; gap: 15px; margin-top: 20px;">';
       guitarrasEspecificas.forEach(g => {
-        htmlContent += `
-          <div style="display: flex; align-items: center; gap: 15px; border: 1px solid #eee; padding: 10px; border-radius: 8px;">
-            <img src="${g.img}" width="80" height="80" style="object-fit: cover; border-radius: 5px;">
-            <div style="flex:1">
-              <strong style="display:block;">${g.nombre}</strong>
-              <small style="color:#666;">${g.desc}</small>
-            </div>
-            <a href="https://wa.me/34695908361?text=Hola, precio y disponibilidad de ${g.nombre}" 
-               target="_blank" 
-               style="background:#25d366; color:white; padding:8px 12px; border-radius:5px; text-decoration:none; font-size:12px; font-weight:bold;">
-               Consultar
-            </a>
-          </div>
-        `;
+        htmlContent += `<div style="display: flex; align-items: center; gap: 15px; border: 1px solid #eee; padding: 10px; border-radius: 8px;"><img src="${g.img}" width="80" height="80" style="object-fit: cover; border-radius: 5px;"><div style="flex:1"><strong style="display:block;">${g.nombre}</strong><small style="color:#666;">${g.desc}</small></div><a href="https://wa.me/34695908361?text=Hola, precio y disponibilidad de ${g.nombre}" target="_blank" style="background:#25d366; color:white; padding:8px 12px; border-radius:5px; text-decoration:none; font-size:12px; font-weight:bold;">Consultar</a></div>`;
       });
       htmlContent += '</div>';
     } else {
-      // Para el resto de instrumentos, mantenemos el diseño simple anterior
-      htmlContent += `
-        <div style="text-align: center; margin: 20px 0;">
-          <a class="whatsapp" style="display:inline-block; padding:15px 25px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold;" 
-             href="https://wa.me/34695908361?text=Hola, quiero consultar el stock de ${titulo}" target="_blank">
-             Consultar disponibilidad por WhatsApp
-          </a>
-        </div>
-      `;
+      htmlContent += `<div style="text-align: center; margin: 20px 0;"><a class="whatsapp" style="display:inline-block; padding:15px 25px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold;" href="https://wa.me/34695908361?text=Hola, quiero consultar el stock de ${titulo}" target="_blank">Consultar disponibilidad por WhatsApp</a></div>`;
     }
-
     landing.innerHTML = htmlContent + '<hr style="opacity: 0.2; margin-top:20px;">';
     window.scrollTo(0,0);
   }
@@ -202,7 +165,13 @@
     document.getElementById('landing-producto').style.display = 'none';
   }
 
-  // --- El resto de tu lógica de stock (fetch, filtrarStock, etc.) se mantiene igual ---
+  // FUNCIÓN PARA ELIMINAR ACENTOS Y NORMALIZAR
+  function normalizarTexto(texto) {
+    return texto.toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+  }
+
   fetch('stock.csv')
     .then(response => response.arrayBuffer())
     .then(buffer => {
@@ -226,6 +195,10 @@
     const cuerpo = document.getElementById('cuerpoTabla');
     const busqueda = document.getElementById('buscador').value.trim();
     if (busqueda === "") { cuerpo.innerHTML = ''; return; }
+    if (lista.length === 0) {
+      cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No hay resultados</td></tr>';
+      return;
+    }
     cuerpo.innerHTML = lista.map(p => {
       let clase = 'rojo', texto = 'Agotado';
       if (p.stock > 5) { clase = 'verde'; texto = 'Disponible'; }
@@ -235,11 +208,23 @@
   }
 
   function filtrarStock() {
-    const busqueda = document.getElementById('buscador').value.toLowerCase().trim();
+    const busquedaOriginal = document.getElementById('buscador').value.trim();
     const soloDisponibles = document.getElementById('soloStock').checked;
-    if(busqueda === "") { renderTabla([]); return; }
+    
+    if(busquedaOriginal === "") { renderTabla([]); return; }
+
+    // Normalizamos la búsqueda y la dividimos en palabras sueltas
+    const terminosBusqueda = normalizarTexto(busquedaOriginal).split(/\s+/);
+
     const filtrados = productos.filter(p => {
-        const coincide = p.nombre.toLowerCase().includes(busqueda) || p.codigo.toLowerCase().includes(busqueda);
+        const nombreNormalizado = normalizarTexto(p.nombre);
+        const codigoNormalizado = normalizarTexto(p.codigo);
+        
+        // Comprobamos que TODAS las palabras de la búsqueda estén presentes en el nombre o código
+        const coincide = terminosBusqueda.every(term => 
+          nombreNormalizado.includes(term) || codigoNormalizado.includes(term)
+        );
+        
         const tieneStock = soloDisponibles ? p.stock > 0 : true;
         return coincide && tieneStock;
     });
@@ -249,7 +234,6 @@
   function loadMap() {
     document.getElementById("mapShell").innerHTML = `<iframe class="map" src="https://www.google.com/maps/embed?pb=..." allowfullscreen="" loading="lazy"></iframe>`;
   }
-
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
