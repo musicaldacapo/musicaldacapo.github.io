@@ -122,79 +122,178 @@
 </div>
 
 <script>
- // 1. LA LÓGICA DE RECORTE QUE PROPONES
-function buscarPorAproximacion(termino) {
-    let intento = termino;
-    // Mientras la palabra tenga más de 3 letras...
-    while (intento.length > 3) {
-        // Buscamos si algún producto EMPIEZA por ese trozo
-        let coincidencias = productos.filter(p => 
-            normalizar(p.nombre).includes(intento) || 
-            normalizar(p.codigo).includes(intento)
-        );
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Musical da Capo | Stock</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{ margin:0; font-family: Arial, sans-serif; background:#f6f6f6; color:#222; padding:10px; }
+    .container{ max-width:800px; margin:0 auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+    .logo{ display:block; margin:0 auto 10px; max-width:200px; }
+    h1 { text-align: center; color: #f28c28; font-size: 24px; }
+    
+    .search-box { display: flex; gap: 5px; margin: 20px 0; }
+    #buscador { flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 16px; }
+    #buscador:focus { border-color: #f28c28; outline: none; }
+    .btn-buscar { background: #333; color: #fff; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-        if (coincidencias.length > 0) {
-            // Si encontramos algo, devolvemos el nombre del primer producto para sugerirlo
-            return {
-                terminoOriginal: intento,
-                sugerencia: coincidencias[0].nombre.toUpperCase(),
-                cantidad: coincidencias.length
-            };
-        }
-        // Si no hay éxito, quitamos la última letra y volvemos a intentar
-        intento = intento.substring(0, intento.length - 1);
+    #contenedor-sugerencias { 
+        background: #fff3e0; border: 1px solid #f28c28; padding: 10px; 
+        border-radius: 8px; margin-bottom: 15px; display: none; cursor: pointer;
     }
-    return null; // Si llegamos a 3 letras y nada, nos rendimos
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { background: #f28c28; color: white; padding: 10px; text-align: left; font-size: 13px; }
+    td { padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
+    
+    .verde { color: #27ae60; font-weight: bold; }
+    .rojo { color: #e74c3c; font-weight: bold; }
+    .btn-ws { background: #25d366; color: white; text-decoration: none; padding: 5px 8px; border-radius: 4px; font-size: 11px; float: right; }
+
+    @media (max-width: 600px) {
+      .search-box { flex-direction: column; }
+      .btn-buscar { padding: 12px; }
+      td { display: block; width: 100%; box-sizing: border-box; }
+      th { display: none; }
+      tr { display: block; border-bottom: 2px solid #f28c28; padding: 10px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <img src="logo-musical.png" alt="Musical da Capo" class="logo">
+  <h1>Consultar Stock</h1>
+
+  <div class="search-box">
+    <input type="text" id="buscador" placeholder="Ej: castauñela, guitara..." oninput="alEscribir()">
+    <button class="btn-buscar" onclick="filtrarStock()">BUSCAR</button>
+  </div>
+
+  <div id="contenedor-sugerencias" onclick="aplicarSugerencia()"></div>
+
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr><th>Producto</th><th>Stock</th></tr>
+      </thead>
+      <tbody id="cuerpoTabla">
+        <tr><td colspan="2" style="text-align:center">Cargando productos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let productos = [];
+let sugerenciaActual = "";
+
+// 1. CARGA REAL DEL CSV
+fetch('stock.csv')
+  .then(response => response.arrayBuffer())
+  .then(buffer => {
+    const decoder = new TextDecoder('iso-8859-1');
+    const contenido = decoder.decode(buffer);
+    const filas = contenido.split('\n').slice(1);
+    
+    productos = filas.map(f => {
+      const c = f.split(',');
+      if(c.length >= 3) {
+        return {
+          codigo: c[0].replace(/"/g, '').trim(),
+          nombre: c[1].replace(/"/g, '').trim(),
+          stock: parseInt(c[2]) || 0
+        };
+      }
+      return null;
+    }).filter(p => p);
+    
+    document.getElementById('cuerpoTabla').innerHTML = '<tr><td colspan="2" style="text-align:center">Escribe algo para buscar</td></tr>';
+  })
+  .catch(err => {
+    document.getElementById('cuerpoTabla').innerHTML = '<tr><td colspan="2" style="color:red">Error al cargar stock.csv</td></tr>';
+  });
+
+function normalizar(t) {
+  return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
-// 2. FUNCIÓN DE FILTRADO ACTUALIZADA
+// 2. LÓGICA DE RECORTE (TU IDEA)
+function buscarSugerencia(incorrecto) {
+  let prueba = incorrecto;
+  while (prueba.length > 3) {
+    prueba = prueba.substring(0, prueba.length - 1); // Quitar última letra
+    let hallado = productos.find(p => normalizar(p.nombre).includes(prueba));
+    if (hallado) return hallado.nombre;
+  }
+  return null;
+}
+
+function alEscribir() {
+  // Solo ocultamos la sugerencia si el campo está vacío
+  if(document.getElementById('buscador').value === "") {
+    document.getElementById('contenedor-sugerencias').style.display = 'none';
+  }
+}
+
 function filtrarStock() {
-    const inputRaw = document.getElementById('buscador').value.trim();
-    const busq = normalizar(inputRaw);
-    const solo = document.getElementById('soloStock').checked;
-    const sugerenciasDiv = document.getElementById('contenedor-sugerencias');
-    
-    if (!busq) { renderTabla([]); return; }
+  const input = document.getElementById('buscador').value;
+  const busq = normalizar(input);
+  const sugerenciasDiv = document.getElementById('contenedor-sugerencias');
+  
+  if (busq === "") return;
 
-    // Intento 1: Búsqueda exacta/parcial normal
-    let filtrados = productos.filter(p => {
-        const n = normalizar(p.nombre);
-        const c = normalizar(p.codigo);
-        return n.includes(busq) || c.includes(busq);
-    });
+  // Intentar búsqueda directa
+  let filtrados = productos.filter(p => 
+    normalizar(p.nombre).includes(busq) || normalizar(p.codigo).includes(busq)
+  );
 
-    // Intento 2: Si no hay resultados, aplicamos tu lógica de "ir restando letras"
-    if (filtrados.length === 0) {
-        let aproximacion = buscarPorAproximacion(busq);
-        
-        if (aproximacion) {
-            sugerenciasDiv.style.display = 'block';
-            sugerenciasDiv.innerHTML = `
-                <div class="sugerencia-item" onclick="aplicarSug('${aproximacion.sugerencia}')">
-                    <span>No hay resultados para "${inputRaw}", ¿quizás quisiste decir <strong>${aproximacion.sugerencia}</strong>?</span>
-                    <button class="btn-buscar-sug">SÍ, BUSCAR ESTO</button>
-                </div>`;
-        } else {
-            sugerenciasDiv.style.display = 'none';
-        }
-    } else {
-        sugerenciasDiv.style.display = 'none';
-    }
-
-    // Aplicamos filtro de stock si está marcado
-    if (solo) filtrados = filtrados.filter(p => p.stock > 0);
-    
+  if (filtrados.length > 0) {
+    sugerenciasDiv.style.display = 'none';
     renderTabla(filtrados);
+  } else {
+    // Si falla, aplicar RECORTE
+    let sug = buscarSugerencia(busq);
+    if (sug) {
+      sugerenciaActual = sug;
+      sugerenciasDiv.style.display = 'block';
+      sugerenciasDiv.innerHTML = `No hay resultados para "${input}". ¿Quisiste decir <strong>${sug}</strong>? <span style="text-decoration:underline">Pulsar aquí</span>`;
+      renderTabla([]);
+    } else {
+      sugerenciasDiv.style.display = 'none';
+      document.getElementById('cuerpoTabla').innerHTML = '<tr><td colspan="2" style="text-align:center">No se encontró nada</td></tr>';
+    }
+  }
 }
 
-// 3. ACTUALIZAMOS EL MANEJAR INPUT (Para que no sea molesto mientras escribes)
-function manejarInput() {
-    // Solo disparamos la búsqueda automática si el usuario deja de escribir un momento
-    clearTimeout(window.searchTimer);
-    window.searchTimer = setTimeout(() => {
-        filtrarStock();
-    }, 500); // 500ms de pausa
+function aplicarSugerencia() {
+  document.getElementById('buscador').value = sugerenciaActual;
+  document.getElementById('contenedor-sugerencias').style.display = 'none';
+  filtrarStock();
 }
+
+function renderTabla(lista) {
+  const cuerpo = document.getElementById('cuerpoTabla');
+  if (lista.length === 0) {
+    cuerpo.innerHTML = '<tr><td colspan="2" style="text-align:center">Sin resultados exactos</td></tr>';
+    return;
+  }
+  
+  cuerpo.innerHTML = lista.map(p => {
+    let estado = p.stock > 0 ? `<span class="verde">Disponible</span>` : `<span class="rojo">Agotado</span>`;
+    let msg = encodeURIComponent(`Hola, pregunto por el stock de: ${p.nombre}`);
+    return `<tr>
+      <td>${p.nombre}<br><small style="color:#999">${p.codigo}</small></td>
+      <td>${estado} <a href="https://wa.me/34695908361?text=${msg}" class="btn-ws">WhatsApp</a></td>
+    </tr>`;
+  }).join('');
+}
+</script>
+
+</body>
+</html> 
 </script>
 </body>
 </html>
