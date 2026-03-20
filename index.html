@@ -58,6 +58,19 @@
     #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
     .btn-volver { background: #eee; color: #333; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; margin-bottom: 15px; }
     footer{ margin-top:18px; text-align:center; font-size:13px; color:#666; }
+    @media (max-width: 600px) {
+      .container { padding: 15px; margin: 10px; }
+      h1 { font-size: 24px; }
+      
+      /* Hack para que la tabla no se salga */
+      table, thead, tbody, th, td, tr { display: block; }
+      thead tr { position: absolute; top: -9999px; left: -9999px; } /* Esconde cabecera */
+      tr { border: 1px solid #eee; margin-bottom: 10px; border-radius: 10px; padding: 5px; }
+      td { border: none; position: relative; padding: 10px !important; text-align: left !important; }
+      
+      .btn-ws-small { float: right; margin-top: -5px; }
+      .verde, .amarillo, .rojo { display: inline-block; margin-bottom: 5px; }
+    }
   </style>
 </head>
 <body>
@@ -207,7 +220,7 @@
       .map(([n, c]) => `<div class="tag-sugerencia" onclick="sobrescribir('${n}')">${n} (${c})</div>`).join('');
   }
 
-  function dibujar(lista) {
+ function dibujar(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     if (lista.length === 0) { cuerpo.innerHTML = ''; return; }
     
@@ -219,6 +232,21 @@
       } else if (p.stock <= 5) {
         clase = 'amarillo'; texto = 'Últimas unidades';
       }
+
+      return `<tr>
+        <td>
+            <strong>${p.nom}</strong><br>
+            <small style="color:#888">Ref: ${p.id}</small>
+        </td>
+        <td style="text-align:right;">
+          <span class="${clase}">${texto}</span>
+          <a class="btn-ws-small" href="https://wa.me/34695908361?text=Hola, me interesa: ${p.nom} (${p.id})" target="_blank">
+            WhatsApp
+          </a>
+        </td>
+      </tr>`;
+    }).join('');
+  }
 
       return `<tr>
         <td><strong>${p.nom}</strong><br><small style="color:#888">Ref: ${p.id}</small></td>
