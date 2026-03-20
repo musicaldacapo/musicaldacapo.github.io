@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Musical da Capo | Buscador Inteligente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* ESTILOS ORIGINALES Y MEJORADOS */
     body{ margin:0; font-family: 'Segoe UI', Roboto, sans-serif; background:#f4f4f4; color:#333; padding:15px; }
     .container{ max-width:700px; margin:0 auto; background:#fff; padding:25px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
     h1{ color:#f28c28; text-align:center; margin-bottom: 25px; font-size: 28px; }
@@ -14,7 +13,6 @@
     input{ width: 100%; padding:16px; border:2px solid #ddd; border-radius:10px; font-size:18px; box-sizing: border-box; transition: 0.3s; }
     input:focus { border-color: #f28c28; outline: none; box-shadow: 0 0 10px rgba(242,140,40,0.2); }
     
-    /* PANEL DE SUGERENCIAS ESTILO BOTÓN */
     #aviso-error{ 
       display:none; background:#fff3e0; border:1px solid #f28c28; 
       padding:15px; border-radius:10px; margin: 15px 0; border-left: 5px solid #f28c28;
@@ -31,7 +29,7 @@
     td{ padding:18px 12px; border-bottom:1px solid #eee; }
     
     .ref-text { color: #999; font-size: 12px; display: block; margin-top: 4px; }
-    .status-badge { font-weight: bold; padding: 5px 10px; border-radius: 20px; font-size: 12px; text-transform: uppercase; }
+    .status-badge { font-weight: bold; padding: 5px 10px; border-radius: 20px; font-size: 11px; text-transform: uppercase; }
     .verde { background: #e8f5e9; color: #27ae60; }
     .rojo { background: #ffebee; color: #e74c3c; }
     
@@ -54,7 +52,7 @@
   <h1>Musical da Capo</h1>
   
   <div class="search-box">
-    <input type="text" id="buscador" placeholder="Busca tu instrumento..." autocomplete="off" oninput="procesarBusqueda()">
+    <input type="text" id="buscador" placeholder="Ej: admira 3/4, castauñela..." autocomplete="off" oninput="procesarBusqueda()">
     <div id="aviso-error"></div>
   </div>
 
@@ -90,21 +88,18 @@ fetch('stock.csv')
       return null;
     }).filter(p => p !== null);
 
-    document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center; color:#999; padding: 40px;">Empieza a escribir para buscar stock en tiempo real...</td></tr>';
+    document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center; color:#999; padding: 40px;">Escribe para buscar stock en tiempo real...</td></tr>';
   });
 
 function limpiar(t) {
   return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
-
 function sobrescribir(palabra) {
   document.getElementById('buscador').value = palabra;
   document.getElementById('aviso-error').style.display = 'none';
   procesarBusqueda();
 }
-
-// ... (Mantén el resto del HTML y CSS igual, solo sustituye estas funciones en el <script>)
 
 function procesarBusqueda() {
   const input = document.getElementById('buscador').value;
@@ -118,18 +113,17 @@ function procesarBusqueda() {
     return;
   }
 
-  // Dividimos la búsqueda en palabras sueltas (ej: ["admira", "3/4"])
+  // Dividimos la búsqueda en términos (para que "admira 3/4" funcione)
   const palabrasBusqueda = textoLimpio.split(/\s+/).filter(p => p.length > 0);
 
-  // FILTRADO MULTI-TÉRMINO
+  // Filtrado: el producto debe contener TODAS las palabras escritas
   let actuales = productos.filter(p => {
     const nombreProd = limpiar(p.nom);
     const idProd = limpiar(p.id);
-    // Verificamos que CADA palabra escrita esté en el nombre o ID
     return palabrasBusqueda.every(palabra => 
       nombreProd.includes(palabra) || idProd.includes(palabra)
     );
-  }).sort((a, b) => b.stock - a.stock);
+  }).sort((a, b) => b.stock - a.stock); // Ordenar por stock (disponibles arriba)
 
   if (actuales.length > 0) {
     ultimosResultadosValidos = actuales;
@@ -137,22 +131,19 @@ function procesarBusqueda() {
     aviso.style.display = 'none';
     dibujar(actuales);
   } else {
-    // Si no hay resultados, aplicamos el recorte palabra por palabra
+    // Si no hay nada, congelamos pantalla con lo último bueno
     if (ultimosResultadosValidos.length > 0) {
       aviso.style.display = 'block';
-      
-      // Intentamos sugerir la primera palabra del primer producto válido
-      let primeraPalabra = ultimosResultadosValidos[0].nom.split(" ")[0].toUpperCase();
+      let sugerencia = ultimosResultadosValidos[0].nom.split(" ")[0].toUpperCase();
       
       aviso.innerHTML = `
-        <div style="margin-bottom:5px;">No hay resultados exactos para "<strong>${input}</strong>".</div>
-        <div>¿Quisiste decir <strong>${primeraPalabra}</strong>?</div>
-        <button class="sugerencia-btn" onclick="sobrescribir('${primeraPalabra}')">CORREGIR Y BUSCAR</button>
+        <div style="margin-bottom:5px;">No hay resultados para "<strong>${input}</strong>".</div>
+        <div>¿Quisiste decir <strong>${sugerencia}</strong>?</div>
+        <button class="sugerencia-btn" onclick="sobrescribir('${sugerencia}')">CORREGIR Y BUSCAR</button>
       `;
-      
       dibujar(ultimosResultadosValidos);
     } else {
-      document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center; padding:40px;">No se han encontrado coincidencias para esos términos.</td></tr>';
+      document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center; padding:40px;">No se han encontrado coincidencias.</td></tr>';
     }
   }
 }
@@ -163,26 +154,6 @@ function dibujar(lista) {
     cuerpo.innerHTML = '';
     return;
   }
-  
-  // Limitamos a 40 resultados para que vuele
-  cuerpo.innerHTML = lista.slice(0, 40).map((p, index) => {
-    let dispClass = p.stock > 0 ? 'verde' : 'rojo';
-    let dispText = p.stock > 0 ? 'Disponible' : 'Agotado';
-    let msg = encodeURIComponent(`Hola, me interesa: ${p.nom} (Ref: ${p.id})`);
-    
-    return `<tr>
-      <td>
-        <span class="num-badge">${index + 1}</span>
-        <strong>${p.nom}</strong>
-        <span class="ref-text">Ref: ${p.id}</span>
-      </td>
-      <td style="text-align: right; white-space: nowrap;">
-        <span class="status-badge ${dispClass}">${dispText}</span>
-        <a href="https://wa.me/34695908361?text=${msg}" target="_blank" class="btn-ws">WhatsApp</a>
-      </td>
-    </tr>`;
-  }).join('');
-}
   
   cuerpo.innerHTML = lista.slice(0, 40).map((p, index) => {
     let dispClass = p.stock > 0 ? 'verde' : 'rojo';
@@ -203,6 +174,5 @@ function dibujar(lista) {
   }).join('');
 }
 </script>
-
 </body>
 </html>
