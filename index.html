@@ -23,4 +23,241 @@
     .dropdown { position: relative; display: inline-block; }
     .dropbtn { background: #333; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
     .dropdown-content { display: none; position: absolute; background-color: #fff; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); z-index: 10; border-radius: 8px; text-align: left; left: 50%; transform: translateX(-50%); overflow: hidden; }
-    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom:
+    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; }
+    .dropdown-content a:hover { background-color: #f28c28; color: white; }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* --- NUEVOS ESTILOS BUSCADOR Y SUGERENCIAS --- */
+    .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; position: relative; }
+    .search-wrapper { position: relative; display: flex; gap: 5px; margin-bottom: 10px; }
+    #buscador { flex-grow: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+    
+    .suggestions-list { 
+        position: absolute; top: 100%; left: 0; right: 0; 
+        background: white; border: 1px solid #ccc; border-top: none;
+        border-radius: 0 0 8px 8px; list-style: none; padding: 0; margin: 0;
+        z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-height: 250px; overflow-y: auto; display: none;
+    }
+    .suggestions-list li { 
+        padding: 10px; border-bottom: 1px solid #eee; 
+        display: flex; justify-content: space-between; align-items: center; font-size: 14px;
+    }
+    .suggestions-list li:hover { background: #fffcf0; }
+    .btn-search-this { 
+        background: #f28c28; color: white; border: none; 
+        padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 11px;
+    }
+
+    /* --- TABLA Y OTROS --- */
+    .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+    th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
+    td { padding: 12px 10px; border-bottom: 1px solid #eee; }
+    .verde { color: #27ae60; font-weight: bold; }
+    .amarillo { color: #f39c12; font-weight: bold; }
+    .rojo { color: #e74c3c; font-weight: bold; }
+    .btn-ws-tabla { display: inline-block; background: #25d366; color: white !important; text-decoration: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-left: 8px; }
+
+    @media screen and (max-width: 600px) {
+      table, thead, tbody, th, td, tr { display: block; width: 100%; }
+      thead { display: none; }
+      tr { border-bottom: 2px solid #f28c28; padding: 15px 0; background: #fff; }
+      td { border: none; padding: 4px 10px; box-sizing: border-box; }
+      .btn-ws-tabla { display: block; text-align: center; margin-top: 10px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <img src="logo-musical.png" alt="Musical da Capo" class="logo">
+  <h1>Musical da Capo</h1>
+  <div class="subtitle">Tu tienda de Música en Córdoba</div>
+
+  <div class="nav-articulos">
+    <div class="dropdown">
+      <button class="dropbtn">Ver Instrumentos en Stock ▼</button>
+      <div class="dropdown-content">
+        <a href="#" onclick="mostrarLanding('Guitarras', 'Selección de guitarras españolas...')">Guitarras</a>
+        <a href="#" onclick="mostrarLanding('Ukeleles', 'Ukeleles de todas las gamas...')">Ukeleles</a>
+        <a href="#" onclick="mostrarLanding('Teclados', 'Pianos digitales y teclados...')">Teclados y Pianos</a>
+        <a href="#" onclick="mostrarLanding('Carrillones', 'Carrillones cromáticos...')">Carrillones</a>
+        <a href="#" onclick="mostrarLanding('Violines', 'Violines de estudio y avanzados.')">Violines</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="landing-producto" style="display:none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px;"></div>
+
+  <div id="main-content">
+    <div class="info">
+      <p><strong>Avenida de los Molinos 8</strong><br>14001 · Córdoba</p>
+    </div>
+
+    <div class="stock-container">
+      <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
+      
+      <div class="search-wrapper">
+        <input type="text" id="buscador" placeholder="Empieza a escribir el nombre del producto..." oninput="manejarSugerencias()">
+        <button class="dropbtn" onclick="limpiarBusqueda()">X</button>
+        <ul id="lista-sugerencias" class="suggestions-list"></ul>
+      </div>
+      
+      <div style="margin-bottom: 15px; font-size: 14px; color: #555;">
+        <label style="cursor:pointer; display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="soloStock" onclick="filtrarStockFinal()"> Solo con stock disponible
+        </label>
+      </div>
+
+      <div class="tabla-wrapper">
+        <table id="tablaStock">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Producto</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoTabla">
+              <tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">Escribe arriba para buscar productos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © Musical da Capo - Córdoba 2026
+  </footer>
+</div>
+
+<script>
+ let productos = [];
+
+ // Normalizar texto (quitar acentos)
+ function normalizarTexto(texto) {
+    return texto ? texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
+ }
+
+ // Carga de CSV
+ fetch('stock.csv')
+    .then(response => response.arrayBuffer())
+    .then(buffer => {
+      const decoder = new TextDecoder('iso-8859-1');
+      const data = decoder.decode(buffer);
+      const filas = data.trim().split('\n').slice(1);
+      productos = filas.map(f => {
+        const c = f.split(',');
+        if (c.length >= 3) {
+          return { 
+            codigo: c[0].replace(/"/g, '').trim(), 
+            nombre: c[1].replace(/"/g, '').trim(), 
+            stock: parseInt(c[2]) || 0
+          };
+        }
+        return null;
+      }).filter(p => p && p.nombre);
+    });
+
+ // Función 1: Mostrar Sugerencias mientras escribe
+ function manejarSugerencias() {
+    const query = normalizarTexto(document.getElementById('buscador').value);
+    const listaSug = document.getElementById('lista-sugerencias');
+    const soloDisponibles = document.getElementById('soloStock').checked;
+
+    if (query.length < 2) {
+        listaSug.style.display = 'none';
+        return;
+    }
+
+    // Filtrar coincidencias para las sugerencias
+    const coincidencias = productos.filter(p => {
+        const coincideNombre = normalizarTexto(p.nombre).includes(query);
+        const coincideCod = normalizarTexto(p.codigo).includes(query);
+        const tieneStock = soloDisponibles ? p.stock > 0 : true;
+        return (coincideNombre || coincideCod) && tieneStock;
+    }).slice(0, 10); // Limitar a 10 sugerencias para no saturar
+
+    if (coincidencias.length > 0) {
+        listaSug.style.display = 'block';
+        listaSug.innerHTML = coincidencias.map(p => `
+            <li>
+                <span>${p.nombre} <strong>(${p.stock > 0 ? p.stock : '0'} ref.)</strong></span>
+                <button class="btn-search-this" onclick="ejecutarBusqueda('${p.nombre.replace(/'/g, "\\'")}')">BUSCAR ESTO</button>
+            </li>
+        `).join('');
+    } else {
+        listaSug.innerHTML = '<li style="color:#888">No se encuentran coincidencias</li>';
+        listaSug.style.display = 'block';
+    }
+ }
+
+ // Función 2: Ejecutar la búsqueda real al pulsar el botón
+ function ejecutarBusqueda(termino) {
+    document.getElementById('buscador').value = termino;
+    document.getElementById('lista-sugerencias').style.display = 'none';
+    filtrarStockFinal();
+ }
+
+ // Función 3: Refrescar la tabla con los resultados finales
+ function filtrarStockFinal() {
+    const busqueda = normalizarTexto(document.getElementById('buscador').value);
+    const soloDisponibles = document.getElementById('soloStock').checked;
+    
+    const filtrados = productos.filter(p => {
+        const coincide = normalizarTexto(p.nombre).includes(busqueda) || normalizarTexto(p.codigo).includes(busqueda);
+        const tieneStock = soloDisponibles ? p.stock > 0 : true;
+        return coincide && tieneStock;
+    });
+
+    renderTabla(filtrados);
+ }
+
+ function renderTabla(lista) {
+    const cuerpo = document.getElementById('cuerpoTabla');
+    if (lista.length === 0) {
+      cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No hay resultados exactos</td></tr>';
+      return;
+    }
+
+    cuerpo.innerHTML = lista.map(p => {
+      let clase = 'rojo', texto = 'Agotado';
+      if (p.stock > 5) { clase = 'verde'; texto = 'Disponible'; }
+      else if (p.stock > 0) { clase = 'amarillo'; texto = 'Últimas unidades'; }
+      
+      const mensajeWA = encodeURIComponent(`Hola, me interesa: ${p.nombre} (Ref: ${p.codigo}). ¿Hay stock?`);
+
+      return `
+        <tr>
+          <td class="col-code">${p.codigo}</td>
+          <td>${p.nombre}</td>
+          <td>
+            <span class="${clase}">${texto}</span>
+            <a href="https://wa.me/34695908361?text=${mensajeWA}" target="_blank" class="btn-ws-tabla">Consultar WhatsApp</a>
+          </td>
+        </tr>`;
+    }).join('');
+ }
+
+ function limpiarBusqueda() {
+    document.getElementById('buscador').value = "";
+    document.getElementById('lista-sugerencias').style.display = 'none';
+    document.getElementById('cuerpoTabla').innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">Escribe arriba para buscar productos</td></tr>';
+ }
+
+ function mostrarLanding(titulo, desc) {
+    document.getElementById('main-content').style.display = 'none';
+    const landing = document.getElementById('landing-producto');
+    landing.style.display = 'block';
+    landing.innerHTML = `<button class="btn-volver" onclick="cerrarLanding()">← Volver</button><h2 style="color:#f28c28">${titulo}</h2><p>${desc}</p>`;
+    window.scrollTo(0,0);
+ }
+
+ function cerrarLanding() {
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('landing-producto').style.display = 'none';
+ }
+</script>
+</body>
+</html>
