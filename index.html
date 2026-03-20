@@ -97,23 +97,39 @@ function limpiar(t) {
   return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
+
+function sobrescribir(palabra) {
+  document.getElementById('buscador').value = palabra;
+  document.getElementById('aviso-error').style.display = 'none';
+  procesarBusqueda();
+}
+
+// ... (Mantén el resto del HTML y CSS igual, solo sustituye estas funciones en el <script>)
+
 function procesarBusqueda() {
   const input = document.getElementById('buscador').value;
-  const busq = limpiar(input);
+  const textoLimpio = limpiar(input);
   const aviso = document.getElementById('aviso-error');
   
-  if (busq.length < 2) {
+  if (textoLimpio.length < 2) {
     aviso.style.display = 'none';
     dibujar([]);
     ultimosResultadosValidos = [];
-    ultimaPalabraValida = "";
     return;
   }
 
-  // Filtrar y ORDENAR POR STOCK (Primero los que tienen stock > 0)
-  let actuales = productos.filter(p => 
-    limpiar(p.nom).includes(busq) || limpiar(p.id).includes(busq)
-  ).sort((a, b) => b.stock - a.stock);
+  // Dividimos la búsqueda en palabras sueltas (ej: ["admira", "3/4"])
+  const palabrasBusqueda = textoLimpio.split(/\s+/).filter(p => p.length > 0);
+
+  // FILTRADO MULTI-TÉRMINO
+  let actuales = productos.filter(p => {
+    const nombreProd = limpiar(p.nom);
+    const idProd = limpiar(p.id);
+    // Verificamos que CADA palabra escrita esté en el nombre o ID
+    return palabrasBusqueda.every(palabra => 
+      nombreProd.includes(palabra) || idProd.includes(palabra)
+    );
+  }).sort((a, b) => b.stock - a.stock);
 
   if (actuales.length > 0) {
     ultimosResultadosValidos = actuales;
@@ -121,31 +137,24 @@ function procesarBusqueda() {
     aviso.style.display = 'none';
     dibujar(actuales);
   } else {
+    // Si no hay resultados, aplicamos el recorte palabra por palabra
     if (ultimosResultadosValidos.length > 0) {
       aviso.style.display = 'block';
       
-      // EXTRAEMOS SOLO LA PRIMERA PALABRA COMPLETA
-      // Ejemplo: "CASTAÑUELA JALE..." -> "CASTAÑUELA"
-      let nombreCompleto = ultimosResultadosValidos[0].nom;
-      let primeraPalabra = nombreCompleto.split(" ")[0].toUpperCase();
+      // Intentamos sugerir la primera palabra del primer producto válido
+      let primeraPalabra = ultimosResultadosValidos[0].nom.split(" ")[0].toUpperCase();
       
       aviso.innerHTML = `
         <div style="margin-bottom:5px;">No hay resultados exactos para "<strong>${input}</strong>".</div>
         <div>¿Quisiste decir <strong>${primeraPalabra}</strong>?</div>
-        <button class="sugerencia-btn" onclick="sobrescribir('${primeraPalabra}')">SÍ, CORREGIR BÚSQUEDA</button>
+        <button class="sugerencia-btn" onclick="sobrescribir('${primeraPalabra}')">CORREGIR Y BUSCAR</button>
       `;
       
       dibujar(ultimosResultadosValidos);
     } else {
-      document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center; padding:40px;">No se han encontrado coincidencias.</td></tr>';
+      document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center; padding:40px;">No se han encontrado coincidencias para esos términos.</td></tr>';
     }
   }
-}
-
-function sobrescribir(palabra) {
-  document.getElementById('buscador').value = palabra;
-  document.getElementById('aviso-error').style.display = 'none';
-  procesarBusqueda();
 }
 
 function dibujar(lista) {
@@ -154,6 +163,26 @@ function dibujar(lista) {
     cuerpo.innerHTML = '';
     return;
   }
+  
+  // Limitamos a 40 resultados para que vuele
+  cuerpo.innerHTML = lista.slice(0, 40).map((p, index) => {
+    let dispClass = p.stock > 0 ? 'verde' : 'rojo';
+    let dispText = p.stock > 0 ? 'Disponible' : 'Agotado';
+    let msg = encodeURIComponent(`Hola, me interesa: ${p.nom} (Ref: ${p.id})`);
+    
+    return `<tr>
+      <td>
+        <span class="num-badge">${index + 1}</span>
+        <strong>${p.nom}</strong>
+        <span class="ref-text">Ref: ${p.id}</span>
+      </td>
+      <td style="text-align: right; white-space: nowrap;">
+        <span class="status-badge ${dispClass}">${dispText}</span>
+        <a href="https://wa.me/34695908361?text=${msg}" target="_blank" class="btn-ws">WhatsApp</a>
+      </td>
+    </tr>`;
+  }).join('');
+}
   
   cuerpo.innerHTML = lista.slice(0, 40).map((p, index) => {
     let dispClass = p.stock > 0 ? 'verde' : 'rojo';
