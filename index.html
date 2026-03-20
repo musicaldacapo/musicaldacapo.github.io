@@ -238,16 +238,113 @@ function normalizarTexto(texto) {
     filtrarStock();
  }
 
- function filtrarStock() {
+// 1. FÓRMULA DE LEVENSHTEIN (Mide cuántos pasos hay de una palabra a otra)
+function calcularDistancia(s1, s2) {
+    s1 = normalizarTexto(s1);
+    s2 = normalizarTexto(s2);
+    if (s1 === s2) return 0;
+    if (s1.length === 0) return s2.length;
+    if (s2.length === 0) return s1.length;
+
+    let v0 = new Array(s2.length + 1);
+    let v1 = new Array(s2.length + 1);
+
+    for (let i = 0; i <= s2.length; i++) v0[i] = i;
+
+    for (let i = 0; i < s1.length; i++) {
+        v1[0] = i + 1;
+        for (let j = 0; j < s2.length; j++) {
+            let cost = (s1[i] === s2[j]) ? 0 : 1;
+            v1[j + 1] = Math.min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
+        }
+        for (let j = 0; j <= s2.length; j++) v0[j] = v1[j];
+    }
+    return v0[s2.length];
+}
+
+// 2. GENERAR SUGERENCIAS (Ahora con umbral dinámico)
+function generarSugerencias() {
+    const busqOriginal = document.getElementById('buscador').value.trim();
+    const inputNorm = normalizarTexto(busqOriginal);
+    const contenedor = document.getElementById('contenedor-sugerencias');
+    
+    if (inputNorm.length < 3) { contenedor.style.display = 'none'; return; }
+
+    let mapaSugerencias = {};
+    
+    productos.forEach(p => {
+        const palabras = p.nombre.split(" ");
+        let coincide = false;
+
+        // Comprobamos cada palabra del producto contra lo que escribe el usuario
+        for (let pal of palabras) {
+            let pNorm = normalizarTexto(pal);
+            let dist = calcularDistancia(inputNorm, pNorm);
+            
+            // Si el error es pequeño (1 o 2 letras según longitud) o está contenida
+            if (pNorm.includes(inputNorm) || dist <= 1 || (inputNorm.length > 5 && dist <= 2)) {
+                coincide = true;
+                break;
+            }
+        }
+
+        if (coincide) {
+            // Creamos la sugerencia de 2 palabras para dar contexto
+            for (let i = 0; i < palabras.length; i++) {
+                let combinacion = normalizarTexto(palabras.slice(0, i + 1).join(" "));
+                if (combinacion.includes(inputNorm) || calcularDistancia(inputNorm, combinacion) <= 2) {
+                    let frase = palabras.slice(0, i + 2).join(" ").toUpperCase();
+                    mapaSugerencias[frase] = (mapaSugerencias[frase] || 0) + 1;
+                    break;
+                }
+            }
+        }
+    });
+
+    const ordenadas = Object.keys(mapaSugerencias)
+        .sort((a,b) => mapaSugerencias[b] - mapaSugerencias[a])
+        .slice(0, 5);
+
+    if (ordenadas.length > 0) {
+        contenedor.style.display = 'block';
+        contenedor.innerHTML = `<div style="padding:5px; font-size:12px; color:#888;">¿Querías decir...?</div>` + 
+            ordenadas.map(word => `
+            <div class="sugerencia-item">
+                <span>✨ <strong>${word}</strong></span>
+                <button class="btn-buscar-sug" onclick="aplicarSugerencia('${word}')">
+                    ${mapaSugerencias[word]} RESULTADOS
+                </button>
+            </div>`).join('');
+    } else { contenedor.style.display = 'none'; }
+}
+
+// 3. FILTRADO FINAL (También tolera errores al pulsar BUSCAR)
+function filtrarStock() {
     const busq = normalizarTexto(document.getElementById('buscador').value.trim());
     const solo = document.getElementById('soloStock').checked;
     document.getElementById('contenedor-sugerencias').style.display = 'none';
+    
     if(busq === "") { renderTabla([]); return; }
 
     let filtrados = productos.filter(p => {
-        const coincide = normalizarTexto(p.nombre).includes(busq) || normalizarTexto(p.codigo).includes(busq);
-        return coincide && (solo ? p.stock > 0 : true);
+        const nNorm = normalizarTexto(p.nombre);
+        const cNorm = normalizarTexto(p.codigo);
+        
+        // Coincidencia exacta o parcial
+        if (nNorm.includes(busq) || cNorm.includes(busq)) return true;
+        
+        // Coincidencia por "letra bailada" en la primera o segunda palabra
+        const pals = nNorm.split(" ");
+        return pals.some(pal => calcularDistancia(busq, pal) <= 1 || (busq.length > 5 && calcularDistancia(busq, pal) <= 2));
     });
+
+    // Filtro de stock y ordenación
+    if (solo) filtrados = filtrados.filter(p => p.stock > 0);
+    filtrados.sort((a, b) => b.stock - a.stock);
+    
+    renderTabla(filtrados);
+    setTimeout(() => { document.getElementById('ancla-resultados').scrollIntoView({ behavior: 'smooth' }); }, 200);
+}
 
     // ORDENAR: Más stock primero
     filtrados.sort((a, b) => b.stock - a.stock);
