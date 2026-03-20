@@ -30,7 +30,13 @@
     .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
     input#buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
     
-    .filter-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+    .filter-row { 
+      display: flex; 
+      align-items: center; 
+      justify-content: flex-start; /* Esto los junta a la izquierda */
+      gap: 15px; /* Esto da una separación elegante de 15px entre el texto y el botón */
+      margin-bottom: 15px; 
+    }
     .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
@@ -117,12 +123,12 @@
       <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
       <input type="text" id="buscador" placeholder="Busca instrumento o referencia..." oninput="procesarBusqueda()">
       
-      <div class="filter-row">
-        <span style="font-size:13px; color:#666;">Solo productos disponibles</span>
-        <label class="switch">
-          <input type="checkbox" id="checkStock" onchange="procesarBusqueda()">
-          <span class="slider"></span>
-        </label>
+     <div class="filter-row">
+  <span style="font-size:13px; color:#666; font-weight:bold;">Filtrar sólo productos en stock</span>
+  <label class="switch">
+    <input type="checkbox" id="checkStock" onchange="procesarBusqueda()">
+    <span class="slider"></span>
+  </label>
       </div>
 
       <div id="panel-sugerencias"></div>
