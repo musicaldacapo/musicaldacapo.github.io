@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Musical da Capo | Tienda de música en Córdoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    /* TUS ESTILOS ORIGINALES SE MANTIENEN IGUAL */
+ <style>
+    /* ... (Tus estilos anteriores se mantienen) ... */
     .review{ background:#d72638; } 
     .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
     .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
@@ -16,7 +16,7 @@
     .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
     th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
-    td { padding: 10px; border-bottom: 1px solid #eee; }
+    td { padding: 12px 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
     .col-code { color: #888; font-family: monospace; font-size: 12px; width: 80px; }
     .verde { color: #27ae60; font-weight: bold; }
     .amarillo { color: #f39c12; font-weight: bold; }
@@ -42,7 +42,41 @@
     .dropdown:hover .dropdown-content { display: block; }
     #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
     .btn-volver { background: #eee; color: #333; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; margin-bottom: 15px; }
-  </style>
+
+    /* --- NUEVOS ESTILOS PARA MÓVIL --- */
+    @media screen and (max-width: 600px) {
+      table, thead, tbody, th, td, tr { 
+        display: block; 
+      }
+      thead tr { 
+        position: absolute; 
+        top: -9999px; 
+        left: -9999px; 
+      }
+      tr { 
+        border-bottom: 2px solid #f28c28; 
+        padding: 10px 0; 
+      }
+      td { 
+        border: none; 
+        padding: 2px 5px; 
+        width: 100%; 
+        box-sizing: border-box; 
+      }
+      .col-code { 
+        font-size: 11px; 
+        color: #999; 
+      }
+      td:nth-of-type(2) { 
+        font-weight: bold; 
+        font-size: 16px; 
+        padding-top: 5px;
+      }
+      td:nth-of-type(3) { 
+        padding-bottom: 5px;
+      }
+    }
+</style>
 </head>
 <body>
 
@@ -207,7 +241,7 @@
       }).filter(p => p && p.nombre);
     });
 
-  function renderTabla(lista) {
+function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     const busqueda = document.getElementById('buscador').value.trim();
     if (busqueda === "") { cuerpo.innerHTML = ''; return; }
@@ -219,7 +253,13 @@
       let clase = 'rojo', texto = 'Agotado';
       if (p.stock > 5) { clase = 'verde'; texto = 'Disponible'; }
       else if (p.stock > 0) { clase = 'amarillo'; texto = 'Últimas unidades'; }
-      return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td class="${clase}">${texto}</td></tr>`;
+      
+      return `
+        <tr>
+          <td class="col-code">${p.codigo}</td>
+          <td>${p.nombre}</td>
+          <td class="${clase}"><span class="mobile-label">Estado: </span>${texto}</td>
+        </tr>`;
     }).join('');
   }
 
