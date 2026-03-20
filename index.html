@@ -346,30 +346,6 @@ function filtrarStock() {
     setTimeout(() => { document.getElementById('ancla-resultados').scrollIntoView({ behavior: 'smooth' }); }, 200);
 }
 
-    // ORDENAR: Más stock primero
-    filtrados.sort((a, b) => b.stock - a.stock);
-    renderTabla(filtrados);
-
-    // Scroll suave para saltar el teclado en móvil
-    setTimeout(() => {
-        document.getElementById('ancla-resultados').scrollIntoView({ behavior: 'smooth' });
-    }, 200);
- }
-
- function renderTabla(lista) {
-    const cuerpo = document.getElementById('cuerpoTabla');
-    if (lista.length === 0) {
-        cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">No hay resultados</td></tr>';
-        return;
-    }
-    cuerpo.innerHTML = lista.map(p => {
-        let cl = p.stock > 5 ? 'verde' : (p.stock > 0 ? 'amarillo' : 'rojo');
-        let tx = p.stock > 5 ? 'Disponible' : (p.stock > 0 ? 'Últimas unidades' : 'Agotado');
-        const msg = encodeURIComponent(`Hola, consulto stock de: ${p.nombre} (Ref: ${p.codigo})`);
-        return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td><span class="${cl}">${tx}</span> <a href="https://wa.me/34695908361?text=${msg}" target="_blank" class="btn-ws-tabla">WhatsApp</a></td></tr>`;
-    }).join('');
- }
-
  function mostrarLanding(titulo, desc) {
     document.getElementById('main-content').style.display = 'none';
     const landing = document.getElementById('landing-producto');
