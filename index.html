@@ -5,75 +5,39 @@
   <title>Musical da Capo | Tienda de música en Córdoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
  <style>
-    /* ... (Tus estilos anteriores se mantienen) ... */
-    .review{ background:#d72638; } 
-    .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
-    .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
-    .mapPlaceholder{ padding:30px; text-align:center; color: #666; font-size: 14px; }
-    .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
-    .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
-    #buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
-    .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
-    th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
-    td { padding: 12px 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
-    .col-code { color: #888; font-family: monospace; font-size: 12px; width: 80px; }
-    .verde { color: #27ae60; font-weight: bold; }
-    .amarillo { color: #f39c12; font-weight: bold; }
-    .rojo { color: #e74c3c; font-weight: bold; }
-    body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
-    .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
-    .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; }
-    h1{ text-align:center; color:#f28c28; margin:10px 0 5px; font-size:30px; }
-    .subtitle{ text-align:center; font-size:18px; margin-bottom:16px; }
-    .xmas{ background:#178a3a; color:#fff; text-align:center; padding:10px; border-radius:10px; font-weight:bold; margin-bottom:18px; }
-    .info{ text-align:center; font-size:16px; line-height:1.5; margin-bottom:18px; }
-    .info strong{color:#1f6feb}
-    .buttons{ text-align:center; margin-bottom:20px; }
-    .buttons a{ display:inline-block; margin:6px; padding:11px 16px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold; cursor: pointer; }
-    .whatsapp{background:#25d366} .email{background:#1f6feb} .maps{background:#f28c28}
-    footer{ margin-top:18px; text-align:center; font-size:13px; color:#666; }
-    .nav-articulos { text-align: center; margin-bottom: 25px; }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: #333; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
-    .dropdown-content { display: none; position: absolute; background-color: #fff; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); z-index: 10; border-radius: 8px; text-align: left; left: 50%; transform: translateX(-50%); overflow: hidden; }
-    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; }
-    .dropdown-content a:hover { background-color: #f28c28; color: white; }
-    .dropdown:hover .dropdown-content { display: block; }
-    #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
-    .btn-volver { background: #eee; color: #333; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; margin-bottom: 15px; }
+    /* ... (Manten tus estilos anteriores) ... */
+    
+    /* Estilo para el botón de WhatsApp en la tabla */
+    .btn-ws-tabla {
+        display: inline-flex;
+        align-items: center;
+        background: #25d366;
+        color: white !important;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .btn-ws-tabla:hover { background: #128c7e; }
 
-    /* --- NUEVOS ESTILOS PARA MÓVIL --- */
+    /* AJUSTES PARA MÓVIL */
     @media screen and (max-width: 600px) {
-      table, thead, tbody, th, td, tr { 
+      table, thead, tbody, th, td, tr { display: block; }
+      thead tr { position: absolute; top: -9999px; left: -9999px; }
+      tr { border-bottom: 2px solid #f28c28; padding: 15px 5px; background: #fff; margin-bottom: 5px; }
+      td { border: none; padding: 2px 5px; width: 100%; box-sizing: border-box; }
+      
+      .col-code { font-size: 11px; color: #999; margin-bottom: 2px; }
+      td:nth-of-type(2) { font-weight: bold; font-size: 16px; color: #333; margin-bottom: 5px; }
+      
+      /* En móvil el botón de WhatsApp se pone debajo */
+      .btn-ws-tabla { 
         display: block; 
-      }
-      thead tr { 
-        position: absolute; 
-        top: -9999px; 
-        left: -9999px; 
-      }
-      tr { 
-        border-bottom: 2px solid #f28c28; 
-        padding: 10px 0; 
-      }
-      td { 
-        border: none; 
-        padding: 2px 5px; 
-        width: 100%; 
-        box-sizing: border-box; 
-      }
-      .col-code { 
-        font-size: 11px; 
-        color: #999; 
-      }
-      td:nth-of-type(2) { 
-        font-weight: bold; 
-        font-size: 16px; 
-        padding-top: 5px;
-      }
-      td:nth-of-type(3) { 
-        padding-bottom: 5px;
+        text-align: center; 
+        margin: 10px 0 0 0; 
+        padding: 8px;
       }
     }
 </style>
@@ -244,25 +208,36 @@
 function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     const busqueda = document.getElementById('buscador').value.trim();
+    
     if (busqueda === "") { cuerpo.innerHTML = ''; return; }
+    
     if (lista.length === 0) {
       cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No hay resultados</td></tr>';
       return;
     }
+
     cuerpo.innerHTML = lista.map(p => {
       let clase = 'rojo', texto = 'Agotado';
       if (p.stock > 5) { clase = 'verde'; texto = 'Disponible'; }
       else if (p.stock > 0) { clase = 'amarillo'; texto = 'Últimas unidades'; }
       
+      // Creamos el mensaje personalizado para WhatsApp
+      const mensajeWA = encodeURIComponent(`Hola, me interesa el producto: ${p.nombre} (Ref: ${p.codigo}). ¿Me podríais dar más información?`);
+      const urlWA = `https://wa.me/34695908361?text=${mensajeWA}`;
+
       return `
         <tr>
           <td class="col-code">${p.codigo}</td>
           <td>${p.nombre}</td>
-          <td class="${clase}"><span class="mobile-label">Estado: </span>${texto}</td>
+          <td>
+            <span class="${clase}">${texto}</span>
+            <a href="${urlWA}" target="_blank" class="btn-ws-tabla">
+               Consultar por WhatsApp
+            </a>
+          </td>
         </tr>`;
     }).join('');
   }
-
   function filtrarStock() {
     const busquedaOriginal = document.getElementById('buscador').value.trim();
     const soloDisponibles = document.getElementById('soloStock').checked;
