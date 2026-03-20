@@ -124,121 +124,156 @@
 </div>
 
 <script>
- let productos = [];
+let productos = [];
 
- const guitarrasEspecificas = [
+// 1. Datos para las Landings de instrumentos
+const guitarrasEspecificas = [
     { nombre: "Admira Alba 3/4", desc: "Ideal para niños.", img: "img/admira-alba34.jpg" },
     { nombre: "Admira Alba 4/4", desc: "Iniciación para adultos.", img: "img/admira-alba.jpg" },
     { nombre: "Admira Luna 4/4", desc: "Negro satinado.", img: "img/admira-luna.jpg" },
     { nombre: "Admira Juanita 4/4", desc: "Española tradicional.", img: "img/admira-juanita.jpg" }
- ];
+];
 
- function normalizarTexto(texto) {
+// 2. Limpieza de texto (Quita tildes y símbolos)
+function normalizarTexto(texto) {
     if (!texto) return "";
-    return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, "");
- }
+    return texto.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9 ]/g, " ")
+        .trim();
+}
 
- function calcularDistancia(s1, s2) {
-    s1 = normalizarTexto(s1); s2 = normalizarTexto(s2);
-    let v0 = new Array(s2.length + 1);
-    let v1 = new Array(s2.length + 1);
-    for (let i = 0; i <= s2.length; i++) v0[i] = i;
-    for (let i = 0; i < s1.length; i++) {
-        v1[0] = i + 1;
-        for (let j = 0; j < s2.length; j++) {
-            let cost = (s1[i] === s2[j]) ? 0 : 1;
-            v1[j + 1] = Math.min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
+// 3. Fórmula de aproximación (Levenshtein) para letras que bailan
+function calcularDistancia(s1, s2) {
+    if (s1 === s2) return 0;
+    if (s1.length < s2.length) [s1, s2] = [s2, s1];
+    let l1 = s1.length, l2 = s2.length;
+    let prev = Array.from({ length: l2 + 1 }, (_, i) => i);
+    for (let i = 0; i < l1; i++) {
+        let curr = [i + 1];
+        for (let j = 0; j < l2; j++) {
+            let cost = s1[i] === s2[j] ? 0 : 1;
+            curr.push(Math.min(curr[j] + 1, prev[j + 1] + 1, prev[j] + cost));
         }
-        for (let j = 0; j <= s2.length; j++) v0[j] = v1[j];
+        prev = curr;
     }
-    return v0[s2.length];
- }
+    return prev[l2];
+}
 
- fetch('stock.csv').then(r => r.arrayBuffer()).then(buffer => {
+// 4. Carga del archivo CSV
+fetch('stock.csv').then(r => r.arrayBuffer()).then(buffer => {
     const decoder = new TextDecoder('iso-8859-1');
     const filas = decoder.decode(buffer).trim().split('\n').slice(1);
     productos = filas.map(f => {
         const c = f.split(',');
-        return c.length >= 3 ? { codigo: c[0].replace(/"/g, '').trim(), nombre: c[1].replace(/"/g, '').trim(), stock: parseInt(c[2]) || 0 } : null;
+        return c.length >= 3 ? { 
+            codigo: c[0].replace(/"/g, '').trim(), 
+            nombre: c[1].replace(/"/g, '').trim(), 
+            stock: parseInt(c[2]) || 0 
+        } : null;
     }).filter(p => p);
- });
+});
 
- function generarSugerencias() {
+// 5. Generar Sugerencias mientras escribes
+function generarSugerencias() {
     const val = document.getElementById('buscador').value.trim();
     const inputNorm = normalizarTexto(val);
     const contenedor = document.getElementById('contenedor-sugerencias');
+    
     if (inputNorm.length < 3) { contenedor.style.display = 'none'; return; }
 
-    let mapaSugerencias = {};
+    let sugerenciasMap = {};
     productos.forEach(p => {
-        const palabras = p.nombre.split(" ");
-        let coincide = false;
-        palabras.forEach(pal => {
-            let pN = normalizarTexto(pal);
-            if (pN.includes(inputNorm) || (inputNorm.length > 4 && calcularDistancia(inputNorm, pN) <= 1)) coincide = true;
+        const nNorm = normalizarTexto(p.nombre);
+        const palabras = nNorm.split(" ");
+        
+        let match = palabras.some(pal => {
+            return pal.startsWith(inputNorm) || (inputNorm.length > 4 && calcularDistancia(inputNorm, pal) <= 1);
         });
 
-        if (coincide) {
-            for (let i = 0; i < palabras.length; i++) {
-                let comb = normalizarTexto(palabras.slice(0, i + 1).join(" "));
-                if (comb.includes(inputNorm) || calcularDistancia(inputNorm, comb) <= 1) {
-                    let frase = palabras.slice(0, i + 2).join(" ").toUpperCase();
-                    mapaSugerencias[frase] = (mapaSugerencias[frase] || 0) + 1;
-                    break;
-                }
-            }
+        if (match) {
+            let frase = p.nombre.split(" ").slice(0, 2).join(" ").toUpperCase();
+            sugerenciasMap[frase] = (sugerenciasMap[frase] || 0) + 1;
         }
     });
 
-    const ordenadas = Object.keys(mapaSugerencias).sort((a,b) => mapaSugerencias[b] - mapaSugerencias[a]).slice(0, 5);
-    if (ordenadas.length > 0) {
+    const claves = Object.keys(sugerenciasMap).slice(0, 4);
+    if (claves.length > 0) {
         contenedor.style.display = 'block';
-        contenedor.innerHTML = `<div style="padding:5px; font-size:12px; color:#888;">Quizás quisiste decir:</div>` + 
-            ordenadas.map(w => `<div class="sugerencia-item"><span>✨ <strong>${w}</strong></span><button class="btn-buscar-sug" onclick="aplicarSugerencia('${w}')">${mapaSugerencias[w]} RESULTADOS</button></div>`).join('');
+        contenedor.innerHTML = `<div style="padding:5px; font-size:12px; color:#888;">¿Buscabas esto?</div>` + 
+            claves.map(w => `<div class="sugerencia-item" onclick="aplicarSugerencia('${w}')" style="cursor:pointer">
+                <span>✨ <strong>${w}</strong></span>
+                <small style="color:#f28c28">${sugerenciasMap[w]} Artículos</small>
+            </div>`).join('');
     } else { contenedor.style.display = 'none'; }
- }
+}
 
- function aplicarSugerencia(val) {
+function aplicarSugerencia(val) {
     document.getElementById('buscador').value = val;
     document.getElementById('contenedor-sugerencias').style.display = 'none';
     filtrarStock();
- }
+}
 
- function filtrarStock() {
-    const busq = normalizarTexto(document.getElementById('buscador').value.trim());
+// 6. FILTRADO FINAL (El que muestra los productos en la tabla)
+function filtrarStock() {
+    const inputUsuario = document.getElementById('buscador').value.trim();
+    const busq = normalizarTexto(inputUsuario);
     const solo = document.getElementById('soloStock').checked;
+    
+    document.getElementById('contenedor-sugerencias').style.display = 'none';
     if(busq === "") { renderTabla([]); return; }
 
-    let filtrados = productos.filter(p => {
-        const nN = normalizarTexto(p.nombre);
-        const cN = normalizarTexto(p.codigo);
-        let match = nN.includes(busq) || cN.includes(busq);
-        if(!match && busq.length > 4) {
-            match = nN.split(" ").some(pal => calcularDistancia(busq, pal) <= 1);
-        }
-        return match && (solo ? p.stock > 0 : true);
-    });
+    let filtrados = productos.map(p => {
+        const nNorm = normalizarTexto(p.nombre);
+        const cNorm = normalizarTexto(p.codigo);
+        
+        // Coincidencia directa
+        if (nNorm.includes(busq) || cNorm.includes(busq)) return { ...p, score: 0 };
 
-    filtrados.sort((a, b) => b.stock - a.stock);
+        // Coincidencia por aproximación (letra bailada)
+        const palabras = nNorm.split(" ");
+        let minD = 99;
+        palabras.forEach(pal => {
+            if (pal.length < 3) return;
+            let d = calcularDistancia(busq, pal);
+            if (d < minD) minD = d;
+        });
+
+        let tolerancia = busq.length > 5 ? 2 : 1;
+        if (minD <= tolerancia) return { ...p, score: minD };
+        
+        return null;
+    }).filter(p => p !== null);
+
+    if (solo) filtrados = filtrados.filter(p => p.stock > 0);
+    filtrados.sort((a, b) => a.score - b.score || b.stock - a.stock);
+    
     renderTabla(filtrados);
     setTimeout(() => { document.getElementById('ancla-resultados').scrollIntoView({ behavior: 'smooth' }); }, 200);
- }
+}
 
- function renderTabla(lista) {
+// 7. DIBUJAR LA TABLA (Esta es la que faltaba)
+function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     if (lista.length === 0) {
-        cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">No hay resultados</td></tr>';
+        cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">No hay resultados exactos o parecidos.</td></tr>';
         return;
     }
     cuerpo.innerHTML = lista.map(p => {
         let cl = p.stock > 5 ? 'verde' : (p.stock > 0 ? 'amarillo' : 'rojo');
         let tx = p.stock > 5 ? 'Disponible' : (p.stock > 0 ? 'Últimas unidades' : 'Agotado');
         const msg = encodeURIComponent(`Hola, consulto stock de: ${p.nombre} (Ref: ${p.codigo})`);
-        return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td><span class="${cl}">${tx}</span> <a href="https://wa.me/34695908361?text=${msg}" target="_blank" class="btn-ws-tabla">WhatsApp</a></td></tr>`;
+        return `<tr>
+            <td class="col-code">${p.codigo}</td>
+            <td>${p.nombre}</td>
+            <td><span class="${cl}">${tx}</span> <a href="https://wa.me/34695908361?text=${msg}" target="_blank" class="btn-ws-tabla">WhatsApp</a></td>
+        </tr>`;
     }).join('');
- }
+}
 
- function mostrarLanding(titulo, desc) {
+// 8. Funciones de Navegación y Mapa
+function mostrarLanding(titulo, desc) {
     document.getElementById('main-content').style.display = 'none';
     const landing = document.getElementById('landing-producto');
     landing.style.display = 'block';
@@ -256,17 +291,18 @@
     }
     landing.innerHTML = html;
     window.scrollTo(0,0);
- }
+}
 
- function cerrarLanding() {
+function cerrarLanding() {
     document.getElementById('main-content').style.display = 'block';
     document.getElementById('landing-producto').style.display = 'none';
- }
+}
 
- function loadMap() {
-    document.getElementById("mapShell").innerHTML = `<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.0326!2d-4.7821!3d37.8933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDUzJzM1LjkiTiA0wrA0Nic1NS42Ilc!5e0!3m2!1ses!2ses!4v1620000000000"></iframe>`;
- }
- document.getElementById('year').textContent = new Date().getFullYear();
+function loadMap() {
+    document.getElementById("mapShell").innerHTML = `<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.681143890333!2d-4.7820626!3d37.8911186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6d207edf733fdf%3A0x6efd186ed8d21fdf!2sMusical%20da%20Capo!5e0!3m2!1ses!2ses!4v1700000000000"></iframe>`;
+}
+
+document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
