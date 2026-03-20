@@ -190,33 +190,55 @@
  });
 
 function generarSugerencias() {
-    const input = normalizarTexto(document.getElementById('buscador').value.trim());
+    const busquedaOriginal = document.getElementById('buscador').value.trim();
+    const inputNorm = normalizarTexto(busquedaOriginal);
     const contenedor = document.getElementById('contenedor-sugerencias');
-    if (input.length < 3) { contenedor.style.display = 'none'; return; }
+    
+    if (inputNorm.length < 3) { contenedor.style.display = 'none'; return; }
 
     let mapaSugerencias = {};
+    
     productos.forEach(p => {
         const nombreNorm = normalizarTexto(p.nombre);
-        const primeraPalabra = p.nombre.split(" ")[0].toUpperCase();
         
-        // Si el nombre contiene lo que escribimos, sumamos al contador de esa categoría
-        if (nombreNorm.includes(input)) {
-            mapaSugerencias[primeraPalabra] = (mapaSugerencias[primeraPalabra] || 0) + 1;
+        if (nombreNorm.includes(inputNorm)) {
+            // Buscamos la frase que contiene el input + la siguiente palabra
+            const palabras = p.nombre.split(" ");
+            let fraseSugerida = "";
+            
+            for (let i = 0; i < palabras.length; i++) {
+                const combinacion = palabras.slice(0, i + 1).join(" ");
+                if (normalizarTexto(combinacion).includes(inputNorm)) {
+                    // Cogemos la combinación actual o añadimos una palabra más si existe
+                    fraseSugerida = palabras.slice(0, i + 1).join(" ").toUpperCase();
+                    // Si la frase sugerida es igual al input, intentamos coger una palabra más
+                    if (normalizarTexto(fraseSugerida) === inputNorm && palabras[i+1]) {
+                        fraseSugerida = palabras.slice(0, i + 2).join(" ").toUpperCase();
+                    }
+                    break;
+                }
+            }
+            
+            if (fraseSugerida) {
+                mapaSugerencias[fraseSugerida] = (mapaSugerencias[fraseSugerida] || 0) + 1;
+            }
         }
     });
 
-    // Ordenamos para que las palabras con más resultados salgan primero
+    // Ordenar por cantidad de resultados y sacar hasta 5
     const ordenadas = Object.keys(mapaSugerencias)
         .sort((a,b) => mapaSugerencias[b] - mapaSugerencias[a])
-        .slice(0, 3);
+        .filter(word => normalizarTexto(word) !== inputNorm) // No sugerir lo que ya está escrito
+        .slice(0, 5);
 
     if (ordenadas.length > 0) {
         contenedor.style.display = 'block';
-        contenedor.innerHTML = ordenadas.map(word => `
+        contenedor.innerHTML = `<div style="padding:5px; font-size:12px; color:#888;">Sugerencias inteligentes:</div>` + 
+            ordenadas.map(word => `
             <div class="sugerencia-item">
-                <span>¿Buscas <strong>${word}</strong>?</span>
+                <span style="font-size:13px;">🔍 <strong>${word}</strong></span>
                 <button class="btn-buscar-sug" onclick="aplicarSugerencia('${word}')">
-                    VER ${mapaSugerencias[word]} RESULTADOS
+                    ${mapaSugerencias[word]} ARTÍCULOS
                 </button>
             </div>`).join('');
     } else { 
@@ -227,6 +249,8 @@ function generarSugerencias() {
  function aplicarSugerencia(val) {
     document.getElementById('buscador').value = val;
     filtrarStock();
+    // Cerramos sugerencias tras elegir
+    document.getElementById('contenedor-sugerencias').style.display = 'none';
  }
 
  function filtrarStock() {
