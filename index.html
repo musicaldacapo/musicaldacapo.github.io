@@ -2,44 +2,44 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Musical da Capo | Stock</title>
+  <title>Musical da Capo | Buscador Inteligente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body{ margin:0; font-family: 'Segoe UI', sans-serif; background:#f4f4f4; padding:15px; }
+    body{ margin:0; font-family: 'Segoe UI', system-ui, sans-serif; background:#f4f4f4; padding:15px; }
     .container{ max-width:700px; margin:0 auto; background:#fff; padding:25px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
-    h1{ color:#f28c28; text-align:center; font-size: 26px; }
+    h1{ color:#f28c28; text-align:center; font-size: 26px; margin-top: 0; }
     
     .search-box{ position: sticky; top: 0; background: white; padding-bottom: 10px; z-index: 10; }
-    input{ width: 100%; padding:16px; border:2px solid #ddd; border-radius:10px; font-size:18px; box-sizing: border-box; }
-    input:focus { border-color: #f28c28; outline: none; }
+    input#buscador{ width: 100%; padding:16px; border:2px solid #ddd; border-radius:12px; font-size:18px; box-sizing: border-box; transition: 0.3s; }
+    input#buscador:focus { border-color: #f28c28; outline: none; }
 
-    /* PANEL DE SUGERENCIAS DINÁMICAS */
-    #panel-sugerencias {
-      display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;
-    }
-    .tag-sugerencia {
-      background: #eee; padding: 6px 12px; border-radius: 20px; font-size: 13px; 
-      cursor: pointer; font-weight: bold; transition: 0.2s; border: 1px solid #ddd;
-    }
+    /* ESTILO SWITCH iOS */
+    .filter-row { display: flex; align-items: center; justify-content: space-between; margin: 15px 0 10px; padding: 0 5px; }
+    .filter-label { font-size: 14px; font-weight: 600; color: #666; }
+    .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    input:checked + .slider { background-color: #34c759; } /* Color verde iOS */
+    input:checked + .slider:before { transform: translateX(22px); }
+
+    /* PANEL SUGERENCIAS */
+    #panel-sugerencias { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .tag-sugerencia { background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 13px; cursor: pointer; font-weight: bold; border: 1px solid #ddd; }
     .tag-sugerencia:hover { background: #f28c28; color: white; border-color: #f28c28; }
     .count-badge { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 10px; margin-left: 5px; font-size: 11px; }
 
-    /* AVISO DE ERROR / CORRECCIÓN */
-    #aviso-error{ 
-      display:none; background:#fff3e0; border:1px solid #f28c28; 
-      padding:15px; border-radius:10px; margin: 15px 0; border-left: 5px solid #f28c28;
-    }
-    .sugerencia-btn {
-      display: inline-block; background: #f28c28; color: white; padding: 8px 15px; 
-      border-radius: 6px; cursor: pointer; border: none; font-weight: bold; margin-top: 10px;
-    }
+    /* AVISO CORRECCIÓN */
+    #aviso-error{ display:none; background:#fff3e0; border:1px solid #f28c28; padding:15px; border-radius:10px; margin: 15px 0; border-left: 5px solid #f28c28; }
+    .sugerencia-btn { display: inline-block; background: #f28c28; color: white; padding: 8px 15px; border-radius: 6px; cursor: pointer; border: none; font-weight: bold; margin-top: 10px; }
 
     table{ width:100%; border-collapse:collapse; }
     td{ padding:15px 10px; border-bottom:1px solid #eee; }
     .ref-text { color: #999; font-size: 12px; display: block; }
     .status-badge { font-weight: bold; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
     .verde { color: #27ae60; } .rojo { color: #e74c3c; }
-    .btn-ws{ background:#25d366; color:#fff; text-decoration:none; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:bold; float:right; }
+    .btn-ws{ background:#25d366; color:#fff; text-decoration:none; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; float:right; transition: 0.2s; }
+    .btn-ws:hover { transform: scale(1.05); }
     .num-badge { background: #eee; color: #666; padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-right: 8px; }
   </style>
 </head>
@@ -50,6 +50,15 @@
   
   <div class="search-box">
     <input type="text" id="buscador" placeholder="Busca instrumento o referencia..." autocomplete="off" oninput="procesarBusqueda()">
+    
+    <div class="filter-row">
+      <span class="filter-label">Solo productos con stock</span>
+      <label class="switch">
+        <input type="checkbox" id="checkStock" onchange="procesarBusqueda()">
+        <span class="slider"></span>
+      </label>
+    </div>
+
     <div id="panel-sugerencias"></div>
     <div id="aviso-error"></div>
   </div>
@@ -82,6 +91,7 @@ function limpiar(t) { return t.toLowerCase().normalize("NFD").replace(/[\u0300-\
 
 function procesarBusqueda() {
   const input = document.getElementById('buscador').value;
+  const soloConStock = document.getElementById('checkStock').checked;
   const textoLimpio = limpiar(input);
   const aviso = document.getElementById('aviso-error');
   const panelSug = document.getElementById('panel-sugerencias');
@@ -95,10 +105,16 @@ function procesarBusqueda() {
 
   const palabrasBusqueda = textoLimpio.split(/\s+/).filter(p => p.length > 0);
 
+  // Filtrado base por términos
   let actuales = productos.filter(p => {
     const n = limpiar(p.nom);
     const id = limpiar(p.id);
-    return palabrasBusqueda.every(pal => n.includes(pal) || id.includes(pal));
+    const coincideTexto = palabrasBusqueda.every(pal => n.includes(pal) || id.includes(pal));
+    
+    if (soloConStock) {
+      return coincideTexto && p.stock > 0;
+    }
+    return coincideTexto;
   }).sort((a, b) => b.stock - a.stock);
 
   if (actuales.length > 0) {
@@ -113,10 +129,14 @@ function procesarBusqueda() {
       aviso.style.display = 'block';
       let corregida = ultimosResultadosValidos[0].nom.split(" ")[0].toUpperCase();
       aviso.innerHTML = `
-        <div>No hay resultados para "<strong>${input}</strong>".</div>
+        <div>No hay resultados exactos para "<strong>${input}</strong>".</div>
         <button class="sugerencia-btn" onclick="sobrescribir('${corregida}')">¿Quisiste decir ${corregida}?</button>
       `;
-      dibujar(ultimosResultadosValidos);
+      // En el congelado también aplicamos el filtro de stock si está activo
+      let validosFiltrados = soloConStock ? ultimosResultadosValidos.filter(p => p.stock > 0) : ultimosResultadosValidos;
+      dibujar(validosFiltrados);
+    } else {
+      document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center; padding:20px;">No se han encontrado productos.</td></tr>';
     }
   }
 }
@@ -124,17 +144,11 @@ function procesarBusqueda() {
 function generarTagsSugerencias(lista) {
   const panel = document.getElementById('panel-sugerencias');
   const conteo = {};
-  
-  // Agrupamos por la primera palabra para crear categorías rápidas
   lista.forEach(p => {
     let cat = p.nom.split(" ")[0].toUpperCase();
-    conteo[cat] = (conteo[cat] || 0) + 1;
+    if(cat.length > 2) conteo[cat] = (conteo[cat] || 0) + 1;
   });
-
-  const topCategorias = Object.entries(conteo)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
-
+  const topCategorias = Object.entries(conteo).sort((a, b) => b[1] - a[1]).slice(0, 5);
   panel.innerHTML = topCategorias.map(([nom, num]) => `
     <div class="tag-sugerencia" onclick="sobrescribir('${nom}')">
       ${nom} <span class="count-badge">${num}</span>
@@ -151,14 +165,13 @@ function sobrescribir(palabra) {
 function dibujar(lista) {
   const cuerpo = document.getElementById('tabla');
   if (lista.length === 0) { cuerpo.innerHTML = ''; return; }
-  
   cuerpo.innerHTML = lista.slice(0, 40).map((p, i) => {
     let st = p.stock > 0 ? 'verde' : 'rojo';
     let txt = p.stock > 0 ? 'Disponible' : 'Agotado';
     return `<tr>
       <td><span class="num-badge">${i+1}</span><strong>${p.nom}</strong><span class="ref-text">Ref: ${p.id}</span></td>
       <td style="text-align:right"><span class="status-badge ${st}">${txt}</span>
-      <a href="https://wa.me/34695908361?text=Me interesa: ${p.nom}" target="_blank" class="btn-ws">WhatsApp</a></td>
+      <a href="https://wa.me/34695908361?text=Me interesa: ${p.nom} (${p.id})" target="_blank" class="btn-ws">WhatsApp</a></td>
     </tr>`;
   }).join('');
 }
