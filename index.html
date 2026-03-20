@@ -138,6 +138,7 @@
     </div>
 
     <div class="stock-container">
+      <div id="sugerencia" style="margin-bottom: 10px; font-size: 14px; color: #d72638; display: none;"></div>
       <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
       <input type="text" id="buscador" placeholder="Busca por nombre o código..." onkeyup="filtrarStock()">
       
@@ -172,45 +173,81 @@
 </div>
 
 <script>
-  function filtrarStock() {
+  // Función para calcular similitud (Distancia de Levenshtein)
+function calcularSimilitud(s1, s2) {
+    s1 = normalizarTexto(s1);
+    s2 = normalizarTexto(s2);
+    let costs = new Array();
+    for (let i = 0; i <= s1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= s2.length; j++) {
+            if (i == 0) costs[j] = j;
+            else {
+                if (j > 0) {
+                    let newValue = costs[j - 1];
+                    if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
+                }
+            }
+        }
+        if (i > 0) costs[s2.length] = lastValue;
+    }
+    return costs[s2.length];
+}
+
+function filtrarStock() {
     const busquedaOriginal = document.getElementById('buscador').value.trim();
     const soloDisponibles = document.getElementById('soloStock').checked;
+    const divSugerencia = document.getElementById('sugerencia');
     
+    divSugerencia.style.display = 'none';
     if(busquedaOriginal === "") { renderTabla([]); return; }
 
-    // Función interna para quitar la "s" final de cada palabra
-    const quitarPlural = (texto) => {
-      return texto.split(/\s+/).map(palabra => {
-        if (palabra.length > 3 && palabra.endsWith('s')) {
-          return palabra.slice(0, -1);
-        }
-        return palabra;
-      }).join(' ');
-    };
-
-    // Normalizamos y quitamos plurales de la búsqueda
     const busquedaLimpia = normalizarTexto(busquedaOriginal);
-    const busquedaSingular = quitarPlural(busquedaLimpia);
-    const terminosBusqueda = busquedaSingular.split(/\s+/);
+    const terminosBusqueda = busquedaLimpia.split(/\s+/);
 
-    const filtrados = productos.filter(p => {
-        // Normalizamos y quitamos plurales del nombre del producto para comparar
+    // 1. Intentar búsqueda exacta
+    let filtrados = productos.filter(p => {
         const nombreNormalizado = normalizarTexto(p.nombre);
-        const nombreSingular = quitarPlural(nombreNormalizado);
-        
         const codigoNormalizado = normalizarTexto(p.codigo);
-        
-        // Comprobamos si los términos (en singular) coinciden
-        const coincide = terminosBusqueda.every(term => 
-          nombreSingular.includes(term) || codigoNormalizado.includes(term)
-        );
-        
         const tieneStock = soloDisponibles ? p.stock > 0 : true;
-        return coincide && tieneStock;
+        return terminosBusqueda.every(term => nombreNormalizado.includes(term) || codigoNormalizado.includes(term)) && tieneStock;
     });
+
+    // 2. Si no hay resultados, buscar "Usted quiso decir..."
+    if (filtrados.length === 0 && busquedaOriginal.length > 3) {
+        let mejorSugerencia = "";
+        let menorDistancia = 3; // Margen de error máximo (3 letras)
+
+        productos.forEach(p => {
+            const palabrasNombre = normalizarTexto(p.nombre).split(/\s+/);
+            palabrasNombre.forEach(palabraProd => {
+                terminosBusqueda.forEach(terminoBus => {
+                    let d = calcularSimilitud(terminoBus, palabraProd);
+                    // Si la palabra es casi igual o es el singular/plural
+                    if (d < menorDistancia) {
+                        menorDistancia = d;
+                        mejorSugerencia = palabraProd;
+                    }
+                });
+            });
+        });
+
+        if (mejorSugerencia && mejorSugerencia !== busquedaLimpia) {
+            divSugerencia.innerHTML = `🔎 Quizás quisiste decir: <strong style="cursor:pointer; text-decoration:underline;" onclick="aplicarSugerencia('${mejorSugerencia}')">${mejorSugerencia}</strong>`;
+            divSugerencia.style.display = 'block';
+        }
+    }
     
     renderTabla(filtrados);
-  }
+}
+
+function aplicarSugerencia(texto) {
+    document.getElementById('buscador').value = texto;
+    filtrarStock();
+}
   let productos = [];
 
   const guitarrasEspecificas = [
