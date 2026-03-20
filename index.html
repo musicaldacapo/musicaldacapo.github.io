@@ -5,7 +5,7 @@
   <title>Musical da Capo | Tienda de música en Córdoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* --- ESTILOS BASE (MANTENIENDO TU FORMATO ORIGINAL) --- */
+    /* --- ESTILOS BASE ORIGINALES --- */
     body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
     .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
     .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; height: auto; }
@@ -29,28 +29,22 @@
     #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
     .btn-volver { background: #eee; color: #333; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; margin-bottom: 15px; }
 
-    /* --- SECCIÓN DE STOCK Y NUEVO BUSCADOR --- */
+    /* --- SECCIÓN DE STOCK ADAPTADA --- */
     .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
     .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
     
-    /* Contenedor para input + botón */
-    .search-box { display: flex; gap: 8px; margin-bottom: 10px; }
-    #buscador { flex-grow: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; outline: none; }
-    .btn-buscar-main { background: #333; color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .search-box { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    #buscador { flex: 1; min-width: 200px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+    .btn-buscar-main { background: #333; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     
-    /* Contenedor Sugerencias debajo del buscador */
     #contenedor-sugerencias { 
         background: white; border: 1px solid #ddd; border-radius: 8px; 
         margin-bottom: 15px; display: none; padding: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
-    .sugerencia-item { 
-        display: flex; justify-content: space-between; align-items: center; 
-        padding: 8px 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px;
-    }
-    .sugerencia-item:last-child { border-bottom: none; }
+    .sugerencia-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
     .btn-buscar-sug { background: #f28c28; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; }
 
-    .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
+    .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; scroll-margin-top: 20px; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
     th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
     td { padding: 12px 10px; border-bottom: 1px solid #eee; }
@@ -58,20 +52,19 @@
     .verde { color: #27ae60; font-weight: bold; }
     .amarillo { color: #f39c12; font-weight: bold; }
     .rojo { color: #e74c3c; font-weight: bold; }
-    .btn-ws-tabla { display: inline-block; background: #25d366; color: white !important; text-decoration: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+    .btn-ws-tabla { display: inline-block; background: #25d366; color: white !important; text-decoration: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-left: 8px; }
 
-    /* --- MAPA Y FOOTER --- */
-    .map{ width:100%; height:380px; border:0; border-radius:12px; display:block; }
-    .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
+    .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px; min-height: 100px;}
     .mapPlaceholder{ padding:30px; text-align:center; color: #666; font-size: 14px; }
     footer{ margin-top:18px; text-align:center; font-size:13px; color:#666; }
 
     @media screen and (max-width: 600px) {
+      .search-box { flex-direction: column; }
+      .btn-buscar-main { width: 100%; }
       table, thead, tbody, th, td, tr { display: block; width: 100%; }
       thead { display: none; }
       tr { border-bottom: 2px solid #f28c28; padding: 15px 0; background: #fff; }
       td { border: none; padding: 4px 10px; box-sizing: border-box; }
-      .col-code { font-size: 11px; color: #999; display: block; }
       td:nth-of-type(2) { font-weight: bold; font-size: 16px; color: #333; }
       .btn-ws-tabla { display: block; text-align: center; margin: 10px 0 0 0; padding: 10px; font-size: 14px; }
     }
@@ -83,54 +76,70 @@
   <img src="logo-musical.png" alt="Musical da Capo" class="logo">
   <h1>Musical da Capo</h1>
   <div class="subtitle">Tu tienda de Música en Córdoba</div>
+  
+  <div class="nav-articulos">
+    <div class="dropdown">
+      <button class="dropbtn">Ver Instrumentos en Stock ▼</button>
+      <div class="dropdown-content">
+        <a href="#" onclick="mostrarLanding('Guitarras', 'Selección de guitarras españolas, acústicas y eléctricas.')">Guitarras</a>
+        <a href="#" onclick="mostrarLanding('Ukeleles', 'Ukeleles de todas las gamas.')">Ukeleles</a>
+        <a href="#" onclick="mostrarLanding('Teclados', 'Pianos digitales y teclados.')">Teclados y Pianos</a>
+        <a href="#" onclick="mostrarLanding('Carrillones', 'Carrillones cromáticos.')">Carrillones</a>
+        <a href="#" onclick="mostrarLanding('Violines', 'Violines de estudio y avanzados.')">Violines</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="xmas">¡Hola amantes de la música!</div>
+  <div id="landing-producto"></div>
 
   <div id="main-content">
     <div class="info">
       <p>Instrumentos, accesorios y librería musical.<br>
         <strong>Avenida de los Molinos 8</strong><br>
-        (junto al Conservatorio Profesional)<br>
-        <strong>14001 · Córdoba</strong>
+        (junto al Conservatorio Profesional) <strong>14001 · Córdoba</strong>
+      </p>
+      <p><strong>HORARIO DE ATENCIÓN AL PÚBLICO (PRIMAVERA 2026):</strong><br>
+        De lunes a jueves: tardes de 16:30h a 20:30h<br>
+        Viernes y sábados: cerrado al público.<br>
+        WhatsApp (24h): 695 90 83 61
       </p>
     </div>
 
     <div class="buttons">
-      <a class="whatsapp" href="https://wa.me/34695908361" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="whatsapp" href="https://wa.me/34695908361" target="_blank">WhatsApp</a>
       <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
       <a class="maps" onclick="loadMap()">Cómo llegar</a>
+      <a class="review" href="https://www.google.com" target="_blank">Dejar reseña</a>
     </div>
 
     <div class="stock-container">
       <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
-      
       <div class="search-box">
-        <input type="text" id="buscador" placeholder="Busca por nombre o código..." oninput="generarSugerencias()" onkeypress="if(event.key === 'Enter') filtrarStock()">
+        <input type="text" id="buscador" placeholder="Escribe castauñela, guitarra..." oninput="generarSugerencias()">
         <button class="btn-buscar-main" onclick="filtrarStock()">BUSCAR</button>
       </div>
-
       <div id="contenedor-sugerencias"></div>
       
-      <div style="margin-bottom: 15px; font-size: 14px; color: #555;">
+      <div style="margin-bottom: 15px; font-size: 14px; color: #555;" id="ancla-resultados">
         <label style="cursor:pointer; display: flex; align-items: center; gap: 8px;">
           <input type="checkbox" id="soloStock" onclick="filtrarStock()"> Mostrar solo productos con stock
         </label>
       </div>
 
-      <div class="tabla-wrapper">
+      <div class="tabla-wrapper" id="tabla-wrapper">
         <table id="tablaStock">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Producto</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Código</th><th>Producto</th><th>Estado</th></tr></thead>
           <tbody id="cuerpoTabla"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <div id="mapShell" class="mapShell"></div>
+  <div id="mapShell" class="mapShell">
+    <div class="mapPlaceholder">Pulsa en "Cómo llegar" para ver el mapa.</div>
+  </div>
+
   <footer>© <span id="year"></span> Musical da Capo - Córdoba</footer>
 </div>
 
@@ -142,104 +151,95 @@
     return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
  }
 
- fetch('stock.csv')
-    .then(response => response.arrayBuffer())
-    .then(buffer => {
-      const decoder = new TextDecoder('iso-8859-1');
-      const data = decoder.decode(buffer);
-      const filas = data.trim().split('\n').slice(1);
-      productos = filas.map(f => {
+ fetch('stock.csv').then(r => r.arrayBuffer()).then(buffer => {
+    const decoder = new TextDecoder('iso-8859-1');
+    const filas = decoder.decode(buffer).trim().split('\n').slice(1);
+    productos = filas.map(f => {
         const c = f.split(',');
-        if (c.length >= 3) {
-          return { 
-            codigo: c[0].replace(/"/g, '').trim(), 
-            nombre: c[1].replace(/"/g, '').trim(), 
-            stock: parseInt(c[2]) || 0
-          };
-        }
-        return null;
-      }).filter(p => p && p.nombre);
-    });
+        return c.length >= 3 ? { codigo: c[0].replace(/"/g, '').trim(), nombre: c[1].replace(/"/g, '').trim(), stock: parseInt(c[2]) || 0 } : null;
+    }).filter(p => p);
+ });
 
- // Lógica de sugerencias: busca la primera palabra clave
  function generarSugerencias() {
     const input = normalizarTexto(document.getElementById('buscador').value.trim());
     const contenedor = document.getElementById('contenedor-sugerencias');
-    
-    if (input.length < 2) {
-        contenedor.style.display = 'none';
-        return;
-    }
+    if (input.length < 3) { contenedor.style.display = 'none'; return; }
 
     let mapaSugerencias = {};
     productos.forEach(p => {
-        const nombreNorm = normalizarTexto(p.nombre);
-        if (nombreNorm.includes(input)) {
-            const palabras = p.nombre.split(" ");
-            const palabraClave = palabras[0].toUpperCase();
-            if (!mapaSugerencias[palabraClave]) mapaSugerencias[palabraClave] = 0;
-            mapaSugerencias[palabraClave]++;
+        const palabras = p.nombre.split(" ");
+        const primeraPalabra = palabras[0].toUpperCase();
+        if (normalizarTexto(p.nombre).includes(input)) {
+            mapaSugerencias[primeraPalabra] = (mapaSugerencias[primeraPalabra] || 0) + 1;
         }
     });
 
-    const sugerenciasOrdenadas = Object.keys(mapaSugerencias)
-        .sort((a, b) => mapaSugerencias[b] - mapaSugerencias[a])
-        .slice(0, 3);
+    const ordenadas = Object.keys(mapaSugerencias).sort((a,b) => mapaSugerencias[b] - mapaSugerencias[a]).slice(0, 3);
 
-    if (sugerenciasOrdenadas.length > 0) {
+    if (ordenadas.length > 0) {
         contenedor.style.display = 'block';
-        contenedor.innerHTML = sugerenciasOrdenadas.map(word => `
+        contenedor.innerHTML = ordenadas.map(word => `
             <div class="sugerencia-item">
-                <span>Ver resultados para: <strong>${word}</strong></span>
-                <button class="btn-buscar-sug" onclick="aplicarBusquedaSugerida('${word}')">BUSCAR ESTO (${mapaSugerencias[word]})</button>
-            </div>
-        `).join('');
-    } else {
-        contenedor.style.display = 'none';
-    }
+                <span>Quizás buscas: <strong>${word}</strong></span>
+                <button class="btn-buscar-sug" onclick="aplicarSugerencia('${word}')">BUSCAR ESTO (${mapaSugerencias[word]})</button>
+            </div>`).join('');
+    } else { contenedor.style.display = 'none'; }
  }
 
- function aplicarBusquedaSugerida(termino) {
-    document.getElementById('buscador').value = termino;
-    document.getElementById('contenedor-sugerencias').style.display = 'none';
-    filtrarStock(); 
+ function aplicarSugerencia(val) {
+    document.getElementById('buscador').value = val;
+    filtrarStock();
  }
 
  function filtrarStock() {
-    const busquedaOriginal = document.getElementById('buscador').value.trim();
-    const soloDisponibles = document.getElementById('soloStock').checked;
-    const busquedaLimpia = normalizarTexto(busquedaOriginal);
-    
-    // Al buscar, ocultamos las sugerencias
+    const busq = normalizarTexto(document.getElementById('buscador').value.trim());
+    const solo = document.getElementById('soloStock').checked;
     document.getElementById('contenedor-sugerencias').style.display = 'none';
-
-    if(busquedaLimpia === "") { renderTabla([]); return; }
+    if(busq === "") { renderTabla([]); return; }
 
     let filtrados = productos.filter(p => {
-        const nombreNorm = normalizarTexto(p.nombre);
-        const codNorm = normalizarTexto(p.codigo);
-        const tieneStock = soloDisponibles ? p.stock > 0 : true;
-        return (nombreNorm.includes(busquedaLimpia) || codNorm.includes(busquedaLimpia)) && tieneStock;
+        const coincide = normalizarTexto(p.nombre).includes(busq) || normalizarTexto(p.codigo).includes(busq);
+        return coincide && (solo ? p.stock > 0 : true);
     });
 
+    // ORDENAR POR STOCK (Descendente: de más a menos)
+    filtrados.sort((a, b) => b.stock - a.stock);
+
     renderTabla(filtrados);
+
+    // AUTO-SCROLL hacia los resultados para saltarse el teclado móvil
+    setTimeout(() => {
+        document.getElementById('ancla-resultados').scrollIntoView({ behavior: 'smooth' });
+    }, 150);
  }
 
  function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     if (lista.length === 0) {
-      cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No hay resultados exactos</td></tr>';
-      return;
+        cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">No hay resultados</td></tr>';
+        return;
     }
     cuerpo.innerHTML = lista.map(p => {
-      let clase = 'rojo', texto = 'Agotado';
-      if (p.stock > 5) { clase = 'verde'; texto = 'Disponible'; }
-      else if (p.stock > 0) { clase = 'amarillo'; texto = 'Últimas unidades'; }
-      const mensajeWA = encodeURIComponent(`Hola, me interesa: ${p.nombre} (Ref: ${p.codigo}).`);
-      return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td><span class="${clase}">${texto}</span> <a href="https://wa.me/34695908361?text=${mensajeWA}" target="_blank" class="btn-ws-tabla">WhatsApp</a></td></tr>`;
+        let cl = p.stock > 5 ? 'verde' : (p.stock > 0 ? 'amarillo' : 'rojo');
+        let tx = p.stock > 5 ? 'Disponible' : (p.stock > 0 ? 'Últimas unidades' : 'Agotado');
+        return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td><span class="${cl}">${tx}</span> <a href="https://wa.me/34695908361?text=Hola, quiero consultar stock de: ${p.nombre}" target="_blank" class="btn-ws-tabla">WhatsApp</a></td></tr>`;
     }).join('');
  }
 
+ function mostrarLanding(t, d) {
+    document.getElementById('main-content').style.display = 'none';
+    const l = document.getElementById('landing-producto');
+    l.style.display = 'block';
+    l.innerHTML = `<button class="btn-volver" onclick="cerrarLanding()">← Volver</button><h2>${t}</h2><p>${d}</p>`;
+    window.scrollTo(0,0);
+ }
+ function cerrarLanding() {
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('landing-producto').style.display = 'none';
+ }
+ function loadMap() {
+    document.getElementById("mapShell").innerHTML = `<iframe style="width:100%; height:380px; border:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.0123456789!2d-4.78!3d37.89!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDUzJzI0LjAiTiA0wrA0Nic0OC4wIlc!5e0!3m2!1ses!2ses!4v123456789"></iframe>`;
+ }
  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
