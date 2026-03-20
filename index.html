@@ -5,6 +5,7 @@
   <title>Musical da Capo | Córdoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    /* ESTILOS BASE */
     body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
     .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
     .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; }
@@ -24,6 +25,7 @@
     .dropdown-content a:hover { background-color: #f28c28; color: white; }
     .dropdown:hover .dropdown-content { display: block; }
 
+    /* BUSCADOR */
     .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
     .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
     input#buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
@@ -41,12 +43,12 @@
     #aviso-error { display:none; background:#fff3e0; border-left: 4px solid #f28c28; padding: 10px; border-radius: 5px; margin-bottom: 10px; font-size: 14px; }
     .sugerencia-btn { background: #f28c28; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 5px; }
 
+    /* TABLA */
     .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
     th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
     td { padding: 12px 10px; border-bottom: 1px solid #eee; }
     
-    /* COLORES DE ESTADO */
     .verde { color: #27ae60; font-weight: bold; margin-right: 12px; }
     .amarillo { color: #f39c12; font-weight: bold; margin-right: 12px; }
     .rojo { color: #e74c3c; font-weight: bold; margin-right: 12px; }
@@ -54,20 +56,19 @@
     .btn-ws-small { background: #25d366; color: white; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold; display: inline-block; vertical-align: middle; }
 
     .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
-    .mapPlaceholder{ padding:30px; text-align:center; color: #666; font-size: 14px; }
     #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
     .btn-volver { background: #eee; color: #333; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; margin-bottom: 15px; }
     footer{ margin-top:18px; text-align:center; font-size:13px; color:#666; }
+
+    /* FIX MÓVIL (SOLO AQUÍ) */
     @media (max-width: 600px) {
       .container { padding: 15px; margin: 10px; }
       h1 { font-size: 24px; }
-      
-      /* Hack para que la tabla no se salga */
-      table, thead, tbody, th, td, tr { display: block; }
-      thead tr { position: absolute; top: -9999px; left: -9999px; } /* Esconde cabecera */
-      tr { border: 1px solid #eee; margin-bottom: 10px; border-radius: 10px; padding: 5px; }
-      td { border: none; position: relative; padding: 10px !important; text-align: left !important; }
-      
+      /* Hacemos que la tabla no se desborde */
+      table, thead, tbody, th, td, tr { display: block; width: 100%; box-sizing: border-box; }
+      thead { display: none; } /* Escondemos cabecera en móvil */
+      tr { border-bottom: 2px solid #eee; padding: 10px 0; }
+      td { border: none; padding: 5px 0 !important; text-align: left !important; }
       .btn-ws-small { float: right; margin-top: -5px; }
       .verde, .amarillo, .rojo { display: inline-block; margin-bottom: 5px; }
     }
@@ -144,11 +145,11 @@
   </div>
 
   <div id="mapShell" class="mapShell">
-    <div class="mapPlaceholder">Haz clic en "Cómo llegar" para cargar el mapa.</div>
+    <div style="padding:20px; text-align:center; color:#888;">Pulsa "Cómo llegar" para ver el mapa.</div>
   </div>
 
   <footer>
-    © <span id="year"></span> Musical da Capo - Avda. de los Molinos 8 - Córdoba
+    © <span id="year"></span> Musical da Capo - Córdoba
   </footer>
 </div>
 
@@ -162,6 +163,7 @@
     { nombre: "Admira Juanita 4/4", desc: "Fabricación española tradicional.", img: "img/admira-juanita.jpg" }
   ];
 
+  // CARGAR CSV
   fetch('stock.csv')
     .then(res => res.arrayBuffer())
     .then(buffer => {
@@ -170,7 +172,14 @@
       const lineas = data.split(/\r?\n/).slice(1);
       productos = lineas.map(linea => {
         const c = linea.split(',');
-        return c.length >= 3 ? { id: c[0].replace(/"/g, '').trim(), nom: c[1].replace(/"/g, '').trim(), stock: parseInt(c[2]) || 0 } : null;
+        if (c.length >= 3) {
+            return { 
+                id: c[0].replace(/"/g, '').trim(), 
+                nom: c[1].replace(/"/g, '').trim(), 
+                stock: parseInt(c[2]) || 0 
+            };
+        }
+        return null;
       }).filter(p => p);
     });
 
@@ -220,37 +229,18 @@
       .map(([n, c]) => `<div class="tag-sugerencia" onclick="sobrescribir('${n}')">${n} (${c})</div>`).join('');
   }
 
- function dibujar(lista) {
+  function dibujar(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
-    if (lista.length === 0) { cuerpo.innerHTML = ''; return; }
+    if (lista.length === 0) { cuerpo.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:20px; color:#888;">Escribe algo para buscar...</td></tr>'; return; }
     
     cuerpo.innerHTML = lista.slice(0, 40).map(p => {
       let clase = 'verde', texto = 'Disponible';
-      
-      if (p.stock <= 0) {
-        clase = 'rojo'; texto = 'Agotado';
-      } else if (p.stock <= 5) {
-        clase = 'amarillo'; texto = 'Últimas unidades';
-      }
-
-      return `<tr>
-        <td>
-            <strong>${p.nom}</strong><br>
-            <small style="color:#888">Ref: ${p.id}</small>
-        </td>
-        <td style="text-align:right;">
-          <span class="${clase}">${texto}</span>
-          <a class="btn-ws-small" href="https://wa.me/34695908361?text=Hola, me interesa: ${p.nom} (${p.id})" target="_blank">
-            WhatsApp
-          </a>
-        </td>
-      </tr>`;
-    }).join('');
-  }
+      if (p.stock <= 0) { clase = 'rojo'; texto = 'Agotado'; }
+      else if (p.stock <= 5) { clase = 'amarillo'; texto = 'Últimas unidades'; }
 
       return `<tr>
         <td><strong>${p.nom}</strong><br><small style="color:#888">Ref: ${p.id}</small></td>
-        <td style="text-align:right; white-space: nowrap;">
+        <td style="text-align:right;">
           <span class="${clase}">${texto}</span>
           <a class="btn-ws-small" href="https://wa.me/34695908361?text=Hola, me interesa: ${p.nom} (${p.id})" target="_blank">WhatsApp</a>
         </td>
@@ -269,8 +259,7 @@
     if (titulo === 'Guitarras') {
       html += '<div style="display: grid; gap: 15px; margin-top: 20px;">';
       guitarrasEspecificas.forEach(g => {
-        html += `
-          <div style="display: flex; align-items: center; gap: 15px; border: 1px solid #eee; padding: 10px; border-radius: 8px; background: #fff;">
+        html += `<div style="display: flex; align-items: center; gap: 15px; border: 1px solid #eee; padding: 10px; border-radius: 8px; background: #fff;">
             <div style="width: 70px; height: 70px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-radius: 5px; overflow: hidden; flex-shrink: 0;">
               <img src="${g.img}" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/70?text=Instrumento'">
             </div>
@@ -278,7 +267,7 @@
               <strong style="display:block; font-size: 14px;">${g.nombre}</strong>
               <small style="color:#666; font-size:12px;">${g.desc}</small>
             </div>
-            <a href="https://wa.me/34695908361?text=Consulta sobre ${g.nombre}" target="_blank" class="btn-ws-small" style="font-size:12px;">Consultar</a>
+            <a href="https://wa.me/34695908361?text=Consulta sobre ${g.nombre}" target="_blank" class="btn-ws-small">Consultar</a>
           </div>`;
       });
       html += '</div>';
@@ -291,7 +280,7 @@
 
   function loadMap() {
     const address = encodeURIComponent("Avenida de los Molinos 8, 14001 Córdoba");
-    document.getElementById("mapShell").innerHTML = `<iframe style="width:100%; height:350px; border:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.7149032821967!2d-4.7791234!3d37.89197660000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6cdf7aaf6b856d%3A0xa2a0162c1597d138!2sMusical%20da%20Capo!5e1!3m2!1ses!2ses!4v1774030739950!5m2!1ses!2ses&output=embed" allowfullscreen></iframe>`;
+    document.getElementById("mapShell").innerHTML = `<iframe style="width:100%; height:350px; border:0;" src="https://maps.google.com/maps?q=${address}&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen></iframe>`;
   }
   
   document.getElementById("year").textContent = new Date().getFullYear();
