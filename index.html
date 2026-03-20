@@ -189,30 +189,39 @@
     }).filter(p => p);
  });
 
- function generarSugerencias() {
+function generarSugerencias() {
     const input = normalizarTexto(document.getElementById('buscador').value.trim());
     const contenedor = document.getElementById('contenedor-sugerencias');
     if (input.length < 3) { contenedor.style.display = 'none'; return; }
 
     let mapaSugerencias = {};
     productos.forEach(p => {
+        const nombreNorm = normalizarTexto(p.nombre);
         const primeraPalabra = p.nombre.split(" ")[0].toUpperCase();
-        const dist = calcularSimilitud(input, primeraPalabra);
-        if (normalizarTexto(p.nombre).includes(input) || dist < 3) {
+        
+        // Si el nombre contiene lo que escribimos, sumamos al contador de esa categoría
+        if (nombreNorm.includes(input)) {
             mapaSugerencias[primeraPalabra] = (mapaSugerencias[primeraPalabra] || 0) + 1;
         }
     });
 
-    const ordenadas = Object.keys(mapaSugerencias).sort((a,b) => mapaSugerencias[b] - mapaSugerencias[a]).slice(0, 2);
+    // Ordenamos para que las palabras con más resultados salgan primero
+    const ordenadas = Object.keys(mapaSugerencias)
+        .sort((a,b) => mapaSugerencias[b] - mapaSugerencias[a])
+        .slice(0, 3);
 
     if (ordenadas.length > 0) {
         contenedor.style.display = 'block';
         contenedor.innerHTML = ordenadas.map(word => `
             <div class="sugerencia-item">
-                <span>¿Buscabas <strong>${word}</strong>?</span>
-                <button class="btn-buscar-sug" onclick="aplicarSugerencia('${word}')">SÍ, BUSCAR</button>
+                <span>¿Buscas <strong>${word}</strong>?</span>
+                <button class="btn-buscar-sug" onclick="aplicarSugerencia('${word}')">
+                    VER ${mapaSugerencias[word]} RESULTADOS
+                </button>
             </div>`).join('');
-    } else { contenedor.style.display = 'none'; }
+    } else { 
+        contenedor.style.display = 'none'; 
+    }
  }
 
  function aplicarSugerencia(val) {
