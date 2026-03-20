@@ -172,6 +172,45 @@
 </div>
 
 <script>
+  function filtrarStock() {
+    const busquedaOriginal = document.getElementById('buscador').value.trim();
+    const soloDisponibles = document.getElementById('soloStock').checked;
+    
+    if(busquedaOriginal === "") { renderTabla([]); return; }
+
+    // Función interna para quitar la "s" final de cada palabra
+    const quitarPlural = (texto) => {
+      return texto.split(/\s+/).map(palabra => {
+        if (palabra.length > 3 && palabra.endsWith('s')) {
+          return palabra.slice(0, -1);
+        }
+        return palabra;
+      }).join(' ');
+    };
+
+    // Normalizamos y quitamos plurales de la búsqueda
+    const busquedaLimpia = normalizarTexto(busquedaOriginal);
+    const busquedaSingular = quitarPlural(busquedaLimpia);
+    const terminosBusqueda = busquedaSingular.split(/\s+/);
+
+    const filtrados = productos.filter(p => {
+        // Normalizamos y quitamos plurales del nombre del producto para comparar
+        const nombreNormalizado = normalizarTexto(p.nombre);
+        const nombreSingular = quitarPlural(nombreNormalizado);
+        
+        const codigoNormalizado = normalizarTexto(p.codigo);
+        
+        // Comprobamos si los términos (en singular) coinciden
+        const coincide = terminosBusqueda.every(term => 
+          nombreSingular.includes(term) || codigoNormalizado.includes(term)
+        );
+        
+        const tieneStock = soloDisponibles ? p.stock > 0 : true;
+        return coincide && tieneStock;
+    });
+    
+    renderTabla(filtrados);
+  }
   let productos = [];
 
   const guitarrasEspecificas = [
