@@ -2,241 +2,57 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Musical da Capo | Tienda de música en Córdoba</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    /* --- DISEÑO ORIGINAL RECUPERADO --- */
-    body{ margin:0; font-family: Arial, sans-serif; background:#f6f6f6; color:#222; }
-    .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
-    .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; height: auto; }
-    h1{ text-align:center; color:#f28c28; margin:10px 0 5px; font-size:30px; }
-    .subtitle{ text-align:center; font-size:18px; margin-bottom:16px; }
-    .xmas{ background:#178a3a; color:#fff; text-align:center; padding:10px; border-radius:10px; font-weight:bold; margin-bottom:18px; }
-    
-    .info{ text-align:center; font-size:15px; line-height:1.5; margin-bottom:18px; }
-    .info strong{ color:#1f6feb; }
-
-    .buttons{ text-align:center; margin-bottom:20px; }
-    .buttons a{ display:inline-block; margin:6px; padding:11px 16px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold; cursor: pointer; }
-    .whatsapp{ background:#25d366; } .email{ background:#1f6feb; } .maps{ background:#f28c28; } .review{ background:#d72638; }
-
-    /* --- NAVEGACIÓN --- */
-    .nav-articulos { text-align: center; margin-bottom: 25px; }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: #333; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
-    .dropdown-content { display: none; position: absolute; background-color: #fff; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); z-index: 10; border-radius: 8px; text-align: left; left: 50%; transform: translateX(-50%); }
-    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; }
-    .dropdown-content a:hover { background-color: #f28c28; color: white; }
-    .dropdown:hover .dropdown-content { display: block; }
-
-    /* --- BUSCADOR Y TABLA --- */
-    .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
-    .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
-    .search-box { display: flex; gap: 8px; margin-bottom: 10px; }
-    #buscador { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
-    .btn-buscar-main { background: #333; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-    #contenedor-sugerencias { background: white; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; display: none; padding: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    .sugerencia-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
-    .sugerencia-item:hover { background: #fff8f0; }
-
-    .tabla-wrapper { max-height: 450px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th { background: #f28c28; color: white; padding: 12px; position: sticky; top: 0; text-align: left; }
-    td { padding: 12px; border-bottom: 1px solid #eee; background: #fff; }
-
-    .verde { color: #27ae60; font-weight: bold; }
-    .amarillo { color: #f39c12; font-weight: bold; }
-    .rojo { color: #e74c3c; font-weight: bold; }
-    .btn-ws-tabla { background: #25d366; color: white !important; text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-block; margin-left: 5px; }
-
-    #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
-    .btn-volver { background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
-
-    footer { text-align: center; font-size: 12px; color: #888; margin-top: 30px; }
-
-    @media (max-width: 600px) {
-      .search-box { flex-direction: column; }
-      thead { display: none; }
-      tr { display: block; border-bottom: 2px solid #f28c28; padding: 10px 0; }
-      td { display: block; padding: 5px 10px; }
-      td:nth-child(2) { font-weight: bold; font-size: 16px; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <img src="logo-musical.png" alt="Musical da Capo" class="logo">
-  <h1>Musical da Capo</h1>
-  <div class="subtitle">Tu tienda de Música en Córdoba</div>
-  
-  <div class="nav-articulos">
-    <div class="dropdown">
-      <button class="dropbtn">Ver Instrumentos en Stock ▼</button>
-      <div class="dropdown-content">
-        <a href="#" onclick="mostrarLanding('Guitarras', 'Selección de guitarras españolas y acústicas.')">Guitarras</a>
-        <a href="#" onclick="mostrarLanding('Ukeleles', 'Ukeleles de todas las gamas.')">Ukeleles</a>
-        <a href="#" onclick="mostrarLanding('Teclados', 'Pianos y teclados digitales.')">Teclados</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="xmas">¡Hola amantes de la música!</div>
-  
-  <div id="landing-producto"></div>
-
-  <div id="main-content">
-    <div class="info">
-      <p>Avenida de los Molinos 8, 14001 · Córdoba<br>
-      <strong>WhatsApp (24h): 695 90 83 61</strong></p>
-    </div>
-
-    <div class="buttons">
-      <a class="whatsapp" href="https://wa.me/34695908361" target="_blank">WhatsApp</a>
-      <a class="maps" href="https://maps.app.goo.gl/..." target="_blank">Cómo llegar</a>
-    </div>
-
-    <div class="stock-container">
-      <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
-      <div class="search-box">
-        <input type="text" id="buscador" placeholder="Escribe guitara o ukelele..." oninput="manejarInput()">
-        <button class="btn-buscar-main" onclick="filtrarStock()">BUSCAR</button>
-      </div>
-      <div id="contenedor-sugerencias"></div>
-      
-      <div style="margin-bottom: 10px; font-size: 14px;">
-        <label><input type="checkbox" id="soloStock" onclick="filtrarStock()"> Solo productos con stock</label>
-      </div>
-
-      <div class="tabla-wrapper" id="ancla-resultados">
-        <table>
-          <thead><tr><th>Código</th><th>Producto</th><th>Estado</th></tr></thead>
-          <tbody id="cuerpoTabla"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <footer>© <span id="year"></span> Musical da Capo - Córdoba</footer>
-</div>
-
-<script>
- <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
   <title>Musical da Capo | Stock</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body{ margin:0; font-family: Arial, sans-serif; background:#f6f6f6; color:#222; padding:10px; }
-    .container{ max-width:800px; margin:0 auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
-    .logo{ display:block; margin:0 auto 10px; max-width:200px; }
-    h1 { text-align: center; color: #f28c28; font-size: 24px; }
+    body{ margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background:#f4f4f4; color:#333; padding:15px; }
+    .container{ max-width:600px; margin:0 auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+    h1{ color:#f28c28; text-align:center; font-size:24px; margin-bottom: 20px; }
     
-    .search-box { display: flex; gap: 5px; margin: 20px 0; }
-    #buscador { flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 16px; }
-    #buscador:focus { border-color: #f28c28; outline: none; }
-    .btn-buscar { background: #333; color: #fff; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-
-    #contenedor-sugerencias { 
-        background: #fff3e0; border: 1px solid #f28c28; padding: 10px; 
-        border-radius: 8px; margin-bottom: 15px; display: none; cursor: pointer;
-    }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th { background: #f28c28; color: white; padding: 10px; text-align: left; font-size: 13px; }
-    td { padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
+    .search-box{ position: sticky; top: 0; background: white; padding: 10px 0; z-index: 10; }
+    input{ width: 100%; padding:14px; border:2px solid #eee; border-radius:8px; font-size:16px; box-sizing: border-box; }
+    input:focus { border-color: #f28c28; outline: none; }
     
-    .verde { color: #27ae60; font-weight: bold; }
-    .rojo { color: #e74c3c; font-weight: bold; }
-    .btn-ws { background: #25d366; color: white; text-decoration: none; padding: 5px 8px; border-radius: 4px; font-size: 11px; float: right; }
-
-    @media (max-width: 600px) {
-      .search-box { flex-direction: column; }
-      .btn-buscar { padding: 12px; }
-      td { display: block; width: 100%; box-sizing: border-box; }
-      th { display: none; }
-      tr { display: block; border-bottom: 2px solid #f28c28; padding: 10px 0; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <img src="logo-musical.png" alt="Musical da Capo" class="logo">
-  <h1>Consultar Stock</h1>
-
-  <div class="search-box">
-    <input type="text" id="buscador" placeholder="Ej: castauñela, guitara..." oninput="alEscribir()">
-    <button class="btn-buscar" onclick="filtrarStock()">BUSCAR</button>
-  </div>
-
-  <div id="contenedor-sugerencias" onclick="aplicarSugerencia()"></div>
-
-  <div style="overflow-x:auto;">
-    <table>
-      <thead>
-        <tr><th>Producto</th><th>Stock</th></tr>
-      </thead>
-      <tbody id="cuerpoTabla">
-        <tr><td colspan="2" style="text-align:center">Cargando productos...</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<script>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Musical da Capo | Stock</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body{ margin:0; font-family: sans-serif; background:#f4f4f4; color:#333; padding:15px; }
-    .container{ max-width:600px; margin:0 auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-    h1{ color:#f28c28; text-align:center; font-size:22px; }
-    .search-box{ display:flex; gap:10px; margin:20px 0; }
-    input{ flex:1; padding:12px; border:1px solid #ddd; border-radius:5px; font-size:16px; }
-    button{ background:#333; color:#fff; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; font-weight:bold; }
-    
-    #aviso-sugerencia{ 
+    #aviso-error{ 
       display:none; background:#fff3e0; border:1px solid #f28c28; 
-      padding:12px; border-radius:5px; margin-bottom:15px; cursor:pointer; text-align:center;
+      padding:10px; border-radius:8px; margin: 10px 0; color: #d35400; font-size: 14px;
     }
     
-    table{ width:100%; border-collapse:collapse; }
-    th{ background:#f28c28; color:#fff; padding:10px; text-align:left; font-size:13px; }
-    td{ padding:12px 10px; border-bottom:1px solid #eee; font-size:14px; }
-    .disponible{ color:#27ae60; font-weight:bold; }
-    .agotado{ color:#e74c3c; font-weight:bold; }
-    .btn-ws{ background:#25d366; color:#fff; text-decoration:none; padding:5px 8px; border-radius:4px; font-size:11px; float:right; }
+    table{ width:100%; border-collapse:collapse; margin-top: 10px; }
+    td{ padding:15px 10px; border-bottom:1px solid #eee; font-size: 15px; }
+    .ref-text { color: #888; font-size: 12px; font-family: monospace; display: block; margin-top: 4px; }
+    .status-badge { font-weight: bold; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+    .verde { color: #27ae60; }
+    .rojo { color: #e74c3c; }
+    .btn-ws{ background:#25d366; color:#fff; text-decoration:none; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:bold; float:right; }
+
+    .sugerencia-item { cursor: pointer; padding: 5px; border-radius: 4px; transition: background 0.2s; }
+    .sugerencia-item:hover { background: #fdf2e9; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>🔎 Consultar Stock</h1>
+  <h1>Musical da Capo</h1>
   
   <div class="search-box">
-    <input type="text" id="buscador" placeholder="Escribe castauñela..." onkeypress="if(event.key==='Enter') filtrar()">
-    <button onclick="filtrar()">BUSCAR</button>
+    <input type="text" id="buscador" placeholder="Escribe castauñela..." autocomplete="off" oninput="procesarBusqueda()">
+    <div id="aviso-error"></div>
   </div>
-
-  <div id="aviso-sugerencia" onclick="usarSugerencia()"></div>
 
   <table>
-    <thead><tr><th>Producto / Ref</th><th>Estado</th></tr></thead>
-    <tbody id="tabla"></tbody>
+    <tbody id="tabla">
+      <tr><td style="text-align:center; color:#999;">Cargando productos...</td></tr>
+    </tbody>
   </table>
 </div>
 
 <script>
 let productos = [];
-let sugerenciaGuardada = "";
+let ultimosResultadosValidos = [];
+let ultimaPalabraValida = "";
 
-// 1. CARGADOR ROBUSTO (Detecta comas o punto y coma)
+// 1. CARGA DEL CSV (Con comas)
 fetch('stock.csv')
   .then(res => res.arrayBuffer())
   .then(buffer => {
@@ -245,9 +61,7 @@ fetch('stock.csv')
     const lineas = texto.split(/\r?\n/).slice(1);
     
     productos = lineas.map(linea => {
-      // Detectar si el CSV usa coma o punto y coma
-      const sep = linea.includes(';') ? ';' : ',';
-      const c = linea.split(sep);
+      const c = linea.split(','); // Tu CSV usa comas
       if (c.length >= 3) {
         return {
           id: c[0].replace(/"/g, '').trim(),
@@ -258,85 +72,89 @@ fetch('stock.csv')
       return null;
     }).filter(p => p !== null);
 
-    console.log("Productos cargados:", productos.length);
-    document.getElementById('tabla').innerHTML = '<tr><td colspan="2">Escribe para buscar...</td></tr>';
-  })
-  .catch(e => {
-    document.getElementById('tabla').innerHTML = '<tr><td colspan="2" style="color:red">No se pudo leer stock.csv</td></tr>';
+    document.getElementById('tabla').innerHTML = '<tr><td style="text-align:center">Empieza a escribir para buscar...</td></tr>';
   });
 
 function limpiar(t) {
   return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
-// 2. TU LÓGICA DE RECORTE (Si falla la búsqueda, vamos quitando letras)
-function encontrarParecido(erroneo) {
-  let intento = erroneo;
-  while (intento.length > 3) {
-    intento = intento.slice(0, -1); // Quitar última letra
-    let coincidencia = productos.find(p => limpiar(p.nom).includes(intento));
-    if (coincidencia) return coincidencia.nom;
-  }
-  return null;
-}
-
-function filtrar() {
+// 2. LÓGICA DE MEMORIA Y ACTUALIZACIÓN AUTOMÁTICA
+function procesarBusqueda() {
   const input = document.getElementById('buscador').value;
   const busq = limpiar(input);
-  const divSug = document.getElementById('aviso-sugerencia');
+  const aviso = document.getElementById('aviso-error');
   
-  if (!busq) return;
+  if (busq.length < 2) {
+    aviso.style.display = 'none';
+    dibujar([]);
+    ultimosResultadosValidos = [];
+    ultimaPalabraValida = "";
+    return;
+  }
 
-  // Búsqueda directa
-  let resultados = productos.filter(p => 
+  // Filtrar productos con el texto actual
+  let actuales = productos.filter(p => 
     limpiar(p.nom).includes(busq) || limpiar(p.id).includes(busq)
   );
 
-  if (resultados.length > 0) {
-    divSug.style.display = 'none';
-    dibujar(resultados);
+  if (actuales.length > 0) {
+    // Si hay resultados, guardamos este estado como el "último bueno"
+    ultimosResultadosValidos = actuales;
+    ultimaPalabraValida = input;
+    aviso.style.display = 'none';
+    dibujar(actuales);
   } else {
-    // Si no hay nada, aplicamos el recorte de letras
-    let sug = encontrarParecido(busq);
-    if (sug) {
-      sugerenciaGuardada = sug;
-      divSug.style.display = 'block';
-      divSug.innerHTML = `No hay resultados para "${input}". ¿Quisiste decir <strong>${sug}</strong>? <br><small>(Pulsa aquí para buscarlo)</small>`;
-      dibujar([]);
+    // SI NO HAY RESULTADOS (porque una letra baila)
+    if (ultimosResultadosValidos.length > 0) {
+      aviso.style.display = 'block';
+      // Tomamos el nombre del primer resultado válido como sugerencia para sobrescribir
+      let sugerencia = ultimosResultadosValidos[0].nom;
+      
+      aviso.innerHTML = `
+        <div class="sugerencia-item" onclick="sobrescribir('${sugerencia}')">
+          No hay resultados para "<strong>${input}</strong>". <br>
+          Mostrando resultados de "<strong>${ultimaPalabraValida}</strong>". 
+          <br><small>¿Quisiste decir <strong>${sugerencia}</strong>? Pulsa aquí.</small>
+        </div>`;
+      
+      // Mantenemos en pantalla los últimos resultados que sí funcionaron
+      dibujar(ultimosResultadosValidos);
     } else {
-      divSug.style.display = 'none';
-      document.getElementById('tabla').innerHTML = '<tr><td colspan="2">No se encontró nada relacionado.</td></tr>';
+      document.getElementById('tabla').innerHTML = '<tr><td>No se encontró nada.</td></tr>';
     }
   }
 }
 
-function usarSugerencia() {
-  document.getElementById('buscador').value = sugerenciaGuardada;
-  document.getElementById('aviso-sugerencia').style.display = 'none';
-  filtrar();
+function sobrescribir(nombre) {
+  document.getElementById('buscador').value = nombre;
+  document.getElementById('aviso-error').style.display = 'none';
+  procesarBusqueda(); // Volver a filtrar con el nombre correcto
 }
 
 function dibujar(lista) {
   const cuerpo = document.getElementById('tabla');
-  if (lista.length === 0) { cuerpo.innerHTML = ''; return; }
+  if (lista.length === 0) {
+    cuerpo.innerHTML = '<tr><td style="text-align:center; color:#999">Escribe una palabra más larga...</td></tr>';
+    return;
+  }
   
-  cuerpo.innerHTML = lista.map(p => {
-    let disp = p.stock > 0 ? '<span class="disponible">Disponible</span>' : '<span class="agotado">Agotado</span>';
+  cuerpo.innerHTML = lista.slice(0, 30).map(p => {
+    let disp = p.stock > 0 ? '<span class="status-badge verde">Disponible</span>' : '<span class="status-badge rojo">Agotado</span>';
     let link = `https://wa.me/34695908361?text=Hola, precio y stock de: ${p.nom} (${p.id})`;
     return `<tr>
-      <td><strong>${p.nom}</strong><br><small style="color:#888">${p.id}</small></td>
-      <td>${disp} <a href="${link}" target="_blank" class="btn-ws">WhatsApp</a></td>
+      <td>
+        <strong>${p.nom}</strong>
+        <span class="ref-text">Ref: ${p.id}</span>
+      </td>
+      <td style="min-width: 100px; text-align: right;">
+        ${disp}
+        <a href="${link}" target="_blank" class="btn-ws">WhatsApp</a>
+      </td>
     </tr>`;
   }).join('');
 }
 </script>
 
-</body>
-</html>
-</script>
-
-</body>
-</html> 
-</script>
 </body>
 </html>
