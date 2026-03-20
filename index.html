@@ -189,7 +189,28 @@
     }).filter(p => p);
  });
 
-function generarSugerencias() {
+// Función para tolerar errores (Distancia Levenshtein)
+ function calcularDistancia(s1, s2) {
+    s1 = normalizarTexto(s1); 
+    s2 = normalizarTexto(s2);
+    let costs = [];
+    for (let i = 0; i <= s1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= s2.length; j++) {
+            if (i == 0) costs[j] = j;
+            else if (j > 0) {
+                let newValue = costs[j - 1];
+                if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                    newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                costs[j - 1] = lastValue; lastValue = newValue;
+            }
+        }
+        if (i > 0) costs[s2.length] = lastValue;
+    }
+    return costs[s2.length];
+ }
+
+ function generarSugerencias() {
     const busquedaOriginal = document.getElementById('buscador').value.trim();
     const inputNorm = normalizarTexto(busquedaOriginal);
     const contenedor = document.getElementById('contenedor-sugerencias');
@@ -200,21 +221,22 @@ function generarSugerencias() {
     
     productos.forEach(p => {
         const nombreNorm = normalizarTexto(p.nombre);
+        const palabras = p.nombre.split(" ");
+        let coincidePorError = false;
         
-        if (nombreNorm.includes(inputNorm)) {
-            // Buscamos la frase que contiene el input + la siguiente palabra
-            const palabras = p.nombre.split(" ");
+        // 1. Comprobamos si hay coincidencia exacta o por error tipográfico en alguna palabra
+        palabras.forEach(pal => {
+            if (calcularDistancia(inputNorm, pal) <= 2) coincidePorError = true;
+        });
+
+        if (nombreNorm.includes(inputNorm) || coincidePorError) {
             let fraseSugerida = "";
-            
             for (let i = 0; i < palabras.length; i++) {
-                const combinacion = palabras.slice(0, i + 1).join(" ");
-                if (normalizarTexto(combinacion).includes(inputNorm)) {
-                    // Cogemos la combinación actual o añadimos una palabra más si existe
-                    fraseSugerida = palabras.slice(0, i + 1).join(" ").toUpperCase();
-                    // Si la frase sugerida es igual al input, intentamos coger una palabra más
-                    if (normalizarTexto(fraseSugerida) === inputNorm && palabras[i+1]) {
-                        fraseSugerida = palabras.slice(0, i + 2).join(" ").toUpperCase();
-                    }
+                const combinacion = normalizarTexto(palabras.slice(0, i + 1).join(" "));
+                // Si la combinación actual ya cubre lo que el usuario escribió (o se parece)
+                if (combinacion.includes(inputNorm) || calcularDistancia(inputNorm, combinacion) <= 2) {
+                    // Sugerimos esa palabra + la siguiente para dar contexto (2 palabras)
+                    fraseSugerida = palabras.slice(0, i + 2).join(" ").toUpperCase();
                     break;
                 }
             }
@@ -224,6 +246,25 @@ function generarSugerencias() {
             }
         }
     });
+
+    const ordenadas = Object.keys(mapaSugerencias)
+        .sort((a,b) => mapaSugerencias[b] - mapaSugerencias[a])
+        .slice(0, 5);
+
+    if (ordenadas.length > 0) {
+        contenedor.style.display = 'block';
+        contenedor.innerHTML = `<div style="padding:5px; font-size:12px; color:#888;">Quizás quisiste decir:</div>` + 
+            ordenadas.map(word => `
+            <div class="sugerencia-item">
+                <span style="font-size:13px;">✨ <strong>${word}</strong></span>
+                <button class="btn-buscar-sug" onclick="aplicarSugerencia('${word}')">
+                    ${mapaSugerencias[word]} ARTÍCULOS
+                </button>
+            </div>`).join('');
+    } else { 
+        contenedor.style.display = 'none'; 
+    }
+ }
 
     // Ordenar por cantidad de resultados y sacar hasta 5
     const ordenadas = Object.keys(mapaSugerencias)
