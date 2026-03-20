@@ -110,13 +110,13 @@
       <a class="whatsapp" href="https://wa.me/34695908361" target="_blank">WhatsApp</a>
       <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
       <a class="maps" onclick="loadMap()">Cómo llegar</a>
-      <a class="review" href="https://www.google.com" target="_blank">Dejar reseña</a>
+      <a class="review" href="https://search.google.com/local/writereview?placeid=ChIJ-3-y_36cbQ0R3x_S2G4Y_W4" target="_blank">Dejar reseña</a>
     </div>
 
     <div class="stock-container">
       <div class="stock-title">🔎 CONSULTAR STOCK DISPONIBLE</div>
       <div class="search-box">
-        <input type="text" id="buscador" placeholder="Escribe castauñela, guitarra..." oninput="generarSugerencias()">
+        <input type="text" id="buscador" placeholder="Escribe castañuela, guitarra, funda..." oninput="generarSugerencias()">
         <button class="btn-buscar-main" onclick="filtrarStock()">BUSCAR</button>
       </div>
       <div id="contenedor-sugerencias"></div>
@@ -137,7 +137,7 @@
   </div>
 
   <div id="mapShell" class="mapShell">
-    <div class="mapPlaceholder">Pulsa en "Cómo llegar" para ver el mapa.</div>
+    <div class="mapPlaceholder">Pulsa en "Cómo llegar" para ver nuestra ubicación en el mapa.</div>
   </div>
 
   <footer>© <span id="year"></span> Musical da Capo - Córdoba</footer>
@@ -153,7 +153,8 @@
 
  fetch('stock.csv').then(r => r.arrayBuffer()).then(buffer => {
     const decoder = new TextDecoder('iso-8859-1');
-    const filas = decoder.decode(buffer).trim().split('\n').slice(1);
+    const data = decoder.decode(buffer);
+    const filas = data.trim().split('\n').slice(1);
     productos = filas.map(f => {
         const c = f.split(',');
         return c.length >= 3 ? { codigo: c[0].replace(/"/g, '').trim(), nombre: c[1].replace(/"/g, '').trim(), stock: parseInt(c[2]) || 0 } : null;
@@ -202,12 +203,9 @@
         return coincide && (solo ? p.stock > 0 : true);
     });
 
-    // ORDENAR POR STOCK (Descendente: de más a menos)
     filtrados.sort((a, b) => b.stock - a.stock);
-
     renderTabla(filtrados);
 
-    // AUTO-SCROLL hacia los resultados para saltarse el teclado móvil
     setTimeout(() => {
         document.getElementById('ancla-resultados').scrollIntoView({ behavior: 'smooth' });
     }, 150);
@@ -216,13 +214,14 @@
  function renderTabla(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     if (lista.length === 0) {
-        cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">No hay resultados</td></tr>';
+        cuerpo.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#888;">No hay resultados exactos</td></tr>';
         return;
     }
     cuerpo.innerHTML = lista.map(p => {
         let cl = p.stock > 5 ? 'verde' : (p.stock > 0 ? 'amarillo' : 'rojo');
         let tx = p.stock > 5 ? 'Disponible' : (p.stock > 0 ? 'Últimas unidades' : 'Agotado');
-        return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td><span class="${cl}">${tx}</span> <a href="https://wa.me/34695908361?text=Hola, quiero consultar stock de: ${p.nombre}" target="_blank" class="btn-ws-tabla">WhatsApp</a></td></tr>`;
+        const mensajeWA = encodeURIComponent(`Hola, me interesa: ${p.nombre} (Ref: ${p.codigo}). ¿Hay stock?`);
+        return `<tr><td class="col-code">${p.codigo}</td><td>${p.nombre}</td><td><span class="${cl}">${tx}</span> <a href="https://wa.me/34695908361?text=${mensajeWA}" target="_blank" class="btn-ws-tabla">Consultar WhatsApp</a></td></tr>`;
     }).join('');
  }
 
@@ -230,16 +229,25 @@
     document.getElementById('main-content').style.display = 'none';
     const l = document.getElementById('landing-producto');
     l.style.display = 'block';
-    l.innerHTML = `<button class="btn-volver" onclick="cerrarLanding()">← Volver</button><h2>${t}</h2><p>${d}</p>`;
+    
+    let extra = '';
+    if(t === 'Guitarras') {
+        extra = '<div style="margin-top:15px; background:#fff8f0; padding:10px; border-radius:8px; border:1px solid #f28c28;"><strong>Destacado:</strong> Admira Alba (Iniciación) siempre disponible en tienda.</div>';
+    }
+    
+    l.innerHTML = `<button class="btn-volver" onclick="cerrarLanding()">← Volver</button><h2 style="color:#f28c28">${t}</h2><p>${d}</p>${extra}`;
     window.scrollTo(0,0);
  }
+ 
  function cerrarLanding() {
     document.getElementById('main-content').style.display = 'block';
     document.getElementById('landing-producto').style.display = 'none';
  }
+ 
  function loadMap() {
-    document.getElementById("mapShell").innerHTML = `<iframe style="width:100%; height:380px; border:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.0123456789!2d-4.78!3d37.89!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDUzJzI0LjAiTiA0wrA0Nic0OC4wIlc!5e0!3m2!1ses!2ses!4v123456789"></iframe>`;
+    document.getElementById("mapShell").innerHTML = `<iframe class="map" style="width:100%; height:380px; border:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.681123490138!2d-4.7797825!3d37.8911425!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6d367c00676437%3A0x6efd186ad2d21fdf!2sMusical%20Da%20Capo!5e0!3m2!1ses!2ses!4v1700000000000"></iframe>`;
  }
+ 
  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
