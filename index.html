@@ -2,10 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Musical da Capo | Tienda de música en Córdoba</title>
+  <title>Musical da Capo | Córdoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* ESTILOS ORIGINALES */
     body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f6f6; color:#222; }
     .container{ max-width:900px; margin:20px auto; background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.12); }
     .logo{ display:block; margin:0 auto 10px; max-width:320px; width:100%; }
@@ -13,12 +12,10 @@
     .subtitle{ text-align:center; font-size:18px; margin-bottom:16px; }
     .xmas{ background:#178a3a; color:#fff; text-align:center; padding:10px; border-radius:10px; font-weight:bold; margin-bottom:18px; }
     
-    /* BOTONES */
     .buttons{ text-align:center; margin-bottom:20px; }
     .buttons a{ display:inline-block; margin:6px; padding:11px 16px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold; cursor: pointer; }
     .whatsapp{background:#25d366} .email{background:#1f6feb} .maps{background:#f28c28} .review{ background:#d72638; }
 
-    /* MENÚ DESPLEGABLE */
     .nav-articulos { text-align: center; margin-bottom: 25px; }
     .dropdown { position: relative; display: inline-block; }
     .dropbtn { background: #333; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
@@ -27,12 +24,10 @@
     .dropdown-content a:hover { background-color: #f28c28; color: white; }
     .dropdown:hover .dropdown-content { display: block; }
 
-    /* BUSCADOR INTELIGENTE */
     .stock-container { margin: 25px 0; padding: 20px; border: 2px solid #f28c28; border-radius: 12px; background: #fffcf9; }
     .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
     input#buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
     
-    /* SWITCH iOS */
     .filter-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
     .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
     .switch input { opacity: 0; width: 0; height: 0; }
@@ -41,22 +36,23 @@
     input:checked + .slider { background-color: #34c759; }
     input:checked + .slider:before { transform: translateX(20px); }
 
-    /* TAGS Y AVISOS */
     #panel-sugerencias { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-    .tag-sugerencia { background: #eee; padding: 4px 10px; border-radius: 15px; font-size: 12px; cursor: pointer; border: 1px solid #ddd; }
+    .tag-sugerencia { background: #eee; padding: 4px 10px; border-radius: 15px; font-size: 12px; cursor: pointer; border: 1px solid #ddd; font-weight: bold; }
     #aviso-error { display:none; background:#fff3e0; border-left: 4px solid #f28c28; padding: 10px; border-radius: 5px; margin-bottom: 10px; font-size: 14px; }
     .sugerencia-btn { background: #f28c28; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 5px; }
 
-    /* TABLA */
     .tabla-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
     th { background: #f28c28; color: white; padding: 12px 10px; position: sticky; top: 0; text-align: left; z-index: 1; }
-    td { padding: 10px; border-bottom: 1px solid #eee; }
-    .verde { color: #27ae60; font-weight: bold; }
-    .rojo { color: #e74c3c; font-weight: bold; }
-    .btn-ws-small { background: #25d366; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none; font-size: 11px; font-weight: bold; float: right; }
+    td { padding: 12px 10px; border-bottom: 1px solid #eee; }
+    
+    /* COLORES DE ESTADO */
+    .verde { color: #27ae60; font-weight: bold; margin-right: 12px; }
+    .amarillo { color: #f39c12; font-weight: bold; margin-right: 12px; }
+    .rojo { color: #e74c3c; font-weight: bold; margin-right: 12px; }
+    
+    .btn-ws-small { background: #25d366; color: white; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold; display: inline-block; vertical-align: middle; }
 
-    /* MAPA Y LANDING */
     .mapShell{ width:100%; border:1px solid rgba(0,0,0,.10); border-radius:12px; overflow:hidden; background:#fff; margin-top: 20px;}
     .mapPlaceholder{ padding:30px; text-align:center; color: #666; font-size: 14px; }
     #landing-producto { display: none; border-top: 2px solid #f28c28; padding-top: 20px; margin-top: 20px; }
@@ -75,8 +71,8 @@
     <div class="dropdown">
       <button class="dropbtn">Ver Instrumentos en Stock ▼</button>
       <div class="dropdown-content">
-        <a href="#" onclick="mostrarLanding('Guitarras', 'Selección de guitarras españolas, acústicas y eléctricas ideales para empezar a tocar.')">Guitarras</a>
-        <a href="#" onclick="mostrarLanding('Ukeleles', 'Ukeleles de todas las gamas, ideales para regalo o iniciación.')">Ukeleles</a>
+        <a href="#" onclick="mostrarLanding('Guitarras', 'Selección de guitarras españolas, acústicas y eléctricas.')">Guitarras</a>
+        <a href="#" onclick="mostrarLanding('Ukeleles', 'Ukeleles de todas las gamas.')">Ukeleles</a>
         <a href="#" onclick="mostrarLanding('Teclados', 'Pianos digitales y teclados de iniciación.')">Teclados y Pianos</a>
         <a href="#" onclick="mostrarLanding('Percusión', 'Carrillones cromáticos y material escolar.')">Percusión Escolar</a>
       </div>
@@ -90,12 +86,10 @@
   <div id="main-content">
     <div class="info" style="text-align: center;">
       <p>Instrumentos, accesorios y librería musical.<br>
-        <strong>Avenida de los Molinos 8, 14001 Córdoba</strong><br>
-        (junto al Conservatorio Profesional)
+        <strong>Avenida de los Molinos 8, 14001 Córdoba</strong>
       </p>
       <p><strong>HORARIO PRIMAVERA 2026:</strong><br>
-        Lunes a Jueves: 16:30h a 20:30h.<br>
-        Consultas WhatsApp: 695 90 83 61
+        Lunes a Jueves: 16:30h a 20:30h.
       </p>
     </div>
 
@@ -103,7 +97,6 @@
       <a class="whatsapp" href="https://wa.me/34695908361" target="_blank">WhatsApp</a>
       <a class="email" href="mailto:tiendagabou@gmail.com">Email</a>
       <a class="maps" onclick="loadMap()">Cómo llegar</a>
-      <a class="review" href="https://search.google.com/local/writereview?placeid=ChIJ34fWvWfkbA0RNR7N9X-2l70" target="_blank">Dejar reseña</a>
     </div>
 
     <div class="stock-container">
@@ -111,7 +104,7 @@
       <input type="text" id="buscador" placeholder="Busca instrumento o referencia..." oninput="procesarBusqueda()">
       
       <div class="filter-row">
-        <span style="font-size:13px; color:#666;">Mostrar solo productos con stock</span>
+        <span style="font-size:13px; color:#666;">Solo productos disponibles</span>
         <label class="switch">
           <input type="checkbox" id="checkStock" onchange="procesarBusqueda()">
           <span class="slider"></span>
@@ -138,11 +131,11 @@
   </div>
 
   <div id="mapShell" class="mapShell">
-    <div class="mapPlaceholder">Pulsa en "Cómo llegar" para ver nuestra ubicación.</div>
+    <div class="mapPlaceholder">Haz clic en "Cómo llegar" para cargar el mapa.</div>
   </div>
 
   <footer>
-    © <span id="year"></span> Musical da Capo - B14956825 - Avda. de los Molinos 8 - 14001 Córdoba
+    © <span id="year"></span> Musical da Capo - Avda. de los Molinos 8 - Córdoba
   </footer>
 </div>
 
@@ -151,19 +144,17 @@
   let ultimosResultadosValidos = [];
 
   const guitarrasEspecificas = [
-    { nombre: "Admira Alba 3/4", desc: "Guitarra clásica ideal para niños y jóvenes estudiantes.", img: "img/admira-alba34.jpg" },
-    { nombre: "Admira Alba 4/4", desc: "La guitarra clásica de iniciación por excelencia para adultos.", img: "img/admira-alba.jpg" },
-    { nombre: "Admira Luna 4/4", desc: "Guitarra clásica acabada en negro satinado, sonido elegante.", img: "img/admira-luna.jpg" },
-    { nombre: "Admira Juanita 4/4", desc: "Guitarra de fabricación española tradicional, excelente proyección.", img: "img/admira-juanita.jpg" },
-    { nombre: "Oqan QGE Starter Kit", desc: "Guitarra eléctrica en pack completo con amplificador.", img: "img/oqan-qge.jpg" },
-    { nombre: "Daytona A411 Azul", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "img/daytona-A411.jpg" }
+    { nombre: "Admira Alba 3/4", desc: "Ideal para niños.", img: "img/admira-alba34.jpg" },
+    { nombre: "Admira Alba 4/4", desc: "Iniciación adultos.", img: "img/admira-alba.jpg" },
+    { nombre: "Admira Juanita 4/4", desc: "Fabricación española tradicional.", img: "img/admira-juanita.jpg" }
   ];
 
   fetch('stock.csv')
     .then(res => res.arrayBuffer())
     .then(buffer => {
       const decoder = new TextDecoder('iso-8859-1');
-      const lineas = decoder.decode(buffer).split(/\r?\n/).slice(1);
+      const data = decoder.decode(buffer);
+      const lineas = data.split(/\r?\n/).slice(1);
       productos = lineas.map(linea => {
         const c = linea.split(',');
         return c.length >= 3 ? { id: c[0].replace(/"/g, '').trim(), nom: c[1].replace(/"/g, '').trim(), stock: parseInt(c[2]) || 0 } : null;
@@ -202,7 +193,7 @@
       if (ultimosResultadosValidos.length > 0) {
         aviso.style.display = 'block';
         let sug = ultimosResultadosValidos[0].nom.split(" ")[0].toUpperCase();
-        aviso.innerHTML = `No hay resultados exactos. ¿Quisiste decir <strong>${sug}</strong>? <br><button class="sugerencia-btn" onclick="sobrescribir('${sug}')">Corregir</button>`;
+        aviso.innerHTML = `No hay resultados. ¿Quisiste decir <strong>${sug}</strong>? <br><button class="sugerencia-btn" onclick="sobrescribir('${sug}')">Corregir</button>`;
         dibujar(soloStock ? ultimosResultadosValidos.filter(p => p.stock > 0) : ultimosResultadosValidos);
       }
     }
@@ -219,19 +210,28 @@
   function dibujar(lista) {
     const cuerpo = document.getElementById('cuerpoTabla');
     if (lista.length === 0) { cuerpo.innerHTML = ''; return; }
-    cuerpo.innerHTML = lista.slice(0, 40).map(p => `
-      <tr>
+    
+    cuerpo.innerHTML = lista.slice(0, 40).map(p => {
+      let clase = 'verde', texto = 'Disponible';
+      
+      if (p.stock <= 0) {
+        clase = 'rojo'; texto = 'Agotado';
+      } else if (p.stock <= 5) {
+        clase = 'amarillo'; texto = 'Últimas unidades';
+      }
+
+      return `<tr>
         <td><strong>${p.nom}</strong><br><small style="color:#888">Ref: ${p.id}</small></td>
-        <td style="text-align:right">
-          <span class="${p.stock > 0 ? 'verde' : 'rojo'}">${p.stock > 0 ? 'Disponible' : 'Agotado'}</span>
-          <a class="btn-ws-small" href="https://wa.me/34695908361?text=Me interesa: ${p.nom}" target="_blank">WhatsApp</a>
+        <td style="text-align:right; white-space: nowrap;">
+          <span class="${clase}">${texto}</span>
+          <a class="btn-ws-small" href="https://wa.me/34695908361?text=Hola, me interesa: ${p.nom} (${p.id})" target="_blank">WhatsApp</a>
         </td>
-      </tr>`).join('');
+      </tr>`;
+    }).join('');
   }
 
   function sobrescribir(val) { document.getElementById('buscador').value = val; procesarBusqueda(); }
 
-  // EL MENÚ DE GUITARRAS ORIGINAL CON IMÁGENES
   function mostrarLanding(titulo, desc) {
     document.getElementById('main-content').style.display = 'none';
     const landing = document.getElementById('landing-producto');
@@ -250,12 +250,10 @@
               <strong style="display:block; font-size: 14px;">${g.nombre}</strong>
               <small style="color:#666; font-size:12px;">${g.desc}</small>
             </div>
-            <a href="https://wa.me/34695908361?text=Consulta sobre ${g.nombre}" target="_blank" style="background:#25d366; color:white; padding:8px 12px; border-radius:8px; text-decoration:none; font-size:11px; font-weight:bold;">Consultar</a>
+            <a href="https://wa.me/34695908361?text=Consulta sobre ${g.nombre}" target="_blank" class="btn-ws-small" style="font-size:12px;">Consultar</a>
           </div>`;
       });
       html += '</div>';
-    } else {
-      html += `<div style="text-align: center; margin-top: 20px;"><a class="whatsapp" style="display:inline-block; padding:12px 20px; border-radius:10px; color:#fff; text-decoration:none; font-weight:bold;" href="https://wa.me/34695908361?text=Consulta sobre ${titulo}" target="_blank">Consultar por WhatsApp</a></div>`;
     }
     landing.innerHTML = html;
     window.scrollTo(0,0);
@@ -265,7 +263,7 @@
 
   function loadMap() {
     const address = encodeURIComponent("Avenida de los Molinos 8, 14001 Córdoba");
-    document.getElementById("mapShell").innerHTML = `<iframe class="map" src="https://maps.google.com/maps?q=${address}&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen></iframe>`;
+    document.getElementById("mapShell").innerHTML = `<iframe style="width:100%; height:350px; border:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.7149032821967!2d-4.7791234!3d37.89197660000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6cdf7aaf6b856d%3A0xa2a0162c1597d138!2sMusical%20da%20Capo!5e1!3m2!1ses!2ses!4v1774030739950!5m2!1ses!2ses&output=embed" allowfullscreen></iframe>`;
   }
   
   document.getElementById("year").textContent = new Date().getFullYear();
