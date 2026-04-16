@@ -65,19 +65,80 @@
     .stock-title { color: #f28c28; font-weight: bold; margin-bottom: 10px; text-align: center; }
     input#buscador { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
     
-    .filter-row { 
-      display: flex; 
-      align-items: center; 
-      justify-content: flex-start; /* Esto los junta a la izquierda */
-      gap: 15px; /* Esto da una separación elegante de 15px entre el texto y el botón */
-      margin-bottom: 15px; 
-    }
-    .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
-    .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-    input:checked + .slider { background-color: #34c759; }
-    input:checked + .slider:before { transform: translateX(20px); }
+ .filter-row { 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+  gap: 15px; 
+  margin-bottom: 15px; 
+}
+
+/* Contenedor del switch un poco más ancho para que quepa la clave y la nota */
+.switch { 
+  position: relative; 
+  display: inline-block; 
+  width: 80px; 
+  height: 40px; 
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider { 
+  position: absolute; 
+  cursor: pointer; 
+  top: 0; left: 0; right: 0; bottom: 0; 
+  /* Dibujo del Pentagrama */
+  background: linear-gradient(
+    to bottom,
+    transparent 10%, #333 10%, #333 12%,
+    transparent 12%, transparent 30%, #333 30%, #333 32%,
+    transparent 32%, transparent 50%, #333 50%, #333 52%,
+    transparent 52%, transparent 70%, #333 70%, #333 72%,
+    transparent 72%, transparent 90%, #333 90%, #333 92%,
+    transparent 92%
+  );
+  transition: .4s; 
+  border-radius: 4px; /* Un poco menos redondeado para que parezca una partitura */
+}
+
+/* CLAVE DE SOL */
+.slider:after {
+  content: "𝄞"; /* Símbolo Unicode de Clave de Sol */
+  position: absolute;
+  left: 5px;
+  top: -2px;
+  font-size: 38px;
+  color: #333;
+}
+
+/* LA NOTA MUSICAL (Tirador) */
+.slider:before { 
+  position: absolute; 
+  content: "♩"; 
+  font-size: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px; 
+  width: 20px; 
+  left: 35px; /* Empezamos después de la clave de sol */
+  /* Posición inicial: Nota SOL (Segunda línea) */
+  bottom: 12px; 
+  color: #333;
+  transition: .4s; 
+  z-index: 2;
+}
+
+/* ESTADO ACTIVADO (Filtro con Stock) */
+input:checked + .slider { 
+  background-color: rgba(52, 199, 89, 0.05); 
+}
+
+input:checked + .slider:before { 
+  /* Movimiento a la nota SI (Tercera línea) y desplazamiento a la derecha */
+  transform: translate(20px, -8px); 
+  color: #34c759; /* Color verde para indicar stock */
+}}
 
     #panel-sugerencias { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
     .tag-sugerencia { background: #eee; padding: 4px 10px; border-radius: 15px; font-size: 12px; cursor: pointer; border: 1px solid #ddd; font-weight: bold; }
