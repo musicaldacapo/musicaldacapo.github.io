@@ -872,10 +872,10 @@
   ];
 
   fetch('stock.csv')
-    .then(res => res.arrayBuffer())
-    .then(buffer => {
-      const decoder = new TextDecoder('iso-8859-1');
-      const data = decoder.decode(buffer);
+  .then(res => res.text())
+  .then(data => {
+    const lineas = data.split(/\r?\n/).slice(1);
+    productos = lineas.map(linea => {
       const lineas = data.split(/\r?\n/).slice(1);
       productos = lineas.map(linea => {
         const c = linea.split(',');
