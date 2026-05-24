@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicStore",
+  "name": "Musical Da Capo",
+  "description": "La mejor tienda de instrumentos musicales y accesorios en Córdoba. Especialistas en guitarras, pianos y reparación.",
+  "url": "https://musicaldacapo.es",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Córdoba",
+    "addressRegion": "Andalucía",
+    "addressCountry": "ES"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Instrumentos y Accesorios",
+    "itemListElement": ["Guitarras","Pianos","Accesorios musicales","Viento y Percusión"]
+  }
+}
+</script>
+  <meta charset="UTF-8">
+  <title>Musical da Capo | Córdoba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --naranja: #f28c28;
+      --naranja-oscuro: #c96e10;
+      --naranja-suave: #fff5eb;
+      --verde-ws: #25d366;
+      --azul: #1f6feb;
+      --rojo: #e74c3c;
+      --amarillo: #f39c12;
+      --verde: #27ae60;
+      --negro: #111;
+      --gris-fondo: #f4f1ee;
+      --gris-borde: #e8e2da;
+      --blanco: #fff;
+      --radio: 16px;
+      --sombra: 0 4px 24px rgba(0,0,0,.08);
+      --sombra-lg: 0 12px 48px rgba(0,0,0,.14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gris-fondo);
+      color: var(--negro);
+      min-height: 100vh;
+    }
+
+    /* ── HERO HEADER ── */
+    .hero {
+      background: var(--negro);
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(242,140,40,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(242,140,40,.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* Líneas de pentagrama decorativas */
+    .hero::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 0;
+      height: 60px;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 10px,
+        rgba(242,140,40,.15) 10px,
+        rgba(242,140,40,.15) 11px
+      );
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      animation: fadeDown .6s ease both;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      display: block;
+      max-width: 260px;
+      width: 100%;
+      filter: brightness(0) invert(1);
+      opacity: .92;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 900;
+      color: var(--blanco);
+      letter-spacing: -.5px;
+      text-align: center;
+      line-height: 1.1;
+    }
+    h1 span { color: var(--naranja); }
+
+    .subtitle {
+      font-size: 15px;
+      color: rgba(255,255,255,.6);
+      text-align: center;
+      letter-spacing: .02em;
+    }
+
+    /* ── BANNER VERDE ── */
+    .xmas-wrap {
+      max-width: 960px;
+      margin: 24px auto 0;
+      padding: 0 16px;
+    }
+    .xmas {
+      background: linear-gradient(135deg, #145f2b, #1e8a3c);
+      color: #fff;
+      padding: 16px 24px;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: .01em;
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    .xmas::before {
+      content: '♪ ♩ ♫ ♬ ♪ ♩ ♫ ♬ ♪ ♩ ♫ ♬ ♪ ♩ ♫ ♬ ♪ ♩ ♫';
+      position: absolute;
+      top: 3px; left: 0; right: 0;
+      font-size: 9px;
+      opacity: .15;
+      letter-spacing: 4px;
+      text-align: center;
+    }
+    .xmas-text { position: relative; z-index: 1; }
+    .xmas-heart {
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+    }
+    /* Corazón SVG azul celeste con clave de sol encima */
+    .xmas-heart::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #5bb8f5;
+      clip-path: path('M23 40 C23 40 4 27 4 15 A10 10 0 0 1 23 10 A10 10 0 0 1 42 15 C42 27 23 40 23 40Z');
+      filter: drop-shadow(0 2px 6px rgba(91,184,245,.5));
+    }
+    .xmas-heart span {
+      position: relative;
+      z-index: 1;
+      font-size: 20px;
+      line-height: 1;
+      margin-top: -4px;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+
+    /* ── CONTENEDOR PRINCIPAL ── */
+    .main-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 28px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── TARJETA GENÉRICA ── */
+    .card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      overflow: hidden;
+      animation: fadeUp .5s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card:nth-child(2) { animation-delay: .08s; }
+    .card:nth-child(3) { animation-delay: .16s; }
+    .card:nth-child(4) { animation-delay: .24s; }
+
+    /* ── TARJETA DE INFO ── */
+    .info-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .info-block {
+      padding: 24px 28px;
+    }
+    .info-block:first-child {
+      border-right: 1px solid var(--gris-borde);
+    }
+    .info-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--naranja);
+      margin-bottom: 8px;
+    }
+    .info-block p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #444;
+    }
+    .info-block strong { color: var(--negro); font-weight: 600; }
+    .info-block .cerrado { font-size: 12px; color: #999; margin-top: 6px; display: block; }
+
+    /* ── BOTONES DE ACCIÓN ── */
+    .actions-card {
+      padding: 20px 24px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      background: var(--naranja-suave);
+      border: 1.5px solid #ffe0b2;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: .01em;
+      transition: transform .15s ease, box-shadow .15s ease, opacity .15s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+    .btn:active { transform: translateY(0); }
+    .btn-whatsapp { background: var(--verde-ws); }
+    .btn-email    { background: var(--azul); }
+    .btn-maps     { background: var(--naranja); }
+    .btn-icon { font-size: 16px; }
+
+    /* ── CARRUSEL DE CATEGORÍAS ── */
+    .nav-card {
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .nav-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    .nav-arrows {
+      display: flex;
+      gap: 6px;
+    }
+    .nav-arrow {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gris-borde);
+      background: var(--gris-fondo);
+      color: var(--negro);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s, border-color .15s, transform .1s;
+      flex-shrink: 0;
+    }
+    .nav-arrow:hover {
+      background: var(--naranja);
+      border-color: var(--naranja);
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .nav-arrow:active { transform: scale(.95); }
+    .nav-scroll-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+    .nav-pills {
+      display: flex;
+      gap: 10px;
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      will-change: transform;
+    }
+    .nav-pill {
+      padding: 9px 18px;
+      border-radius: 50px;
+      background: var(--gris-fondo);
+      border: 1.5px solid var(--gris-borde);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--negro);
+      cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s, transform .15s;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .nav-pill:hover, .nav-pill.active {
+      background: var(--naranja);
+      color: #fff;
+      border-color: var(--naranja);
+      transform: translateY(-1px);
+    }
+
+    /* ── LANDING DE PRODUCTO ── */
+    #landing-producto {
+      display: none;
+    }
+    .landing-inner {
+      padding: 24px;
+    }
+    .btn-volver {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gris-fondo);
+      border: 1.5px solid var(--gris-borde);
+      color: var(--negro);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background .15s;
+    }
+    .btn-volver:hover { background: #e8e2da; }
+    .landing-titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--naranja);
+      margin-bottom: 6px;
+    }
+    .landing-desc { font-size: 14px; color: #666; margin-bottom: 20px; }
+    .guitarra-grid { display: grid; gap: 12px; }
+    .guitarra-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px;
+      border: 1.5px solid var(--gris-borde);
+      border-radius: 12px;
+      background: var(--blanco);
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .guitarra-item:hover {
+      box-shadow: var(--sombra);
+      border-color: var(--naranja);
+    }
+    .guitarra-img {
+      width: 64px; height: 64px;
+      border-radius: 8px;
+      background: var(--gris-fondo);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .guitarra-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .guitarra-info { flex: 1; }
+    .guitarra-nombre { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .guitarra-desc { font-size: 12px; color: #777; line-height: 1.5; }
+    .btn-consultar {
+      background: var(--verde-ws);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: opacity .15s;
+    }
+    .btn-consultar:hover { opacity: .85; }
+
+    /* ── BUSCADOR DE STOCK ── */
+    .stock-card { padding: 24px; }
+    .stock-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .stock-titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--negro);
+    }
+    .stock-subtitulo {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    #buscador {
+      flex: 1;
+      padding: 13px 18px;
+      border: 2px solid var(--gris-borde);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--negro);
+      background: var(--gris-fondo);
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    #buscador:focus {
+      border-color: var(--naranja);
+      box-shadow: 0 0 0 3px rgba(242,140,40,.12);
+      background: #fff;
+    }
+    #buscador::placeholder { color: #bbb; }
+
+    /* ── SWITCH PENTAGRAMA (mantenido igual pero refinado) ── */
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: .02em;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 80px;
+      height: 40px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 10%, #ccc 10%, #ccc 12%,
+        transparent 12%, transparent 30%, #ccc 30%, #ccc 32%,
+        transparent 32%, transparent 50%, #ccc 50%, #ccc 52%,
+        transparent 52%, transparent 70%, #ccc 70%, #ccc 72%,
+        transparent 72%, transparent 90%, #ccc 90%, #ccc 92%,
+        transparent 92%
+      );
+      transition: .4s;
+      border-radius: 4px;
+    }
+    .slider:after {
+      content: "𝄞";
+      position: absolute;
+      left: 5px; top: -2px;
+      font-size: 38px;
+      color: #aaa;
+    }
+    .slider:before {
+      position: absolute;
+      content: "♩";
+      font-size: 35px;
+      display: flex; align-items: center; justify-content: center;
+      height: 20px; width: 20px;
+      left: 35px; bottom: 12px;
+      color: #aaa;
+      transition: .4s;
+      z-index: 2;
+    }
+    input:checked + .slider {
+      background: linear-gradient(
+        to bottom,
+        transparent 10%, rgba(39,174,96,.3) 10%, rgba(39,174,96,.3) 12%,
+        transparent 12%, transparent 30%, rgba(39,174,96,.3) 30%, rgba(39,174,96,.3) 32%,
+        transparent 32%, transparent 50%, rgba(39,174,96,.3) 50%, rgba(39,174,96,.3) 52%,
+        transparent 52%, transparent 70%, rgba(39,174,96,.3) 70%, rgba(39,174,96,.3) 72%,
+        transparent 72%, transparent 90%, rgba(39,174,96,.3) 90%, rgba(39,174,96,.3) 92%,
+        transparent 92%
+      );
+    }
+    input:checked + .slider:after { color: var(--verde); }
+    input:checked + .slider:before {
+      transform: translate(20px, -8px);
+      color: var(--verde);
+    }
+
+    /* ── TAGS SUGERENCIAS ── */
+    #panel-sugerencias {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-bottom: 12px;
+    }
+    .tag-sugerencia {
+      background: var(--naranja-suave);
+      border: 1.5px solid #ffe0b2;
+      color: var(--naranja-oscuro);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .tag-sugerencia:hover {
+      background: var(--naranja);
+      color: #fff;
+      border-color: var(--naranja);
+    }
+
+    #aviso-error {
+      display: none;
+      background: #fff8f0;
+      border-left: 3px solid var(--naranja);
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #555;
+    }
+    .sugerencia-btn {
+      background: var(--naranja);
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    /* ── TABLA DE STOCK ── */
+    .tabla-wrapper {
+      border: 1.5px solid var(--gris-borde);
+      border-radius: 12px;
+      overflow: hidden;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .tabla-wrapper::-webkit-scrollbar { width: 6px; }
+    .tabla-wrapper::-webkit-scrollbar-track { background: var(--gris-fondo); }
+    .tabla-wrapper::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    thead th {
+      background: var(--negro);
+      color: rgba(255,255,255,.9);
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--gris-borde);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--naranja-suave); }
+
+    .producto-nombre { font-weight: 600; font-size: 14px; line-height: 1.3; }
+    .producto-ref { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+    .badge-verde  { background: #eafaf1; color: var(--verde); }
+    .badge-amarillo { background: #fef9e7; color: var(--amarillo); }
+    .badge-rojo   { background: #fdecea; color: var(--rojo); }
+
+    .btn-ws-table {
+      background: var(--verde-ws);
+      color: #fff;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      transition: opacity .15s;
+    }
+    .btn-ws-table:hover { opacity: .85; }
+
+    .td-right {
+      text-align: right;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* ── MAPA ── */
+    .map-card {
+      border-radius: var(--radio);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+    }
+    .map-placeholder {
+      padding: 32px;
+      text-align: center;
+      color: #bbb;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      padding: 0 16px 32px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ── RESPONSIVE MÓVIL ── */
+    @media (max-width: 640px) {
+      .info-card {
+        grid-template-columns: 1fr;
+      }
+      .info-block:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--gris-borde);
+      }
+      .hero-inner { padding: 28px 16px 36px; }
+      h1 { font-size: 26px; }
+      .nav-card { gap: 10px; padding: 14px; }
+      .nav-top { gap: 8px; }
+      .stock-header { flex-direction: column; gap: 2px; }
+      /* Tabla responsive en móvil */
+      table, thead, tbody, tr { display: block; width: 100%; }
+      thead { display: none; }
+      tr { border-bottom: 1.5px solid var(--gris-borde); padding: 12px 0; }
+      td {
+        display: block;
+        border: none;
+        padding: 4px 16px !important;
+        text-align: left !important;
+      }
+      .td-right {
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+      .actions-card { justify-content: flex-start; }
+      .guitarra-item { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <img src="logo-musical.png" alt="Musical da Capo" class="logo">
+    <h1>Musical <span>da Capo</span></h1>
+    <p class="subtitle">Tu tienda de Música en Córdoba</p>
+  </div>
+</header>
+
+<!-- BANNER -->
+<div class="xmas-wrap">
+  <div class="xmas">
+    <span class="xmas-text">¡Hola amantes de la música!</span>
+    <div class="xmas-heart"><span>𝄞</span></div>
+  </div>
+</div>
+
+<!-- LANDING PRODUCTO (oculto por defecto) -->
+<div class="main-wrap">
+  <div id="landing-producto" class="card">
+    <div class="landing-inner">
+      <button class="btn-volver" onclick="cerrarLanding()">← Volver</button>
+      <div id="landing-contenido"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div id="main-content">
+  <div class="main-wrap">
+
+    <!-- NAVEGACIÓN CARRUSEL -->
+    <div class="card nav-card">
+      <div class="nav-top">
+        <span class="nav-label">Ver instrumentos</span>
+        <div class="nav-arrows">
+          <button class="nav-arrow" id="navPrev" onclick="navScroll(-1)">&#8592;</button>
+          <button class="nav-arrow" id="navNext" onclick="navScroll(1)">&#8594;</button>
+        </div>
+      </div>
+      <div class="nav-scroll-wrap">
+        <div class="nav-pills" id="navPills">
+          <a class="nav-pill" href="#" onclick="mostrarLanding('Guitarras','Selección de guitarras españolas, acústicas y eléctricas.');return false;">🎸 Guitarras</a>
+          <a class="nav-pill" href="#" onclick="mostrarLanding('Ukeleles','Ukeleles de todas las gamas.');return false;">🪕 Ukeleles</a>
+          <a class="nav-pill" href="#" onclick="mostrarLanding('Teclados','Pianos digitales y teclados de iniciación.');return false;">🎹 Teclados y Pianos</a>
+          <a class="nav-pill" href="#" onclick="mostrarLanding('Percusión','Carrillones cromáticos y material escolar.');return false;">🥁 Percusión Escolar</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TARJETA INFO -->
+    <div class="card info-card">
+      <div class="info-block">
+        <div class="info-label">Dónde estamos</div>
+        <p>
+          Instrumentos, accesorios y librería musical.<br>
+          <strong>Avenida de los Molinos 8</strong><br>
+          (Junto al Conservatorio Profesional)<br>
+          <strong>14001 · Córdoba</strong>
+        </p>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Horario Primavera 2026</div>
+        <p>
+          Lunes a Jueves<br>
+          <strong>15:30h a 20:30h</strong>
+        </p>
+        <span class="cerrado">Mañanas, Viernes y Sábados: Tienda cerrada al público 🙏<br>WhatsApp 24h: <strong>695 90 83 61</strong></span>
+      </div>
+    </div>
+
+    <!-- BOTONES DE ACCIÓN -->
+    <div class="card actions-card">
+      <a class="btn btn-whatsapp" href="https://wa.me/34695908361" target="_blank">
+        <span class="btn-icon">💬</span> WhatsApp
+      </a>
+      <a class="btn btn-email" href="mailto:tiendagabou@gmail.com">
+        <span class="btn-icon">✉️</span> Email
+      </a>
+      <a class="btn btn-maps" onclick="loadMap()">
+        <span class="btn-icon">📍</span> Cómo llegar
+      </a>
+    </div>
+
+    <!-- BUSCADOR DE STOCK -->
+    <div class="card stock-card">
+      <div class="stock-header">
+        <div class="stock-titulo">🔎 Consultar stock disponible</div>
+      </div>
+
+      <div class="search-row">
+        <input type="text" id="buscador" placeholder="Busca instrumento o referencia..." oninput="procesarBusqueda()">
+      </div>
+
+      <div class="filter-row">
+        <span class="filter-label">Pulsa en la nota para mostrar sólo productos con stock:</span>
+        <label class="switch">
+          <input type="checkbox" id="checkStock" onchange="procesarBusqueda()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div id="panel-sugerencias"></div>
+      <div id="aviso-error"></div>
+
+      <div class="tabla-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th style="text-align:right">Estado / Consulta</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoTabla">
+            <tr><td colspan="2" style="text-align:center; padding:30px; color:#bbb;">Escribe para buscar...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MAPA -->
+    <div id="mapShell" class="map-card">
+      <div class="map-placeholder">Pulsa "Cómo llegar" para ver el mapa.</div>
+    </div>
+
+  </div><!-- /main-wrap -->
+
+  <footer>
+    © <span id="year"></span> GABOU SL · Avenida de los Molinos 8 · 14001 Córdoba (España) · Si buscas una tienda de instrumentos musicales en Córdoba, en Musical Da Capo ofrecemos desde accesorios musicales básicos hasta instrumentos profesionales. Estamos situados en el corazón de Córdoba para dar servicio a todos los músicos de la ciudad.
+  </footer>
+</div><!-- /main-content -->
+
+<script>
+  let productos = [];
+  let ultimosResultadosValidos = [];
+
+  const guitarrasEspecificas = [
+    { nombre: "Admira Alba 3/4", desc: "Guitarra clásica ideal para niños y jóvenes estudiantes.", img: "img/admira-alba34.jpg" },
+    { nombre: "Admira Alba 4/4", desc: "La guitarra clásica de iniciación por excelencia para adultos.", img: "img/admira-alba.jpg" },
+    { nombre: "Admira Luna 4/4", desc: "Guitarra clásica acabada en negro satinado, sonido equilibrado y elegante.", img: "img/admira-luna.jpg" },
+    { nombre: "Admira Juanita 4/4", desc: "Guitarra de fabricación española tradicional, excelente proyección.", img: "img/admira-juanita.jpg" },
+    { nombre: "Oqan QGE Starter Kit", desc: "Guitarra eléctrica en pack completo con amplificador y accesorios, lista para empezar.", img: "img/oqan-qge.jpg" },
+    { nombre: "Daytona A411 Azul Brillo", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "img/daytona-A411.jpg" }
+  ];
+
+  fetch('stock.csv')
+    .then(res => res.arrayBuffer())
+    .then(buffer => {
+      const decoder = new TextDecoder('iso-8859-1');
+      const data = decoder.decode(buffer);
+      const lineas = data.split(/\r?\n/).slice(1);
+      productos = lineas.map(linea => {
+        const c = linea.split(',');
+        if (c.length >= 3) {
+          return {
+            id: c[0].replace(/"/g, '').trim(),
+            nom: c[1].replace(/"/g, '').trim(),
+            stock: parseInt(c[2]) || 0
+          };
+        }
+        return null;
+      }).filter(p => p);
+    });
+
+  function limpiar(t) {
+    return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  }
+
+  function procesarBusqueda() {
+    const input = document.getElementById('buscador').value;
+    const soloStock = document.getElementById('checkStock').checked;
+    const texto = limpiar(input);
+    const aviso = document.getElementById('aviso-error');
+    const panelSug = document.getElementById('panel-sugerencias');
+
+    if (texto.length < 2) {
+      aviso.style.display = 'none';
+      panelSug.innerHTML = '';
+      dibujar([]);
+      return;
+    }
+
+    const palabras = texto.split(/\s+/);
+    let actuales = productos.filter(p => {
+      const coincide = palabras.every(pal => limpiar(p.nom).includes(pal) || limpiar(p.id).includes(pal));
+      return soloStock ? (coincide && p.stock > 0) : coincide;
+    }).sort((a, b) => b.stock - a.stock);
+
+    if (actuales.length > 0) {
+      ultimosResultadosValidos = actuales;
+      aviso.style.display = 'none';
+      generarTags(actuales);
+      dibujar(actuales);
+    } else {
+      panelSug.innerHTML = '';
+      if (ultimosResultadosValidos.length > 0) {
+        aviso.style.display = 'block';
+        let sug = ultimosResultadosValidos[0].nom.split(" ")[0].toUpperCase();
+        aviso.innerHTML = `No hay resultados. ¿Quisiste decir <strong>${sug}</strong>? <br><button class="sugerencia-btn" onclick="sobrescribir('${sug}')">Corregir</button>`;
+        dibujar(soloStock ? ultimosResultadosValidos.filter(p => p.stock > 0) : ultimosResultadosValidos);
+      }
+    }
+  }
+
+  function generarTags(lista) {
+    const panel = document.getElementById('panel-sugerencias');
+    const conteo = {};
+    lista.forEach(p => {
+      let cat = p.nom.split(" ")[0].toUpperCase();
+      if (cat.length > 2) conteo[cat] = (conteo[cat] || 0) + 1;
+    });
+    panel.innerHTML = Object.entries(conteo).sort((a, b) => b[1] - a[1]).slice(0, 5)
+      .map(([n, c]) => `<div class="tag-sugerencia" onclick="sobrescribir('${n}')">${n} (${c})</div>`).join('');
+  }
+
+  function dibujar(lista) {
+    const cuerpo = document.getElementById('cuerpoTabla');
+    if (lista.length === 0) {
+      cuerpo.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:28px; color:#bbb; font-size:14px;">Escribe algo para buscar...</td></tr>';
+      return;
+    }
+
+    cuerpo.innerHTML = lista.slice(0, 40).map(p => {
+      let badgeClass = 'badge-verde', badgeTxt = 'Disponible';
+      if (p.stock <= 0)      { badgeClass = 'badge-rojo';     badgeTxt = 'Agotado'; }
+      else if (p.stock <= 5) { badgeClass = 'badge-amarillo'; badgeTxt = 'Últimas unidades'; }
+
+      return `<tr>
+        <td>
+          <div class="producto-nombre">${p.nom}</div>
+          <div class="producto-ref">Ref: ${p.id}</div>
+        </td>
+        <td>
+          <div class="td-right">
+            <span class="badge ${badgeClass}">${badgeTxt}</span>
+            <a class="btn-ws-table" href="https://wa.me/34695908361?text=Hola, me interesa: ${p.nom} (${p.id})" target="_blank">💬 WhatsApp</a>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function sobrescribir(val) {
+    document.getElementById('buscador').value = val;
+    procesarBusqueda();
+  }
+
+  function mostrarLanding(titulo, desc) {
+    document.getElementById('main-content').style.display = 'none';
+
+    let html = `<div class="landing-titulo">${titulo}</div><p class="landing-desc">${desc}</p>`;
+
+    if (titulo === 'Guitarras') {
+      html += '<div class="guitarra-grid">';
+      guitarrasEspecificas.forEach(g => {
+        html += `<div class="guitarra-item">
+          <div class="guitarra-img">
+            <img src="${g.img}" alt="${g.nombre}" onerror="this.src='https://via.placeholder.com/64?text=🎸'">
+          </div>
+          <div class="guitarra-info">
+            <div class="guitarra-nombre">${g.nombre}</div>
+            <div class="guitarra-desc">${g.desc}</div>
+          </div>
+          <a href="https://wa.me/34695908361?text=Consulta sobre ${g.nombre}" target="_blank" class="btn-consultar">💬 Consultar</a>
+        </div>`;
+      });
+      html += '</div>';
+    }
+
+    document.getElementById('landing-contenido').innerHTML = html;
+    document.getElementById('landing-producto').style.display = 'block';
+
+    // Mover la tarjeta al main-wrap visible
+    document.querySelector('.main-wrap').prepend(document.getElementById('landing-producto').parentElement === document.querySelector('.main-wrap')
+      ? document.getElementById('landing-producto')
+      : document.getElementById('landing-producto'));
+
+    window.scrollTo(0, 0);
+  }
+
+  function cerrarLanding() {
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('landing-producto').style.display = 'none';
+  }
+
+  function loadMap() {
+    document.getElementById("mapShell").innerHTML = `<iframe style="width:100%; height:360px; border:0; display:block;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.7149032821967!2d-4.7791234!3d37.89197660000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6cdf7aaf6b856d%3A0xa2a0162c1597d138!2sMusical%20da%20Capo!5e1!3m2!1ses!2ses!4v1774030739950!5m2!1ses!2ses&output=embed" allowfullscreen></iframe>`;
+  }
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // ── CARRUSEL DE CATEGORÍAS ──
+  let navOffset = 0;
+  function navScroll(dir) {
+    const pills = document.getElementById('navPills');
+    const wrap = pills.parentElement;
+    const pill = pills.querySelector('.nav-pill');
+    if (!pill) return;
+    const pillW = pill.offsetWidth + 10; // gap
+    const maxOffset = pills.scrollWidth - wrap.offsetWidth;
+    navOffset = Math.max(0, Math.min(navOffset + dir * pillW, maxOffset));
+    pills.style.transform = `translateX(-${navOffset}px)`;
+    document.getElementById('navPrev').style.opacity = navOffset <= 0 ? '.35' : '1';
+    document.getElementById('navNext').style.opacity = navOffset >= maxOffset ? '.35' : '1';
+  }
+  // Estado inicial de flechas
+  window.addEventListener('load', () => navScroll(0));
+</script>
+</body>
+</html>
