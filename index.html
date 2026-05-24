@@ -871,24 +871,32 @@
     { nombre: "Daytona A411 Azul Brillo", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "img/daytona-A411.jpg" }
   ];
 
-  fetch('stock.csv')
+ fetch('stock.csv')
   .then(res => res.text())
   .then(data => {
     const lineas = data.split(/\r?\n/).slice(1);
     productos = lineas.map(linea => {
-      const lineas = data.split(/\r?\n/).slice(1);
-      productos = lineas.map(linea => {
-        const c = linea.split(',');
-        if (c.length >= 3) {
-          return {
-            id: c[0].replace(/"/g, '').trim(),
-            nom: c[1].replace(/"/g, '').trim(),
-            stock: parseInt(c[2]) || 0
-          };
-        }
-        return null;
-      }).filter(p => p);
-    });
+      if (!linea.trim()) return null;
+      // Parser CSV que respeta comillas
+      const cols = [];
+      let actual = '', dentro = false;
+      for (let i = 0; i < linea.length; i++) {
+        const c = linea[i];
+        if (c === '"') { dentro = !dentro; }
+        else if (c === ',' && !dentro) { cols.push(actual); actual = ''; }
+        else { actual += c; }
+      }
+      cols.push(actual);
+      if (cols.length >= 3) {
+        return {
+          id: cols[0].trim(),
+          nom: cols[1].trim(),
+          stock: parseFloat(cols[2]) || 0
+        };
+      }
+      return null;
+    }).filter(p => p);
+  });
 
   function limpiar(t) {
     return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
