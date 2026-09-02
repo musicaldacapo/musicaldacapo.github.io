@@ -35,6 +35,98 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+    /* ── LIBROS LENGUAJE MUSICAL ── */
+.libros-card { padding: 24px; }
+.libros-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--negro);
+  margin-bottom: 6px;
+}
+.libros-seccion-titulo {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--naranja);
+  margin: 20px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--naranja-suave);
+}
+.libros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.libro-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 12px;
+  background: var(--blanco);
+  transition: box-shadow .2s, border-color .2s;
+}
+.libro-item:hover {
+  box-shadow: var(--sombra);
+  border-color: var(--naranja);
+}
+.libro-img {
+  width: 56px;
+  height: 72px;
+  border-radius: 6px;
+  background: var(--gris-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  font-size: 28px;
+}
+.libro-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+.libro-info { flex: 1; }
+.libro-nombre {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--negro);
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+.libro-editorial {
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+.libro-precio {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--naranja);
+}
+.libro-btn {
+  background: var(--verde-ws);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.libro-btn:hover { opacity: .85; }
+@media (max-width: 640px) {
+  .libros-grid { grid-template-columns: 1fr; }
+}
     :root {
       --naranja: #f28c28;
       --naranja-oscuro: #c96e10;
@@ -778,6 +870,7 @@
           <a class="nav-pill" href="#" onclick="mostrarLanding('Ukeleles','Ukeleles de todas las gamas.');return false;">🪕 Ukeleles</a>
           <a class="nav-pill" href="#" onclick="mostrarLanding('Teclados','Pianos digitales y teclados de iniciación.');return false;">🎹 Teclados y Pianos</a>
           <a class="nav-pill" href="#" onclick="mostrarLanding('Percusión','Carrillones cromáticos y material escolar.');return false;">🥁 Percusión Escolar</a>
+          <a class="nav-pill" href="#" onclick="mostrarLanding('Libros','Libros de Lenguaje Musical de la editorial SiBemol.');return false;">📚 Libros LM</a>
         </div>
       </div>
     </div>
@@ -878,6 +971,27 @@
     { nombre: "Oqan QGE Starter Kit", desc: "Guitarra eléctrica en pack completo con amplificador y accesorios, lista para empezar.", img: "img/oqan-qge.jpg" },
     { nombre: "Daytona A411 Azul Brillo", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "img/daytona-A411.jpg" }
   ];
+
+  const librosLM = [
+  // ENSEÑANZAS BÁSICAS
+  { curso: "1º EEBB", nombre: "Teoría 1º EEBB", precio: "15,80 €", img: "img/libros/teoria-1eebb.jpg" },
+  { curso: "1º EEBB", nombre: "Lenguaje Musical Melódico 1º EEBB", precio: "15,40 €", img: "img/libros/melodico-1eebb.jpg" },
+  { curso: "1º EEBB", nombre: "Lenguaje Musical Rítmico 1º EEBB", precio: "12,40 €", img: "img/libros/ritmico-1eebb.jpg" },
+  { curso: "2º EEBB", nombre: "Teoría 2º EEBB", precio: "15,80 €", img: "img/libros/teoria-2eebb.jpg" },
+  { curso: "2º EEBB", nombre: "Lenguaje Musical Melódico 2º EEBB", precio: "16,40 €", img: "img/libros/melodico-2eebb.jpg" },
+  { curso: "2º EEBB", nombre: "Lenguaje Musical Rítmico 2º EEBB", precio: "13,40 €", img: "img/libros/ritmico-2eebb.jpg" },
+  { curso: "3º EEBB", nombre: "Teoría 3º EEBB", precio: "15,80 €", img: "img/libros/teoria-3eebb.jpg" },
+  { curso: "3º EEBB", nombre: "Lenguaje Musical Melódico 3º EEBB", precio: "17,40 €", img: "img/libros/melodico-3eebb.jpg" },
+  { curso: "3º EEBB", nombre: "Lenguaje Musical Rítmico 3º EEBB", precio: "14,40 €", img: "img/libros/ritmico-3eebb.jpg" },
+  { curso: "4º EEBB", nombre: "Teoría 4º EEBB", precio: "16,80 €", img: "img/libros/teoria-4eebb.jpg" },
+  { curso: "4º EEBB", nombre: "Lenguaje Musical Melódico 4º EEBB", precio: "18,40 €", img: "img/libros/melodico-4eebb.jpg" },
+  { curso: "4º EEBB", nombre: "Lenguaje Musical Rítmico 4º EEBB", precio: "15,40 €", img: "img/libros/ritmico-4eebb.jpg" },
+  // ENSEÑANZAS PROFESIONALES
+  { curso: "1º EEPP", nombre: "Teoría 1º EEPP", precio: "16,80 €", img: "img/libros/teoria-1eepp.jpg" },
+  { curso: "1º EEPP", nombre: "Nuevo Lenguaje Musical 1", precio: "25,00 €", img: "img/libros/nlm-1.jpg" },
+  { curso: "2º EEPP", nombre: "Teoría 2º EEPP", precio: "17,80 €", img: "img/libros/teoria-2eepp.jpg" },
+  { curso: "2º EEPP", nombre: "Nuevo Lenguaje Musical 2", precio: "26,30 €", img: "img/libros/nlm-2.jpg" },
+];
 
  fetch('stock.csv')
   .then(res => res.text())
@@ -1010,6 +1124,31 @@
       });
       html += '</div>';
     }
+
+    if (titulo === 'Libros') {
+  const secciones = ['ENSEÑANZAS BÁSICAS', 'ENSEÑANZAS PROFESIONALES'];
+  const filtros = {
+    'ENSEÑANZAS BÁSICAS': l => l.curso.includes('EEBB'),
+    'ENSEÑANZAS PROFESIONALES': l => l.curso.includes('EEPP')
+  };
+  secciones.forEach(sec => {
+    html += `<div class="libros-seccion-titulo">${sec}</div><div class="libros-grid">`;
+    librosLM.filter(filtros[sec]).forEach(l => {
+      html += `<div class="libro-item">
+        <div class="libro-img">
+          <img src="${l.img}" alt="${l.nombre}" onerror="this.innerHTML='📚'">
+        </div>
+        <div class="libro-info">
+          <div class="libro-nombre">${l.nombre}</div>
+          <div class="libro-editorial">Editorial SiBemol</div>
+          <div class="libro-precio">${l.precio}</div>
+        </div>
+        <a href="https://wa.me/34695908361?text=Quiero%20comprar%3A%20${encodeURIComponent(l.nombre)}" target="_blank" class="libro-btn">💬 Pedir</a>
+      </div>`;
+    });
+    html += '</div>';
+  });
+}
 
     document.getElementById('landing-contenido').innerHTML = html;
     document.getElementById('landing-producto').style.display = 'block';
