@@ -35,7 +35,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* ── LIBROS LENGUAJE MUSICAL ── */
+/* ── LIBROS LENGUAJE MUSICAL ── */
 .libros-card { padding: 24px; }
 .libros-titulo {
   font-family: 'Playfair Display', serif;
@@ -58,6 +58,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 12px;
+  overflow: visible;
 }
 .libro-item {
   display: flex;
@@ -75,6 +76,7 @@
   border-color: var(--naranja);
 }
 .libro-img {
+  position: relative;
   width: 56px;
   height: 72px;
   border-radius: 6px;
@@ -87,13 +89,10 @@
   font-size: 28px;
 }
 .libro-img img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 56px;
+  height: 72px;
   object-fit: cover;
-}
-/* ── PREVIEW PORTADA LIBRO ── */
-.libro-img {
-  position: relative;
+  border-radius: 6px;
 }
 .libro-img .preview-grande {
   display: none;
@@ -101,8 +100,8 @@
   left: 70px;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 630px;
+  width: 280px;
+  height: 370px;
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 8px 32px rgba(0,0,0,.28);
@@ -112,7 +111,7 @@
 }
 .libro-img:hover .preview-grande {
   display: block;
-}    
+}
 .libro-info { flex: 1; }
 .libro-nombre {
   font-size: 13px;
@@ -148,6 +147,9 @@
 }
 .libro-btn:hover { opacity: .85; }
 @media (max-width: 640px) {
+  .libros-grid { grid-template-columns: 1fr; }
+  .libro-img .preview-grande { display: none !important; }
+}
 .libros-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
