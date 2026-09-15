@@ -973,7 +973,7 @@
   ];
 
   const librosLM = [
-  // ENSEÑANZAS BÁSICAS
+  // ENSEÑANZAS BÁSICAS - MARIA ASUNCIÓN ONIEVA
   { curso: "1º EEBB", nombre: "Teoría 1º EEBB", precio: "15,80 €", img: "img/libros/teoria-1eebb.jpg" },
   { curso: "1º EEBB", nombre: "Lenguaje Musical Melódico 1º EEBB", precio: "15,40 €", img: "img/libros/melodico-1eebb.jpg" },
   { curso: "1º EEBB", nombre: "Lenguaje Musical Rítmico 1º EEBB", precio: "12,40 €", img: "img/libros/ritmico-1eebb.jpg" },
@@ -986,7 +986,14 @@
   { curso: "4º EEBB", nombre: "Teoría 4º EEBB", precio: "16,80 €", img: "img/libros/teoria-4eebb.jpg" },
   { curso: "4º EEBB", nombre: "Lenguaje Musical Melódico 4º EEBB", precio: "18,40 €", img: "img/libros/melodico-4eebb.jpg" },
   { curso: "4º EEBB", nombre: "Lenguaje Musical Rítmico 4º EEBB", precio: "15,40 €", img: "img/libros/ritmico-4eebb.jpg" },
-  // ENSEÑANZAS PROFESIONALES
+  // ENSEÑANZAS BÁSICAS - JOSÉ ABEL FERNÁNDEZ
+  { curso: "1º EEBB", nombre: "Teoría del Lenguaje Musical 1 - José Abel Fernández", precio: "25,00 €", img: "img/libros/abel-teoria-1.jpg" },
+  { curso: "1º EEBB", nombre: "Fichas de Lenguaje Musical 1 - José Abel Fernández", precio: "25,00 €", img: "img/libros/abel-fichas-1.jpg" },
+  { curso: "2º EEBB", nombre: "Teoría del Lenguaje Musical 2 - José Abel Fernández", precio: "25,00 €", img: "img/libros/abel-teoria-2.jpg" },
+  { curso: "2º EEBB", nombre: "Fichas de Lenguaje Musical 2 - José Abel Fernández", precio: "25,00 €", img: "img/libros/abel-fichas-2.jpg" },
+  { curso: "3º EEBB", nombre: "Teoría del Lenguaje Musical 3 - José Abel Fernández", precio: "25,00 €", img: "img/libros/abel-teoria-3.jpg" },
+  { curso: "3º EEBB", nombre: "Fichas de Lenguaje Musical 3 - José Abel Fernández", precio: "25,00 €", img: "img/libros/abel-fichas-3.jpg" },  
+  // ENSEÑANZAS PROFESIONALES - MARIA ASUNCIÓN ONIEVA
   { curso: "1º EEPP", nombre: "Teoría 1º EEPP", precio: "16,80 €", img: "img/libros/teoria-1eepp.jpg" },
   { curso: "1º EEPP", nombre: "Nuevo Lenguaje Musical 1", precio: "25,00 €", img: "img/libros/nlm-1.jpg" },
   { curso: "2º EEPP", nombre: "Teoría 2º EEPP", precio: "17,80 €", img: "img/libros/teoria-2eepp.jpg" },
@@ -1140,7 +1147,7 @@
         </div>
         <div class="libro-info">
           <div class="libro-nombre">${l.nombre}</div>
-          <div class="libro-editorial">Editorial SiBemol</div>
+          <div class="libro-editorial">${l.nombre.includes('Abel') ? 'José Abel Fernández' : 'Ediciones SiBemol'}</div>
           <div class="libro-precio">${l.precio}</div>
         </div>
         <a href="https://wa.me/34695908361?text=Quiero%20comprar%3A%20${encodeURIComponent(l.nombre)}" target="_blank" class="libro-btn">💬 Pedir</a>
