@@ -1228,20 +1228,9 @@ document.addEventListener('mouseover', function(e) {
   if (!libroImg) return;
   const preview = libroImg.querySelector('.preview-grande');
   if (!preview) return;
-  const rect = libroImg.getBoundingClientRect();
-  const previewW = 280;
-  const previewH = 370;
-  const espacioDerecha = window.innerWidth - rect.right;
-  let left, top;
-  if (espacioDerecha >= previewW + 20) {
-    left = rect.right + 10;
-  } else {
-    left = rect.left - previewW - 10;
-  }
-  top = rect.top + (rect.height / 2) - (previewH / 2);
-  top = Math.max(10, Math.min(top, window.innerHeight - previewH - 10));
-  preview.style.left = left + 'px';
-  preview.style.top = top + 'px';
+  preview.style.left = '50%';
+  preview.style.top = '50%';
+  preview.style.transform = 'translate(-50%, -50%)';
 });
 </script>
 </body>
