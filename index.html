@@ -68,6 +68,7 @@
   border-radius: 12px;
   background: var(--blanco);
   transition: box-shadow .2s, border-color .2s;
+  overflow: visible;
 }
 .libro-item:hover {
   box-shadow: var(--sombra);
@@ -147,7 +148,11 @@
 }
 .libro-btn:hover { opacity: .85; }
 @media (max-width: 640px) {
-  .libros-grid { grid-template-columns: 1fr; }
+.libros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  overflow: visible;
 }
     :root {
       --naranja: #f28c28;
