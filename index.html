@@ -96,16 +96,13 @@
 }
 .libro-img .preview-grande {
   display: none;
-  position: absolute;
-  left: 70px;
-  top: 50%;
-  transform: translateY(-50%);
+  position: fixed;
   width: 280px;
   height: 370px;
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 8px 32px rgba(0,0,0,.28);
-  z-index: 100;
+  z-index: 1000;
   pointer-events: none;
   border: 2px solid var(--gris-borde);
 }
@@ -1225,6 +1222,27 @@
   }
   // Estado inicial de flechas
   window.addEventListener('load', () => navScroll(0));
+  // Preview portada libro - posicionamiento inteligente
+document.addEventListener('mouseover', function(e) {
+  const libroImg = e.target.closest('.libro-img');
+  if (!libroImg) return;
+  const preview = libroImg.querySelector('.preview-grande');
+  if (!preview) return;
+  const rect = libroImg.getBoundingClientRect();
+  const previewW = 280;
+  const previewH = 370;
+  const espacioDerecha = window.innerWidth - rect.right;
+  let left, top;
+  if (espacioDerecha >= previewW + 20) {
+    left = rect.right + 10;
+  } else {
+    left = rect.left - previewW - 10;
+  }
+  top = rect.top + (rect.height / 2) - (previewH / 2);
+  top = Math.max(10, Math.min(top, window.innerHeight - previewH - 10));
+  preview.style.left = left + 'px';
+  preview.style.top = top + 'px';
+});
 </script>
 </body>
 </html>
