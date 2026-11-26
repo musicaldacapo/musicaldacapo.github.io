@@ -1242,25 +1242,18 @@ const guitarrasEspecificas = [
 
     let html = `<div class="landing-titulo">${titulo}</div><p class="landing-desc">${desc}</p>`;
 
-    if (titulo === 'Guitarras') {
+   if (titulo === 'Guitarras') {
       html += '<div class="guitarra-grid">';
-  guitarrasEspecificas.forEach(g => {
-  const msg = encodeURIComponent(
-    g.oferta ? `Hola, me interesa la oferta Black Friday: ${g.nombre} (${g.precio})`
-             : `Consulta sobre ${g.nombre}`);
-  html += `<div class="guitarra-item ${g.oferta ? 'oferta' : ''}">
-    <div class="guitarra-img">
-      <img src="${g.img}" alt="${g.nombre}" onerror="this.src='https://via.placeholder.com/64?text=🎸'">
-    </div>
-    <div class="guitarra-info">
-      ${g.oferta ? '<span class="oferta-badge">Oferta Black Friday</span>' : ''}
-      <div class="guitarra-nombre">${g.nombre}</div>
-      <div class="guitarra-desc">${g.desc}</div>
-      ${g.precio ? `<div class="guitarra-precio">${g.precio}${g.extra ? `<span class="guitarra-extra">✔ ${g.extra}</span>` : ''}</div>` : ''}
-    </div>
-    <a href="https://wa.me/34695908361?text=${msg}" target="_blank" class="btn-consultar">💬 ${g.oferta ? 'Lo quiero' : 'Consultar'}</a>
-  </div>`;
-});
+      guitarrasEspecificas.forEach(g => {
+        const msg = encodeURIComponent(
+          g.oferta ? `Hola, me interesa la oferta Black Friday: ${g.nombre} (${g.precio})`
+                   : `Consulta sobre ${g.nombre}`);
+        html += `<div class="guitarra-item ${g.oferta ? 'oferta' : ''}">
+          ...
+        </div>`;
+      });
+      html += '</div>';
+    }                      
 
     if (titulo === 'Libros') {
   const secciones = ['ENSEÑANZAS BÁSICAS', 'ENSEÑANZAS PROFESIONALES'];
