@@ -902,7 +902,7 @@
 .bf-item .bf-tipo { font-size: 12px; color: rgba(255,255,255,.6); }
 .bf-precio { font-size: 32px; font-weight: 800; color: var(--naranja); line-height: 1; }
 .bf-extra { font-size: 12px; color: #7be3a0; font-weight: 600; }
-.bf-item .btn-consultar { align-self: flex-start; margin-top: 6px; }
+.bf-item .btn-consultar { align-self: flex-start; margin-top: auto; }
 .bf-ver {
   display: inline-block; margin-top: 16px; color: var(--naranja);
   font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline;
@@ -982,14 +982,6 @@
   </div>
   <p class="bf-sub">Hasta fin de existencias. Consulta disponibilidad por WhatsApp.</p>
   <div class="bf-grid">
-   <div class="bf-item">
-      <div class="bf-nombre">Admira Juanita</div>
-      <div class="bf-tipo">Guitarra clásica 4/4</div>
-      <div class="bf-precio">170 €</div>
-      <a class="btn-consultar" target="_blank"
-         href="https://wa.me/34695908361?text=Hola,%20me%20interesa%20la%20oferta%20Black%20Friday%20de%20la%20Admira%20Juanita%20(170%20%E2%82%AC)">💬 Lo quiero</a>
-    </div>
-    <div class="bf-grid">
     <div class="bf-item">
       <div class="bf-nombre">Admira Macarena</div>
       <div class="bf-tipo">Guitarra flamenca</div>
@@ -1005,9 +997,17 @@
       <a class="btn-consultar" target="_blank"
          href="https://wa.me/34695908361?text=Hola,%20me%20interesa%20la%20oferta%20Black%20Friday%20de%20la%20Alhambra%20Z-Nature%20(320%20%E2%82%AC)">💬 Lo quiero</a>
     </div>
-  </div>
+    <div class="bf-item">
+      <div class="bf-nombre">Admira Juanita</div>
+      <div class="bf-tipo">Guitarra clásica 4/4</div>
+      <div class="bf-precio">170 €</div>
+      <a class="btn-consultar" target="_blank"
+         href="https://wa.me/34695908361?text=Hola,%20me%20interesa%20la%20oferta%20Black%20Friday%20de%20la%20Admira%20Juanita%20(170%20%E2%82%AC)">💬 Lo quiero</a>
+    </div>
+  </div><!-- /bf-grid -->
   <a class="bf-ver" onclick="mostrarLanding('Guitarras','Selección de guitarras españolas, acústicas y eléctricas.')">Ver todas las guitarras →</a>
-</div>
+</div><!-- /bf-card -->
+    
     <!-- TARJETA INFO -->
     <div class="card info-card">
       <div class="info-block">
@@ -1103,7 +1103,6 @@ const guitarrasEspecificas = [
   { nombre: "Admira Alba 3/4", desc: "Guitarra clásica ideal para niños y jóvenes estudiantes.", img: "img/admira-alba34.jpg" },
   { nombre: "Admira Alba 4/4", desc: "La guitarra clásica de iniciación por excelencia para adultos.", img: "img/admira-alba.jpg" },
   { nombre: "Admira Luna 4/4", desc: "Guitarra clásica acabada en negro satinado, sonido equilibrado y elegante.", img: "img/admira-luna.jpg" },
-  { nombre: "Admira Juanita 4/4", desc: "Guitarra de fabricación española tradicional, excelente proyección.", img: "img/admira-juanita.jpg" },
   { nombre: "Oqan QGE Starter Kit", desc: "Guitarra eléctrica en pack completo con amplificador y accesorios, lista para empezar.", img: "img/oqan-qge.jpg" },
   { nombre: "Daytona A411 Azul Brillo", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "img/daytona-A411.jpg" }
 ];
