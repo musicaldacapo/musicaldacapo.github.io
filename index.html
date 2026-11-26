@@ -846,6 +846,79 @@
       .actions-card { justify-content: flex-start; }
       .guitarra-item { flex-wrap: wrap; }
     }
+    css
+/* ── NAVIDAD: luces y copos/notas ── */
+.luces {
+  position: absolute; top: 0; left: 0; right: 0; height: 16px; z-index: 2;
+  background:
+    radial-gradient(circle at 10px 8px, #e74c3c 4px, transparent 5px) 0 0/80px 16px,
+    radial-gradient(circle at 30px 8px, #f1c40f 4px, transparent 5px) 0 0/80px 16px,
+    radial-gradient(circle at 50px 8px, #2ecc71 4px, transparent 5px) 0 0/80px 16px,
+    radial-gradient(circle at 70px 8px, #5bb8f5 4px, transparent 5px) 0 0/80px 16px;
+  animation: parpadeo 2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes parpadeo { from { opacity: .55; } to { opacity: 1; } }
+
+.caida { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+.caida span {
+  position: absolute; top: -30px;
+  color: rgba(255,255,255,.7);
+  animation: caer linear infinite;
+}
+.caida span.nota { color: rgba(242,140,40,.75); }
+@keyframes caer {
+  to { transform: translateY(340px) rotate(360deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .caida, .luces { animation: none; display: none; }
+}
+
+/* ── BLACK FRIDAY ── */
+.bf-card {
+  background: linear-gradient(135deg, #111 0%, #2a1a0a 100%);
+  color: #fff;
+  padding: 24px;
+  position: relative;
+  border: 2px solid var(--naranja);
+}
+.bf-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.bf-tag {
+  background: var(--naranja); color: #111; font-weight: 800; font-size: 11px;
+  letter-spacing: .12em; text-transform: uppercase; padding: 5px 12px; border-radius: 50px;
+}
+.bf-titulo {
+  font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900;
+}
+.bf-titulo span { color: var(--naranja); }
+.bf-sub { font-size: 13px; color: rgba(255,255,255,.65); margin-bottom: 18px; }
+.bf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.bf-item {
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(242,140,40,.45);
+  border-radius: 14px; padding: 16px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.bf-item .bf-nombre { font-weight: 700; font-size: 15px; }
+.bf-item .bf-tipo { font-size: 12px; color: rgba(255,255,255,.6); }
+.bf-precio { font-size: 32px; font-weight: 800; color: var(--naranja); line-height: 1; }
+.bf-extra { font-size: 12px; color: #7be3a0; font-weight: 600; }
+.bf-item .btn-consultar { align-self: flex-start; margin-top: 6px; }
+.bf-ver {
+  display: inline-block; margin-top: 16px; color: var(--naranja);
+  font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline;
+}
+@media (max-width: 640px) { .bf-grid { grid-template-columns: 1fr; } }
+
+/* Etiqueta de oferta en la lista de guitarras */
+.guitarra-item.oferta { border-color: var(--naranja); background: var(--naranja-suave); }
+.oferta-badge {
+  display: inline-block; background: var(--rojo); color: #fff; font-size: 10px;
+  font-weight: 800; letter-spacing: .08em; padding: 2px 8px; border-radius: 50px;
+  margin-bottom: 4px; text-transform: uppercase;
+}
+.guitarra-precio { font-size: 20px; font-weight: 800; color: var(--naranja-oscuro); margin-top: 4px; }
+.guitarra-extra { font-size: 12px; color: var(--verde); font-weight: 600; margin-left: 6px; }
   </style>
 </head>
 <body>
@@ -855,14 +928,14 @@
   <div class="hero-inner">
     <img src="logo-musical.png" alt="Musical da Capo" class="logo">
     <h1>Musical <span>da Capo</span></h1>
-    <p class="subtitle">Tu tienda de Música en Córdoba</p>
+    <p class="subtitle">Tu tienda de Música en Córdoba · 🎄 Feliz Navidad</p>
   </div>
 </header>
 
 <!-- BANNER -->
 <div class="xmas-wrap">
   <div class="xmas">
-    <span class="xmas-text">¡Hola amantes de la música!</span>
+    <span class="xmas-text">🎄 ¡Felices fiestas, amantes de la música! 🎁</span>
     <div class="xmas-heart"><span>𝄞</span></div>
   </div>
 </div>
@@ -900,7 +973,32 @@
         </div>
       </div>
     </div>
-
+<!-- BLACK FRIDAY -->
+<div class="card bf-card">
+  <div class="bf-top">
+    <span class="bf-tag">Black Friday</span>
+    <div class="bf-titulo">Ofertas en <span>guitarras</span></div>
+  </div>
+  <p class="bf-sub">Hasta fin de existencias. Consulta disponibilidad por WhatsApp.</p>
+  <div class="bf-grid">
+    <div class="bf-item">
+      <div class="bf-nombre">Admira Macarena</div>
+      <div class="bf-tipo">Guitarra flamenca</div>
+      <div class="bf-precio">250 €</div>
+      <a class="btn-consultar" target="_blank"
+         href="https://wa.me/34695908361?text=Hola,%20me%20interesa%20la%20oferta%20Black%20Friday%20de%20la%20Admira%20Macarena%20(250%20%E2%82%AC)">💬 Lo quiero</a>
+    </div>
+    <div class="bf-item">
+      <div class="bf-nombre">Alhambra Z-Nature</div>
+      <div class="bf-tipo">Guitarra clásica</div>
+      <div class="bf-precio">320 €</div>
+      <div class="bf-extra">✔ Incluye funda</div>
+      <a class="btn-consultar" target="_blank"
+         href="https://wa.me/34695908361?text=Hola,%20me%20interesa%20la%20oferta%20Black%20Friday%20de%20la%20Alhambra%20Z-Nature%20(320%20%E2%82%AC)">💬 Lo quiero</a>
+    </div>
+  </div>
+  <a class="bf-ver" onclick="mostrarLanding('Guitarras','Selección de guitarras españolas, acústicas y eléctricas.')">Ver todas las guitarras →</a>
+</div>
     <!-- TARJETA INFO -->
     <div class="card info-card">
       <div class="info-block">
@@ -989,14 +1087,16 @@
   let productos = [];
   let ultimosResultadosValidos = [];
 
-  const guitarrasEspecificas = [
-    { nombre: "Admira Alba 3/4", desc: "Guitarra clásica ideal para niños y jóvenes estudiantes.", img: "img/admira-alba34.jpg" },
-    { nombre: "Admira Alba 4/4", desc: "La guitarra clásica de iniciación por excelencia para adultos.", img: "img/admira-alba.jpg" },
-    { nombre: "Admira Luna 4/4", desc: "Guitarra clásica acabada en negro satinado, sonido equilibrado y elegante.", img: "img/admira-luna.jpg" },
-    { nombre: "Admira Juanita 4/4", desc: "Guitarra de fabricación española tradicional, excelente proyección.", img: "img/admira-juanita.jpg" },
-    { nombre: "Oqan QGE Starter Kit", desc: "Guitarra eléctrica en pack completo con amplificador y accesorios, lista para empezar.", img: "img/oqan-qge.jpg" },
-    { nombre: "Daytona A411 Azul Brillo", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "img/daytona-A411.jpg" }
-  ];
+const guitarrasEspecificas = [
+  { nombre: "Admira Macarena", desc: "Guitarra flamenca de fabricación española.", img: "img/admira-macarena.jpg", oferta: true, precio: "250 €" },
+  { nombre: "Alhambra Z-Nature", desc: "Guitarra clásica de Alhambra, referente de la guitarra española.", img: "img/alhambra-znature.jpg", oferta: true, precio: "320 €", extra: "Incluye funda" },
+  { nombre: "Admira Alba 3/4", desc: "Guitarra clásica ideal para niños y jóvenes estudiantes.", img: "img/admira-alba34.jpg" },
+  { nombre: "Admira Alba 4/4", desc: "La guitarra clásica de iniciación por excelencia para adultos.", img: "img/admira-alba.jpg" },
+  { nombre: "Admira Luna 4/4", desc: "Guitarra clásica acabada en negro satinado, sonido equilibrado y elegante.", img: "img/admira-luna.jpg" },
+  { nombre: "Admira Juanita 4/4", desc: "Guitarra de fabricación española tradicional, excelente proyección.", img: "img/admira-juanita.jpg" },
+  { nombre: "Oqan QGE Starter Kit", desc: "Guitarra eléctrica en pack completo con amplificador y accesorios, lista para empezar.", img: "img/oqan-qge.jpg" },
+  { nombre: "Daytona A411 Azul Brillo", desc: "Guitarra acústica tipo Dreadnought con acabado espectacular.", img: "img/daytona-A411.jpg" }
+];
 
   const librosLM = [
   // ENSEÑANZAS BÁSICAS - MARIA ASUNCIÓN ONIEVA
@@ -1143,20 +1243,23 @@
 
     if (titulo === 'Guitarras') {
       html += '<div class="guitarra-grid">';
-      guitarrasEspecificas.forEach(g => {
-        html += `<div class="guitarra-item">
-          <div class="guitarra-img">
-            <img src="${g.img}" alt="${g.nombre}" onerror="this.src='https://via.placeholder.com/64?text=🎸'">
-          </div>
-          <div class="guitarra-info">
-            <div class="guitarra-nombre">${g.nombre}</div>
-            <div class="guitarra-desc">${g.desc}</div>
-          </div>
-          <a href="https://wa.me/34695908361?text=Consulta sobre ${g.nombre}" target="_blank" class="btn-consultar">💬 Consultar</a>
-        </div>`;
-      });
-      html += '</div>';
-    }
+  guitarrasEspecificas.forEach(g => {
+  const msg = encodeURIComponent(
+    g.oferta ? `Hola, me interesa la oferta Black Friday: ${g.nombre} (${g.precio})`
+             : `Consulta sobre ${g.nombre}`);
+  html += `<div class="guitarra-item ${g.oferta ? 'oferta' : ''}">
+    <div class="guitarra-img">
+      <img src="${g.img}" alt="${g.nombre}" onerror="this.src='https://via.placeholder.com/64?text=🎸'">
+    </div>
+    <div class="guitarra-info">
+      ${g.oferta ? '<span class="oferta-badge">Oferta Black Friday</span>' : ''}
+      <div class="guitarra-nombre">${g.nombre}</div>
+      <div class="guitarra-desc">${g.desc}</div>
+      ${g.precio ? `<div class="guitarra-precio">${g.precio}${g.extra ? `<span class="guitarra-extra">✔ ${g.extra}</span>` : ''}</div>` : ''}
+    </div>
+    <a href="https://wa.me/34695908361?text=${msg}" target="_blank" class="btn-consultar">💬 ${g.oferta ? 'Lo quiero' : 'Consultar'}</a>
+  </div>`;
+});
 
     if (titulo === 'Libros') {
   const secciones = ['ENSEÑANZAS BÁSICAS', 'ENSEÑANZAS PROFESIONALES'];
@@ -1232,6 +1335,23 @@ document.addEventListener('mouseover', function(e) {
   preview.style.top = '50%';
   preview.style.transform = 'translate(-50%, -50%)';
 });
+    // ── Copos y notas cayendo en el hero ──
+(function () {
+  const cont = document.getElementById('caida');
+  if (!cont || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const simbolos = ['❄', '❅', '♪', '♫', '♩', '♬'];
+  for (let i = 0; i < 26; i++) {
+    const s = document.createElement('span');
+    const sim = simbolos[Math.floor(Math.random() * simbolos.length)];
+    s.textContent = sim;
+    if ('♪♫♩♬'.includes(sim)) s.className = 'nota';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.fontSize = (12 + Math.random() * 14) + 'px';
+    s.style.animationDuration = (6 + Math.random() * 7) + 's';
+    s.style.animationDelay = (-Math.random() * 10) + 's';
+    cont.appendChild(s);
+  }
+})();
 </script>
 </body>
 </html>
