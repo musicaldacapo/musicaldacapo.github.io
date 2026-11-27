@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orquesta de amiguitos | Musical da Capo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--fondo:#1d1b3a;--fondo2:#2c2a57;--papel:#fff8ec;--naranja:#f28c28}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Fredoka',system-ui,sans-serif;background:radial-gradient(ellipse at 50% 0%,var(--fondo2),var(--fondo) 70%);color:var(--papel);min-height:100vh;padding:18px 14px 28px}
+.barra{max-width:980px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.barra a.logo{display:flex;align-items:center;text-decoration:none}
+.barra img{height:42px;width:auto;filter:brightness(0) invert(1);opacity:.92}
+.barra .marca{font-weight:700;font-size:20px;color:#fff}
+.barra .marca span{color:var(--naranja)}
+.volver{display:inline-flex;align-items:center;gap:6px;background:var(--naranja);color:#1d1b3a;font-weight:700;font-size:15px;text-decoration:none;border-radius:50px;padding:10px 18px}
+.volver:hover{filter:brightness(1.1)}
+.volver:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto}
+header{text-align:center;margin-bottom:14px}
+h1{font-size:clamp(26px,5vw,40px);font-weight:700;line-height:1.1}
+header p{opacity:.8;font-size:16px;margin-top:4px}
+
+/* Compás */
+.compas{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-width:640px;margin:0 auto 6px}
+.pulso{text-align:center}
+.pulso .num{font-size:15px;font-weight:600;opacity:.7;transition:.1s}
+.pulso .pts{display:flex;gap:3px;justify-content:center;margin-top:3px}
+.d{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.18);transition:.08s}
+.d.now{background:var(--naranja);transform:scale(1.35);box-shadow:0 0 10px var(--naranja)}
+.pulso.fuerte .num{opacity:1}
+.cap{text-align:center;font-size:13px;opacity:.65;margin-bottom:14px}
+
+/* Escenario */
+.escenario{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.pj{--c:#888;position:relative;background:rgba(255,255,255,.06);border:3px solid transparent;border-radius:22px;padding:12px 8px 10px;color:inherit;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:background .2s,border-color .2s,transform .15s}
+.pj:hover{transform:translateY(-3px)}
+.pj:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.pj.on{background:rgba(255,255,255,.13);border-color:var(--c)}
+.emo{position:absolute;top:8px;right:10px;font-size:22px}
+.cuerpo{width:78px;height:78px;border-radius:46% 46% 40% 40%;background:var(--c);position:relative;filter:grayscale(.85) brightness(.7);transition:filter .25s}
+.pj.on .cuerpo{filter:none}
+.ojo{position:absolute;top:26px;width:15px;height:17px;background:#fff;border-radius:50%}
+.ojo::after{content:'';position:absolute;width:7px;height:8px;background:#222;border-radius:50%;left:4px;top:6px}
+.ojo.i{left:16px}.ojo.r{right:16px}
+.boca{position:absolute;left:50%;bottom:14px;width:20px;height:9px;margin-left:-10px;background:#3a1020;border-radius:0 0 20px 20px;transition:.1s}
+.pj.on .boca{height:14px}
+.pj.salta .cuerpo{animation:salto .22s ease-out}
+@keyframes salto{0%{transform:translateY(0) scale(1)}40%{transform:translateY(-12px) scale(1.06,.95)}100%{transform:translateY(0) scale(1)}}
+.nom{font-weight:700;font-size:17px}
+.fam{font-size:12px;opacity:.75;background:rgba(255,255,255,.12);border-radius:20px;padding:1px 10px}
+.tira{display:grid;grid-template-columns:repeat(16,1fr);gap:2px;width:100%;margin-top:2px}
+.tira i{height:9px;border-radius:2px;background:rgba(255,255,255,.1)}
+.tira i.h{background:var(--c);opacity:.55}
+.pj.on .tira i.h{opacity:1}
+.tira i.now{outline:2px solid #fff;outline-offset:0}
+.txt{font-size:12px;line-height:1.25;opacity:.85;text-align:center;min-height:30px}
+
+/* Controles */
+.panel{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:18px 0 12px}
+button.ctl{font:inherit;font-weight:600;font-size:15px;color:#fff;background:rgba(255,255,255,.14);border:0;border-radius:50px;padding:10px 18px;cursor:pointer}
+button.ctl:hover{background:rgba(255,255,255,.24)}
+button.ctl:focus-visible{outline:3px solid #fff}
+.tempo{display:flex;align-items:center;gap:10px;font-size:14px}
+.tempo input{accent-color:var(--naranja);width:150px}
+.consejo{background:var(--papel);color:#2a2340;border-radius:18px;padding:14px 18px;font-size:16px;line-height:1.4;text-align:center;max-width:640px;margin:0 auto;min-height:56px;display:flex;align-items:center;justify-content:center}
+footer{text-align:center;font-size:12px;opacity:.55;margin-top:18px}
+@media(max-width:760px){.escenario{grid-template-columns:repeat(2,1fr)}.cuerpo{width:68px;height:68px}.ojo{top:22px}.compas{gap:3px}}
+@media(prefers-reduced-motion:reduce){.pj.salta .cuerpo{animation:none}.pj:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="barra">
+  <a class="logo" href="index.html" aria-label="Musical da Capo, ir a la página principal">
+    <img src="logo-musical.png" alt="Musical da Capo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+    <span class="marca" style="display:none">Musical <span>da Capo</span></span>
+  </a>
+  <a class="volver" href="index.html">← Volver a la tienda</a>
+</div>
+<div class="wrap">
+  <header>
+    <h1>🎶 La orquesta de los amiguitos</h1>
+    <p>Toca a un amiguito para que se una a la música. ¡Toca otra vez para que se calle!</p>
+  </header>
+
+  <div class="compas" id="compas" aria-hidden="true"></div>
+  <div class="cap">Dos compases de 4 tiempos · cada pulso se puede dividir en dos mitades (corcheas)</div>
+
+  <div class="escenario" id="escenario"></div>
+
+  <div class="panel">
+    <button class="ctl" id="btnSorpresa">🎲 Sorpresa</button>
+    <button class="ctl" id="btnSilencio">🔇 Silencio</button>
+    <label class="tempo">🐢 <input type="range" id="tempo" min="70" max="140" value="100" aria-label="Velocidad"> 🐇</label>
+  </div>
+
+  <div class="consejo" id="consejo">¡Empieza con Bom! Es el que marca el pulso, como el latido de un corazón.</div>
+  <footer>Musical da Capo · Juego de aprendizaje musical</footer>
+</div>
+
+<script>
+(function(){
+  /* ── Notas (escala pentatónica de Do: todo suena bien junto) ── */
+  const F={C3:130.81,G2:98,A2:110,C4:261.63,D4:293.66,E4:329.63,G4:392,A4:440,C5:523.25,D5:587.33,E5:659.25};
+  const SIL={C3:'Do',G2:'Sol',A2:'La',C4:'Do',D4:'Re',E4:'Mi',G4:'Sol',A4:'La',C5:'Do',D5:'Re',E5:'Mi'};
+  const ACORDE={Do:[261.63,329.63,392],Lam:[220,261.63,329.63]};
+
+  let ctx,master,ruido;
+  function iniciarAudio(){
+    if(ctx){ if(ctx.state==='suspended') ctx.resume(); return; }
+    ctx=new (window.AudioContext||window.webkitAudioContext)();
+    master=ctx.createGain(); master.gain.value=.7; master.connect(ctx.destination);
+    const b=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate), d=b.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    ruido=b;
+  }
+  function osc(t,f,tipo,pico,ataque,dur,rel){
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=tipo; o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(pico,t+ataque);
+    g.gain.setValueAtTime(pico,t+Math.max(ataque,dur));
+    g.gain.exponentialRampToValueAtTime(.0001,t+Math.max(ataque,dur)+rel);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t+dur+rel+.05);
+    return o;
+  }
+  function ruidoFiltrado(t,tipo,freq,pico,dur){
+    const s=ctx.createBufferSource(); s.buffer=ruido;
+    const f=ctx.createBiquadFilter(); f.type=tipo; f.frequency.value=freq;
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(pico,t); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+dur+.02);
+  }
+
+  /* ── Sonidos de cada amiguito ── */
+  const voz={
+    bombo(t){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(160,t);o.frequency.exponentialRampToValueAtTime(45,t+.15);g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(.0001,t+.32);o.connect(g);g.connect(master);o.start(t);o.stop(t+.35)},
+    caja(t){ruidoFiltrado(t,'bandpass',1800,.7,.16);osc(t,190,'triangle',.35,.003,.04,.08)},
+    chic(t){ruidoFiltrado(t,'highpass',7500,.3,.05)},
+    bajo(t,f,d){osc(t,f,'triangle',.6,.02,d,.12)},
+    marimba(t,f,d){osc(t,f,'sine',.55,.004,.02,.35);osc(t,f*4,'sine',.12,.002,.01,.08)},
+    campana(t,f){osc(t,f,'sine',.28,.003,.02,1.1);osc(t,f*2.76,'sine',.08,.003,.01,.5)},
+    flauta(t,f,d){const o=osc(t,f,'sine',.35,.09,d,.15);const l=ctx.createOscillator(),lg=ctx.createGain();l.frequency.value=5;lg.gain.value=4;l.connect(lg);lg.connect(o.frequency);l.start(t);l.stop(t+d+.3)},
+    coro(t,fs,d){fs.forEach(f=>osc(t,f,'triangle',.12,.25,d,.4))}
+  };
+
+  /* ── Personajes: hits = [paso, nota, duración en pasos] (16 pasos = 2 compases de corcheas) ── */
+  const pasos=(a)=>a.map(p=>[p]);
+  const P=[
+    {id:'bombo',nom:'Bom',emo:'🥁',col:'#ff6b6b',fam:'Percusión',
+     hits:pasos([0,2,4,6,8,10,12,14]),play:(t)=>voz.bombo(t),
+     txt:'Ritmo: ta · ta · ta · ta',
+     tip:'Bom marca el pulso: 4 golpes iguales en cada compás. Son negras: ta, ta, ta, ta.'},
+    {id:'caja',nom:'Tac',emo:'🪘',col:'#ffb347',fam:'Percusión',
+     hits:pasos([2,6,10,14]),play:(t)=>voz.caja(t),
+     txt:'Suena en los tiempos 2 y 4',
+     tip:'Tac toca en los tiempos 2 y 4. Fíjate: ¡nunca coincide con Bom! Se turnan.'},
+    {id:'chic',nom:'Chic',emo:'✨',col:'#f7d630',fam:'Percusión',bounce:false,
+     hits:pasos([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]),play:(t)=>voz.chic(t),
+     txt:'Ritmo: ti-ti · ti-ti · ti-ti · ti-ti',
+     tip:'Chic toca corcheas: dos sonidos en cada pulso (ti-ti). Son el doble de rápidas que las negras.'},
+    {id:'bajo',nom:'Bruno',emo:'🎸',col:'#6c8cff',fam:'Cuerda',
+     hits:[[0,'C3',4],[4,'G2',4],[8,'A2',4],[12,'G2',4]],play:(t,n,d)=>voz.bajo(t,F[n],d),
+     txt:'Notas: Do · Sol · La · Sol',
+     tip:'Bruno toca notas graves y largas: cada una dura 2 pulsos (son blancas). Grave = sonido gordo.'},
+    {id:'marimba',nom:'Mari',emo:'🎹',col:'#4ecb8f',fam:'Percusión de láminas',
+     hits:[[0,'C4'],[2,'E4'],[4,'G4'],[6,'E4'],[8,'A4'],[10,'G4'],[12,'E4'],[14,'D4']],play:(t,n)=>voz.marimba(t,F[n]),
+     txt:'Notas: Do · Mi · Sol · Mi · La · Sol · Mi · Re',
+     tip:'Mari toca la melodía: Do Mi Sol Mi La Sol Mi Re. ¡Las notas suben y bajan como una escalera!'},
+    {id:'campanas',nom:'Din',emo:'🔔',col:'#ff8fd1',fam:'Percusión',
+     hits:[[0,'E5'],[1,'D5'],[2,'C5'],[8,'D5'],[9,'C5'],[10,'A4']],play:(t,n)=>voz.campana(t,F[n]),
+     txt:'Notas: Mi · Re · Do … Re · Do · La',
+     tip:'Din toca notas agudas y rápidas. Agudo = sonido fino, como un pajarito.'},
+    {id:'flauta',nom:'Flo',emo:'🌬️',col:'#5ad1e6',fam:'Viento',
+     hits:[[0,'G4',4],[4,'A4',2],[6,'G4',2],[8,'E4',6]],play:(t,n,d)=>voz.flauta(t,F[n],d),
+     txt:'Notas: Sol – La Sol – Mi',
+     tip:'Flo es de viento: sopla y sus notas son largas y suaves. ¿Notas cómo se enlazan unas con otras?'},
+    {id:'coro',nom:'Cora',emo:'🎤',col:'#b388ff',fam:'Voz',
+     hits:[[0,'Do',8],[8,'Lam',8]],play:(t,n,d)=>voz.coro(t,ACORDE[n],d),
+     txt:'Acordes: Do mayor · La menor',
+     tip:'Cora canta acordes: varias notas a la vez. Do mayor suena alegre y La menor suena más tranquilo.'}
+  ];
+  const durSeg=(pasosN)=>pasosN*paso();
+
+  /* ── Pantalla ── */
+  const esc=document.getElementById('escenario'), compas=document.getElementById('compas'), consejo=document.getElementById('consejo');
+  const dots=[];
+  for(let p=0;p<8;p++){
+    const d=document.createElement('div'); d.className='pulso'+(p%4===0?' fuerte':'');
+    d.innerHTML='<div class="num">'+(p%4+1)+'</div><div class="pts"></div>';
+    for(let k=0;k<2;k++){const s=document.createElement('span');s.className='d';d.querySelector('.pts').appendChild(s);dots.push(s)}
+    compas.appendChild(d);
+  }
+  P.forEach(p=>{
+    p.on=false;
+    const b=document.createElement('button'); b.className='pj'; b.style.setProperty('--c',p.col);
+    b.setAttribute('aria-pressed','false');
+    const marcas=Array(16).fill(0); p.hits.forEach(h=>marcas[h[0]]=1);
+    b.innerHTML='<span class="emo">'+p.emo+'</span><div class="cuerpo"><span class="ojo i"></span><span class="ojo r"></span><span class="boca"></span></div>'+
+      '<div class="nom">'+p.nom+'</div><span class="fam">'+p.fam+'</span>'+
+      '<div class="tira">'+marcas.map(m=>'<i class="'+(m?'h':'')+'"></i>').join('')+'</div>'+
+      '<div class="txt">'+p.txt+'</div>';
+    b.onclick=()=>alternar(p);
+    p.el=b; p.celdas=b.querySelectorAll('.tira i'); esc.appendChild(b);
+  });
+
+  /* ── Reloj musical ── */
+  let paso_i=0,sig=0,timer=null;
+  const tempo=document.getElementById('tempo');
+  function paso(){return 60/tempo.value/2}
+  function programar(){
+    while(sig<ctx.currentTime+.12){
+      const s=paso_i,t=sig;
+      P.forEach(p=>{
+        if(!p.on) return;
+        const h=p.hits.find(x=>x[0]===s);
+        if(h) p.play(t,h[1],(h[2]||1)*paso());
+      });
+      setTimeout(()=>pintar(s),Math.max(0,(t-ctx.currentTime)*1000));
+      sig+=paso(); paso_i=(paso_i+1)%16;
+    }
+  }
+  function pintar(s){
+    dots.forEach((d,i)=>d.classList.toggle('now',i===s));
+    P.forEach(p=>{
+      p.celdas.forEach((c,i)=>c.classList.toggle('now',i===s&&p.on));
+      if(p.on&&p.bounce!==false&&p.hits.some(h=>h[0]===s)){
+        p.el.classList.remove('salta'); void p.el.offsetWidth; p.el.classList.add('salta');
+      }
+    });
+  }
+  function arrancar(){
+    if(timer) return;
+    paso_i=0; sig=ctx.currentTime+.06; timer=setInterval(programar,25);
+  }
+  function parar(){
+    clearInterval(timer); timer=null;
+    dots.forEach(d=>d.classList.remove('now'));
+    P.forEach(p=>p.celdas.forEach(c=>c.classList.remove('now')));
+  }
+  function poner(p,v){
+    p.on=v; p.el.classList.toggle('on',v); p.el.setAttribute('aria-pressed',v);
+    if(!v) p.celdas.forEach(c=>c.classList.remove('now'));
+  }
+  function alternar(p){
+    iniciarAudio();
+    poner(p,!p.on);
+    consejo.textContent=p.on?p.tip:'Hasta pronto, '+p.nom+'. ¡Escucha cómo cambia la música sin él!';
+    if(P.some(x=>x.on)) arrancar(); else parar();
+  }
+
+  document.getElementById('btnSilencio').onclick=()=>{
+    P.forEach(p=>poner(p,false)); parar();
+    consejo.textContent='¡Silencio! El silencio también es música: en una partitura se escribe con un símbolo especial.';
+  };
+  document.getElementById('btnSorpresa').onclick=()=>{
+    iniciarAudio();
+    P.forEach(p=>poner(p,false));
+    const orden=[...P].sort(()=>Math.random()-.5).slice(0,4);
+    if(!orden.some(p=>p.id==='bombo'||p.id==='caja')) orden[0]=P[0];
+    orden.forEach(p=>poner(p,true)); arrancar();
+    consejo.textContent='¡Sorpresa! Suenan: '+orden.map(p=>p.nom).join(', ')+'. ¿Qué instrumento oyes mejor?';
+  };
+})();
+</script>
+</body>
+</html>
